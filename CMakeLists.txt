@@ -5,5 +5,5 @@ cmake_minimum_required (VERSION 3.8)
 
 project ("Rita")
 
-# Include sub-projects.
-add_subdirectory ("Rita")
+# Include subdirectories
+add_subdirectory("Rita")
