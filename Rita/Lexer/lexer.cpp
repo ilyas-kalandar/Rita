@@ -1,18 +1,10 @@
-#include "token.h"
+#include "lexer.h"
+#include "tokenator.h"
 
 namespace Lexer
 {
-    Token::Token(TokenType type, std::string& literal) : Literal(std::move(literal))
+    Tokenator Lexer::Tokenize(const std::string& code)
     {
-        this->Type = type;
-    }
-
-    Token::Token(TokenType type)
-    {
-        this->Type = type;
-    }
-    const std::string& Token::GetLiteral()
-    {
-        return this->Literal;
+        //TODO        
     }
 }
