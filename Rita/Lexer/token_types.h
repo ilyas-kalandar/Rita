@@ -29,6 +29,6 @@ namespace Lexer
 
         // Other
         DOT,
-        ENF_OF_FILE
+        END_OF_FILE
     };
 }
