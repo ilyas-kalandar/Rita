@@ -1,14 +1,35 @@
 #include "tokenator.h"
 
-/*
-* Implementation of Tokenator's class will be here
-* 
-* 
-* 
-* 
-*/
-
 namespace Lexer
 {
+    Tokenator::Tokenator(std::vector<Token>& vec) : Tokens(std::move(vec))
+    {
+        /*
+        * If received vector's size is equals to zero, we don't have next token
+        * So, I need set this->currentToken to zero, because by default it has been set to -1
+        */
+        if (this->Tokens.size() == 0)
+        {
+            this->currentToken = 0;
+        }
+    }
     
+    const Token& Tokenator::Current()
+    {
+        return this->Tokens[this->currentToken];
+    }
+
+    bool Tokenator::HasNext()
+    {
+        return this->currentToken < this->Tokens.size();
+    }
+
+    const Token& Tokenator::Next()
+    {
+        if (this->HasNext())
+        {
+            return this->Tokens[++this->currentToken];
+        }
+        return EOF_TOKEN;
+    }
 }
