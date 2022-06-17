@@ -28,6 +28,14 @@ namespace Lexer
         /// Get Token's literal
         /// </summary>
         /// <returns>Token's literal</returns>
-        const std::string& GetLiteral();
+        const std::string& GetLiteral() const;
+
+        /// <summary>
+        /// Returns type of token
+        /// </summary>
+        /// <returns></returns>
+        const TokenType& GetTokenType() const;
     };
+    
+    std::ostream& operator<<(std::ostream& os, const Token& tok);
 }
