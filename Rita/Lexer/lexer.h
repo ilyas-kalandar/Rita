@@ -11,30 +11,30 @@ namespace Lexer
     class Lexer
     {
     private:
-        size_t currChar = -1;
-        size_t currentLine = 0;
-        TokenType currentTokenType;
+        static size_t currChar;
+        static size_t currentLine;
+        static TokenType currentTokenType;
 
-        std::string& source;
-        std::string currentLexeme;
+        static std::string& source;
+        static std::string currentLexeme;
 
-        std::vector<Token> parsedTokens;
+        static std::vector<Token> parsedTokens;
 
         /// <summary>
         /// Resets inner fields
         /// </summary>
-        void Reset();
+        static void Reset();
 
         /// <summary>
         /// Parses a token and pushes it to parsedTokens vector.
         /// </summary>
-        void ParseToken();
+        static void ParseToken();
     public:
         /// <summary>
         /// Divide your code into tokens
         /// </summary>
         /// <param name="code">An std::string with your code</param>
         /// <returns>Tokens</returns>
-        Tokenator Tokenize(std::string& code);
+        static Tokenator Tokenize(std::string& code);
     };
 }
