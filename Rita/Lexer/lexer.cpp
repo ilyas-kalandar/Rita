@@ -8,21 +8,10 @@ namespace Lexer
 {
     size_t Lexer::currentLine;
     size_t Lexer::currChar;
+    size_t Lexer::sourceLength;
 
-
-    /*
-    * I need make Lexer::Lexer non-static
-    * This code absolutely crashed.
-    * 
-    * Why Lexer::Lexer must be non-static?
-    * 
-    * 
-    * Because in C++, fucking references must be initialized, but I can't initialize Lexer::source without constructor!
-    * 
-    */
-
-    std::string& Lexer::source;
-    std::string Lexer::currentLexeme;    
+    std::string* Lexer::sourcePointer;
+    std::string Lexer::currentLexeme;
     TokenType Lexer::currentTokenType;
     std::vector<Token> Lexer::parsedTokens;
 
@@ -32,44 +21,75 @@ namespace Lexer
         currentLine = 1;
     }
 
+    inline char Lexer::Current()
+    {
+        return (*sourcePointer)[currChar];
+    }
+
+    inline bool Lexer::HasNext()
+    {
+        return currChar < sourceLength;
+    }
+
+    inline char Lexer::GetNext()
+    {
+        if (!HasNext()) 
+            return '\0';
+        return (*sourcePointer)[currChar + 1];
+    }
+
+    inline bool Lexer::CheckNext(char ch) 
+    {
+        return GetNext() == ch;
+    }
+
+    void Lexer::Next()
+    {
+        if (HasNext())
+        {
+            currChar++;
+        }
+    }
+
     void Lexer::ParseToken()
     {
+
         bool working = true;
 
-        while (true)
+        while (Current() != '\0')
         {
-            switch (currentTokenType)
+            switch (Lexer::currentTokenType)
             {
             case TokenType::STRING:
-                switch (source[currChar])
+                switch (Current())
                 {
                 case '\"':
                     working = false;
                     break;
                 case '\n':
-                    currentLine++;
-                    throw std::runtime_error("Parsing error, expected '\"', found '\\n'");
+                    //TODO(Ilyas): Throw exception
+                    break;
                 }
                 break;
             case TokenType::IDENTIFIER:
-                if (!isalnum(source[currChar]))
-                {
-                    working = false;
-                }
+                // TODO 
                 break;
-            case TokenType::FLOAT:
-                //TODO
-                break;
-            case TokenType::INTEGER:
-                //todo
-                break;
+            //TODO(Ilyas): Add another here
             }
 
             if (!working)
+            {
+                /*
+                * Maybe here will be something like 
+                *    
+                *       Lexer::Next();
+                * 
+                */
                 break;
-
-            currentLexeme.push_back(source[currChar]);
-            currChar++;
+            }
+            
+            currentLexeme.push_back(Current());
+            Next();
         }
         parsedTokens.emplace_back(currentTokenType, currentLexeme);
     }
@@ -77,9 +97,11 @@ namespace Lexer
     Tokenator Lexer::Tokenize(std::string& code)
     {
         Reset();
-        source = code; // not copy, just reference creation.
-        
-        while (currChar < code.size())
+
+        sourceLength = code.size();
+        sourcePointer = &code;
+
+        while (HasNext())
         {
             // Heart of lexer is here, lets check current charachter
 
@@ -93,6 +115,6 @@ namespace Lexer
             ParseToken();
         }
 
-        return Tokenator(parsedTokens);
+        return Tokenator(Lexer::parsedTokens);
     }
 }
