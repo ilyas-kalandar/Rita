@@ -1,18 +1,20 @@
 #pragma once
 
+#include <iostream>
+
 namespace Lexer
 {
     enum class TokenType
     {
         // Literals
-        INTEGER, 
-        FLOAT, 
-        STRING, 
+        INTEGER,
+        FLOAT,
+        STRING,
         IDENTIFIER,
 
         // Binary operators
         EQUAL,
-        EQUAL_EQUAL, 
+        EQUAL_EQUAL,
         LESS_THAN,
         GREATER_THAN,
         LESS_OR_EQUAL_THAN,
@@ -21,7 +23,7 @@ namespace Lexer
         MULTIPLY,
         MINUS,
         PLUS,
-        
+
         // Keywords
         IF,
         WHILE,
@@ -31,4 +33,9 @@ namespace Lexer
         DOT,
         END_OF_FILE
     };
+
+    /*
+    * Needed for using this Enum with <code>cout</code>
+    */
+    std::ostream& operator<<(std::ostream& os, TokenType type);
 }
