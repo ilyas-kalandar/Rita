@@ -13,10 +13,12 @@ namespace Lexer
     private:
         static size_t currChar;
         static size_t currentLine;
+        static size_t sourceLength;
+
         static TokenType currentTokenType;
 
-        static std::string& source;
         static std::string currentLexeme;
+        static std::string* sourcePointer;
 
         static std::vector<Token> parsedTokens;
 
@@ -29,6 +31,34 @@ namespace Lexer
         /// Parses a token and pushes it to parsedTokens vector.
         /// </summary>
         static void ParseToken();
+        
+        /// <summary>
+        /// Checks for next character
+        /// <returns>True/False depend on result</returns>
+        /// </summary>
+        static inline bool HasNext();
+
+        /// <summary>
+        /// Moves currChar's pointer to right (if possible)
+        /// </summary>
+        static inline void Next();
+
+        /// <summary>
+        /// Get next char
+        /// </summary>
+        /// <returns>Next charater, <c>'\0'</c> if source handled.</returns>
+        static inline char GetNext();
+
+        /// <summary>
+        /// Checks for <code>GetNext() == ch</code>
+        /// </summary>
+        static inline bool CheckNext(char ch);
+
+        /// <summary>
+        /// Get current character
+        /// </summary>
+        /// <returns></returns>
+        static inline char Current();
     public:
         /// <summary>
         /// Divide your code into tokens
