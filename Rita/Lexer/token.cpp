@@ -18,7 +18,7 @@ namespace Lexer
     {
         return this->Literal;
     }
-
+    
     const TokenType& Token::GetTokenType() const
     {
         return this->Type;
@@ -26,7 +26,7 @@ namespace Lexer
 
     std::ostream& operator<<(std::ostream& os, const Token& tok)
     {
-        os << std::string("Token<") << tok.GetTokenType() << std::string(">: ") << tok.GetLiteral();
+        os << "Token<" << tok.GetTokenType() << ", " << tok.GetLiteral() << ">";
         return os;
     }
 }
