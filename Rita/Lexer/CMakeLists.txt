@@ -1,6 +1,6 @@
 project (Lexer)
 
-set(SOURCE_LEXER lexer.cpp token.cpp tokenator.cpp)
+set(SOURCE_LEXER lexer.cpp token_types.cpp token.cpp tokenator.cpp)
 set(HEADER_LEXER lexer.h token_types.h token.h tokenator.h)
 
 add_library(Lexer STATIC ${SOURCE_LEXER} ${HEADER_LEXER})
