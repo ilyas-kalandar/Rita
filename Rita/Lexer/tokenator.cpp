@@ -8,14 +8,14 @@ namespace Lexer
         * If received vector's size is equals to zero, we don't have next token
         * So, I need set this->currentToken to zero, because by default it has been set to -1
         */
-        if (this->Tokens.size() == 0)
-        {
-            this->currentToken = 0;
-        }
+        
+        this->currentToken = 0;
     }
     
     const Token& Tokenator::Current()
     {
+        if (this->currentToken == Tokens.size())
+            return EOF_TOKEN;
         return this->Tokens[this->currentToken];
     }
 
