@@ -28,7 +28,7 @@ namespace Lexer
         /// Get Token's literal
         /// </summary>
         /// <returns>Token's literal</returns>
-        const std::string& GetLiteral() const;
+        const std::string& GetLiteral() const;  
 
         /// <summary>
         /// Returns type of token
