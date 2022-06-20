@@ -28,6 +28,11 @@ namespace Lexer
         static void Reset();
 
         /// <summary>
+        /// Pushes token into <c>arsedTokens</c>
+        /// </summary>
+        static void PushToken(TokenType t);
+
+        /// <summary>
         /// Parses a token and pushes it to parsedTokens vector.
         /// </summary>
         static void ParseToken();
