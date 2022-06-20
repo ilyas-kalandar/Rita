@@ -12,18 +12,24 @@ namespace Lexer
     private:
         TokenType Type;
         std::string Literal;
+        size_t line;
+        size_t character;
     public:
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="type">Just type of token</param>
         /// <param name="literal">Just literal (will moved!)</param>
-        Token(TokenType type, std::string& literal);
+        /// <param name="line">Just line, where token located</param>
+        /// <param name="character">Character</param>
+        Token(TokenType type, std::string& literal, size_t line, size_t character);
         /// <summary>
         /// Constructor without literal
         /// </summary>
-        /// <param name="type"></param>
-        Token(TokenType type);
+        /// <param name="type">Type of token</param>
+        /// <param name="line">Line where token located</param>
+        /// <param name="character">Character</param>
+        Token(TokenType type, size_t line, size_t character);
         /// <summary>
         /// Get Token's literal
         /// </summary>
@@ -36,6 +42,8 @@ namespace Lexer
         /// <returns></returns>
         const TokenType& GetTokenType() const;
     };
+
+    const Token EOF_TOKEN = Token(TokenType::END_OF_FILE, 0, 0);
     
     std::ostream& operator<<(std::ostream& os, const Token& tok);
 }
