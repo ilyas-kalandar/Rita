@@ -6,8 +6,6 @@
 
 namespace Lexer
 {
-    const Token EOF_TOKEN = Token(TokenType::END_OF_FILE);
-    
     /// <summary>
     /// Class for containing Token-objects.
     /// </summary>
