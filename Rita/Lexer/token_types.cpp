@@ -6,6 +6,12 @@ namespace Lexer
     {
         switch (type)
         {
+        case TokenType::LEFT_PAREN:
+            os << "LEFT_PAREN";
+            break;
+        case TokenType::RIGHT_PAREN:
+            os << "RIGHT_PAREN";
+            break;
         case TokenType::DIVISION:
             os << "DIVISION";
             break;
@@ -15,6 +21,11 @@ namespace Lexer
         case TokenType::END_OF_FILE:
             os << "END_OF_FILE";
             break;
+        case TokenType::LEFT_BRACE:
+            os << "LEFT_BRACE";
+            break;
+        case TokenType::RIGHT_BRACE:
+            os << "RIGHT_BRACE";
         case TokenType::EQUAL:
             os << "EQUAL";
             break;
