@@ -24,6 +24,15 @@ namespace Lexer
         MINUS,
         PLUS,
 
+        // Parens
+
+        RIGHT_PAREN,
+        LEFT_PAREN,
+
+        // Braces
+        LEFT_BRACE,
+        RIGHT_BRACE,
+
         // Keywords
         IF,
         WHILE,
