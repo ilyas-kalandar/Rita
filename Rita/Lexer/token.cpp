@@ -4,14 +4,18 @@
 
 namespace Lexer
 {
-    Token::Token(TokenType type, std::string& literal) : Literal(std::move(literal))
+    Token::Token(TokenType type, std::string& literal, size_t line, size_t character) : Literal(std::move(literal))
     {
         this->Type = type;
+        this->line = line;
+        this->character = character;
     }
 
-    Token::Token(TokenType type)
+    Token::Token(TokenType type, size_t line, size_t character)
     {
         this->Type = type;
+        this->line = line;
+        this->character = character;
     }
 
     const std::string& Token::GetLiteral() const
