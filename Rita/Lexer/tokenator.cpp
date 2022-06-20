@@ -14,7 +14,7 @@ namespace Lexer
     
     const Token& Tokenator::Current()
     {
-        if (this->currentToken == Tokens.size())
+        if (this->currentToken >= Tokens.size())
             return EOF_TOKEN;
         return this->Tokens[this->currentToken];
     }
@@ -28,7 +28,7 @@ namespace Lexer
     {
         if (this->HasNext())
         {
-            return this->Tokens[++this->currentToken];
+            return this->Tokens[this->currentToken++];
         }
         return EOF_TOKEN;
     }
