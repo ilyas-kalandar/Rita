@@ -15,6 +15,15 @@ namespace Lexer
     TokenType Lexer::currentTokenType;
     std::vector<Token> Lexer::parsedTokens;
 
+    void Lexer::PushToken(TokenType t = TokenType::END_OF_FILE)
+    {
+        if (t == TokenType::END_OF_FILE)
+        {
+            t = currentTokenType;
+        }
+        parsedTokens.emplace_back(t, currentLexeme, currentLine, currChar);
+    }
+
     void Lexer::Reset()
     {
         currChar = 0;
@@ -76,10 +85,9 @@ namespace Lexer
                     working = false;
                 }
                 break;
-                //TODO(Ilyas): Add another here
             case TokenType::INTEGER:
             case TokenType::FLOAT:
-                if (Current() == '.' && currentTokenType == TokenType::FLOAT)
+                if (Current() == '.' && !(currentTokenType == TokenType::FLOAT))
                 {
                     /*
                     * If some integer contains dot, parse it as float
@@ -107,7 +115,7 @@ namespace Lexer
             currentLexeme.push_back(Current());
             Next();
         }
-        parsedTokens.emplace_back(currentTokenType, currentLexeme);
+        PushToken();
     }
 
     Tokenator Lexer::Tokenize(std::string& code)
@@ -147,17 +155,26 @@ namespace Lexer
                 case '\n':
                     currentLine++;
                     break;
+                case '.':
+                    PushToken(TokenType::DOT);
+                    break;
+                case ')':
+                    PushToken(TokenType::RIGHT_PAREN);
+                    break;
+                case '(':
+                    PushToken(TokenType::LEFT_PAREN);
+                    break;
                 case '+':
-                    parsedTokens.emplace_back(Token(TokenType::PLUS));
+                    PushToken(TokenType::PLUS);
                     break;
                 case '-':
-                    parsedTokens.emplace_back(Token(TokenType::MINUS));
+                    PushToken(TokenType::MINUS);
                     break;
                 case '/':
-                    parsedTokens.emplace_back(Token(TokenType::DIVISION));
+                    PushToken(TokenType::DIVISION);
                     break;
                 case '*':
-                    parsedTokens.emplace_back(Token(TokenType::MULTIPLY));
+                    PushToken(TokenType::MULTIPLY);
                     break;
                 case '\"':
                     currentTokenType = TokenType::STRING;
@@ -168,16 +185,17 @@ namespace Lexer
                     // Check for EQUAL_EQUAL
                     if (CheckNext('='))
                     {
-                        parsedTokens.emplace_back(Token(TokenType::EQUAL_EQUAL));
+                        PushToken(TokenType::EQUAL_EQUAL);
                         Next();
                     }
                     else
                     {
-                        parsedTokens.emplace_back(Token(TokenType::EQUAL));
+                        PushToken(TokenType::EQUAL);
                     }
                     break;
                 default:
-                    std::cout << "WHAT? " << Current() << std::endl;
+                    throw std::runtime_error(
+                        "Unknown character passed: \'" + std::to_string(Current()) + "\' (" + std::to_string(currentLine) + "," + std::to_string(currChar) + ")");
                 }
                 Next();
             }
