@@ -41,6 +41,10 @@ namespace Lexer
         /// </summary>
         /// <returns></returns>
         const TokenType& GetTokenType() const;
+
+        const size_t& GetLine() const;
+
+        const size_t& GetCharacter() const;
     };
 
     const Token EOF_TOKEN = Token(TokenType::END_OF_FILE, 0, 0);
