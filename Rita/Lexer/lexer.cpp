@@ -24,6 +24,33 @@ namespace Lexer
         parsedTokens.emplace_back(t, currentLexeme, currentLine, currChar);
     }
 
+    bool Lexer::CheckKeyWord(const std::string& keyword)
+    {
+        size_t offset = 0;
+        size_t currentKeywordChar = 0;
+
+        while (currentKeywordChar != keyword.size())
+        {
+            if (Current() != keyword[currentKeywordChar])
+            {
+                currChar -= offset;
+                return false;
+            }
+
+            currentKeywordChar++;
+            offset++;
+            Next();
+        }
+
+        if (std::isalpha(Current()))
+        {
+            currChar -= offset;
+            return false;
+        }
+
+        return true;
+    }
+
     void Lexer::Reset()
     {
         currChar = 0;
@@ -129,6 +156,23 @@ namespace Lexer
         {
             // Heart of lexer is here, lets check current charachter
 
+            // Firstly, check for keyword
+
+            bool is_keyword = false;
+
+            for (const std::pair<const std::string&, TokenType>& keyword : RESERVED_WORDS)
+            {
+                if(CheckKeyWord(keyword.first))
+                {
+                    PushToken(keyword.second);
+                    is_keyword = true;
+                    break;
+                }
+            }
+
+            if (is_keyword)
+                continue;
+
             if (std::isalpha(Current()))
             {
                 /*
@@ -167,6 +211,12 @@ namespace Lexer
                 case '+':
                     PushToken(TokenType::PLUS);
                     break;
+                case '}':
+                    PushToken(TokenType::RIGHT_BRACE);
+                    break;
+                case '{':
+                    PushToken(TokenType::LEFT_BRACE);
+                    break;
                 case '-':
                     PushToken(TokenType::MINUS);
                     break;
@@ -176,6 +226,10 @@ namespace Lexer
                 case '*':
                     PushToken(TokenType::MULTIPLY);
                     break;
+                case '>':
+                    PushToken(TokenType::GREATER_THAN);
+                    break;
+                
                 case '\"':
                     currentTokenType = TokenType::STRING;
                     Next();
