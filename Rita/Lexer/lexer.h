@@ -3,11 +3,20 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <unordered_map>
 
 #include "tokenator.h"
 
 namespace Lexer 
 {
+    const std::unordered_map<std::string, TokenType> RESERVED_WORDS =
+    {
+        {"if", TokenType::IF},
+        {"else", TokenType::ELSE},
+        {"fun", TokenType::FUN},
+        {"while", TokenType::WHILE},
+    };
+
     class Lexer
     {
     private:
@@ -28,9 +37,16 @@ namespace Lexer
         static void Reset();
 
         /// <summary>
-        /// Pushes token into <c>arsedTokens</c>
+        /// Pushes token into <c>ParsedTokens</c>
         /// </summary>
         static void PushToken(TokenType t);
+
+        /// <summary>
+        /// Checks for keyword
+        /// </summary>
+        /// <param name="keyword">Just keyword</param>
+        /// <returns>True if keyword detected, False if not.</returns>
+        static bool CheckKeyWord(const std::string& keyword);
 
         /// <summary>
         /// Parses a token and pushes it to parsedTokens vector.
