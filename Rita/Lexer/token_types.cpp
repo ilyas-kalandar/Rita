@@ -26,6 +26,7 @@ namespace Lexer
             break;
         case TokenType::RIGHT_BRACE:
             os << "RIGHT_BRACE";
+            break;
         case TokenType::EQUAL:
             os << "EQUAL";
             break;
@@ -73,6 +74,9 @@ namespace Lexer
             break;
         case TokenType::LESS_OR_EQUAL_THAN:
             os << "LESS_OR_EQUAL_THAN";
+            break;
+        case TokenType::ELSE:
+            os << "ELSE";
             break;
         default:
             os << "Unknown token!";
