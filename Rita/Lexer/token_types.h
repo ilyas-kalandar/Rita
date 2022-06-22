@@ -34,7 +34,9 @@ namespace Lexer
         RIGHT_BRACE,
 
         // Keywords
+        FUN, 
         IF,
+        ELSE,
         WHILE,
         FOR,
 
