@@ -28,9 +28,19 @@ namespace Lexer
         return this->Type;
     }
 
+    const size_t& Token::GetLine() const
+    {
+        return this->line;
+    }
+
+    const size_t& Token::GetCharacter() const
+    {
+        return this->character;
+    }
+    
     std::ostream& operator<<(std::ostream& os, const Token& tok)
     {
-        os << "Token<" << tok.GetTokenType() << ", " << tok.GetLiteral() << ">";
+        os << "Token<" << tok.GetTokenType() << ", " << tok.GetLiteral() << ", (" << tok.GetLine() << "," << tok.GetCharacter() << ")" << ">";
         return os;
     }
 }
