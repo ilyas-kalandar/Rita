@@ -2,6 +2,7 @@
 
 #include "lexer.h"
 #include "tokenator.h"
+#include "Constants/keywords.h"
 
 
 namespace Lexer
