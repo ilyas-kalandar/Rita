@@ -93,6 +93,6 @@ namespace Lexer
          * @param code Your source code
          * @return Tokenator 
          */
-        static Tokenator Tokenize(std::string& code);
+        Tokenator Tokenize(std::string& code);
     };
 }
