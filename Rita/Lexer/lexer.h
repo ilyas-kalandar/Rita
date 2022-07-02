@@ -14,72 +14,85 @@ namespace Lexer
     class Lexer
     {
     private:
-        static size_t currChar;
-        static size_t currentLine;
-        static size_t sourceLength;
+        size_t currChar;
+        size_t currentLine;
+        size_t sourceLength;
 
-        static TokenType currentTokenType;
+        TokenType currentTokenType;
 
-        static std::string currentLexeme;
-        static std::string* sourcePointer;
+        std::string currentLexeme;
+        std::vector<Token> parsedTokens;
 
-        static std::vector<Token> parsedTokens;
+        /**
+         * @brief Resets inner fields
+         */
+        void Reset();
 
-        /// <summary>
-        /// Resets inner fields
-        /// </summary>
-        static void Reset();
+        /**
+         * @brief 
+         * 
+         * @param t 
+         */
+        void PushToken(TokenType t);
 
-        /// <summary>
-        /// Pushes token into <c>ParsedTokens</c>
-        /// </summary>
-        static void PushToken(TokenType t);
+        /**
+         * @brief 
+         * 
+         * @param keyword 
+         * @return true 
+         * @return false 
+         */
+        bool CheckKeyWord(const std::string& keyword);
 
-        /// <summary>
-        /// Checks for keyword
-        /// </summary>
-        /// <param name="keyword">Just keyword</param>
-        /// <returns>True if keyword detected, False if not.</returns>
-        static bool CheckKeyWord(const std::string& keyword);
-
-        /// <summary>
-        /// Parses a token and pushes it to parsedTokens vector.
-        /// </summary>
-        static void ParseToken();
+        /**
+         * @brief 
+         * 
+         */
+        void ParseToken();
         
-        /// <summary>
-        /// Checks for next character
-        /// <returns>True/False depend on result</returns>
-        /// </summary>
-        static inline bool HasNext();
+        /**
+         * @brief 
+         * 
+         * @return true 
+         * @return false 
+         */
+        inline bool HasNext();
 
-        /// <summary>
-        /// Moves currChar's pointer to right (if possible)
-        /// </summary>
-        static inline void Next();
+        /**
+         * @brief 
+         * 
+         */
+        inline void Next();
 
-        /// <summary>
-        /// Get next char
-        /// </summary>
-        /// <returns>Next charater, <c>'\0'</c> if source handled.</returns>
-        static inline char GetNext();
+        /**
+         * @brief Get the Next object
+         * 
+         * @return char 
+         */
+        inline char GetNext();
 
-        /// <summary>
-        /// Checks for <code>GetNext() == ch</code>
-        /// </summary>
-        static inline bool CheckNext(char ch);
+        /**
+         * @brief 
+         * 
+         * @param ch 
+         * @return true 
+         * @return false 
+         */
+        inline bool CheckNext(char ch);
 
-        /// <summary>
-        /// Get current character
-        /// </summary>
-        /// <returns></returns>
-        static inline char Current();
+        /**
+         * @brief 
+         * 
+         * @return char 
+         */
+        inline char Current();
     public:
-        /// <summary>
-        /// Divide your code into tokens
-        /// </summary>
-        /// <param name="code">An std::string with your code</param>
-        /// <returns>Tokens</returns>
+        /**
+         * @brief Tokenize given source
+         * 
+         * @param code Your source code
+         * @return Tokenator 
+         */
         static Tokenator Tokenize(std::string& code);
     };
 }
