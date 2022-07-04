@@ -1,3 +1,14 @@
+/**
+ * @file tokenator.cpp
+ * @author Ilyas (t.me/awaitable)
+ * @brief Implementation of Tokenator's class.
+ * @version 0.1
+ * @date 2022-07-02
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include "tokenator.h"
 
 namespace Lexer
@@ -10,6 +21,12 @@ namespace Lexer
         */
         
         this->currentToken = 0;
+    }
+
+    Tokenator::Tokenator()
+    {
+        this->currentToken = 0;
+        this->Tokens = std::vector<Token>();
     }
     
     const Token& Tokenator::Current()

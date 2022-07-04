@@ -4,18 +4,8 @@
 #include "tokenator.h"
 #include "Constants/keywords.h"
 
-
 namespace Lexer
 {
-    size_t Lexer::currentLine;
-    size_t Lexer::currChar;
-    size_t Lexer::sourceLength;
-
-    std::string* Lexer::sourcePointer;
-    std::string Lexer::currentLexeme;
-    TokenType Lexer::currentTokenType;
-    std::vector<Token> Lexer::parsedTokens;
-
     void Lexer::PushToken(TokenType t = TokenType::END_OF_FILE)
     {
         if (t == TokenType::END_OF_FILE)
@@ -60,7 +50,7 @@ namespace Lexer
 
     inline char Lexer::Current()
     {
-        return (*sourcePointer)[currChar];
+        return this->givenSource[this->currChar];
     }
 
     inline bool Lexer::HasNext()
@@ -72,7 +62,7 @@ namespace Lexer
     {
         if (!HasNext())
             return '\0';
-        return (*sourcePointer)[currChar + 1];
+        return this->givenSource[currChar + 1];
     }
 
     inline bool Lexer::CheckNext(char ch)
@@ -150,8 +140,8 @@ namespace Lexer
     {
         Reset();
 
-        sourceLength = code.size();
-        sourcePointer = &code;
+        this->givenSource = std::string(std::move(code));
+        this->sourceLength = givenSource.size();
 
         while (HasNext())
         {
