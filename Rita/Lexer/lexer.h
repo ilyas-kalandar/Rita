@@ -1,3 +1,15 @@
+/**
+ * @file lexer.h
+ * @author Ilyas (t.me/awaitable)
+ * @brief Lexer's definition
+ * @version 0.1
+ * @date 2022-07-02
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
+
 #pragma once
 
 #include <vector>
@@ -9,8 +21,6 @@
 
 namespace Lexer 
 {
-
-
     class Lexer
     {
     private:
@@ -20,6 +30,7 @@ namespace Lexer
 
         TokenType currentTokenType;
 
+        std::string givenSource;
         std::string currentLexeme;
         std::vector<Token> parsedTokens;
 

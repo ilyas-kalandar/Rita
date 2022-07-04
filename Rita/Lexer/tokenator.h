@@ -1,3 +1,14 @@
+/**
+ * @file tokenator.h
+ * @author Ilyas (t.me/awaitable)
+ * @brief Just Tokenator declaration.
+ * @version 0.1
+ * @date 2022-07-02
+ * 
+ * @copyright Copyright (c) Awaitable (Ilyas) 2022
+ * 
+ */
+
 #pragma once
 
 #include <vector>
@@ -6,37 +17,49 @@
 
 namespace Lexer
 {
-    /// <summary>
-    /// Class for containing Token-objects.
-    /// </summary>
+    /**
+     * @brief Just class for containing tokens 
+     * You can use Current, Next and HasNext methods for iterating through Tokens.
+     */
     class Tokenator
     {
     private:
         std::vector<Token> Tokens;
         size_t currentToken = -1;
     public:
-        /// <summary>
-        /// Checks for next token
-        /// </summary>
-        /// <returns>true or false (depends on result)</returns>
+        /**
+         * @brief Check for next Token
+         * 
+         * @return true If token exist
+         * @return false If token does not exist (EOF)
+         */
         bool HasNext();
 
-        /// <summary>
-        /// Returns a const reference to next token, EOF_TOKEN will be returned if there is no token.
-        /// </summary>
-        /// <returns>Reference to next token</returns>
+        /**
+         * @brief Get next Token
+         * 
+         * @return const Token& Just next token
+         */
         const Token& Next();
 
-        /// <summary>
-        /// Returns a reference to current token.
-        /// </summary>
-        /// <returns></returns>
+        /**
+         * @brief Get current token
+         * 
+         * @return const Token& Current token
+         */
         const Token& Current();
 
-        /// <summary>
-        /// Constructor for Tokenator
-        /// </summary>
-        /// <param name="tokens">Just vector with tokens (will be moved!)</param>
+        /**
+         * @brief Construct a new Tokenator object
+         * 
+         * @param tokens Your tokens (warning, will be moved!)
+         */
         Tokenator(std::vector<Token>& tokens);
+
+        /**
+         * @brief Construct a new Tokenator object (with empty tokens vector)
+         * 
+         */
+        Tokenator();
     };
 }
