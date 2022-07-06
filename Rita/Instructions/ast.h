@@ -9,15 +9,6 @@ enum class InstructionType
     WHILE,
 };
 
-enum class OpType
-{
-    PLUS,
-    MINUS,
-    MUL,
-    DIV,
-    EQUAL_EQUAL,
-};
-
 class Instruction
 {
 protected: 
