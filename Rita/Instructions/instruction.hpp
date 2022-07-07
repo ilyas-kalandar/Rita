@@ -14,11 +14,20 @@
 #ifndef instruction_hpp
 #define instruction_hpp
 
+/**
+ * @brief Base class for Interpreter's instruction
+ * Don't create instance of this class, use inherited classes instead
+ */
 class Instruction
 {
 protected: 
     InstructionType type;
 public:
+    /**
+     * @brief Get the Type of bject
+     * 
+     * @return InstructionType 
+     */
     InstructionType GetType();
 };
 
