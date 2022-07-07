@@ -1,12 +1,31 @@
-#pragma once
+/**
+ * @file token.h
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief Token definition
+ * @version 0.1
+ * @date 2022-06-08
+ * 
+ * @copyright Copyright Awaitable(c) 2022
+ * 
+ */
 
 #include <string>
 #include <memory>
 
 #include "token_types.h"
 
+#ifndef token_hpp
+#define token_hpp
+
 namespace Lexer
 {
+    /**
+     * @brief Class which represents a token, contains data like:
+     *        Type - type of token
+     *        Literal 
+     *        Line
+     *        Character
+     */
     class Token
     {
     private:
@@ -15,35 +34,49 @@ namespace Lexer
         size_t line;
         size_t character;
     public:
-        /// <summary>
-        /// Default constructor
-        /// </summary>
-        /// <param name="type">Just type of token</param>
-        /// <param name="literal">Just literal (will moved!)</param>
-        /// <param name="line">Just line, where token located</param>
-        /// <param name="character">Character</param>
+        /**
+         * @brief Construct a new Token object
+         * 
+         * @param type Type of token
+         * @param literal Just string with literal
+         * @param line Line of token
+         * @param character Character of token.
+         */
         Token(TokenType type, std::string& literal, size_t line, size_t character);
-        /// <summary>
-        /// Constructor without literal
-        /// </summary>
-        /// <param name="type">Type of token</param>
-        /// <param name="line">Line where token located</param>
-        /// <param name="character">Character</param>
+        /**
+         * @brief Construct a new Token object
+         * 
+         * @param type Type of token
+         * @param line Line of token
+         * @param character Character of token
+         */
         Token(TokenType type, size_t line, size_t character);
-        /// <summary>
-        /// Get Token's literal
-        /// </summary>
-        /// <returns>Token's literal</returns>
+        /**
+         * @brief Get the Literal of token
+         * 
+         * @return const std::string& 
+         */
         const std::string& GetLiteral() const;  
 
-        /// <summary>
-        /// Returns type of token
-        /// </summary>
-        /// <returns></returns>
+        /**
+         * @brief Get the type of token
+         * 
+         * @return const TokenType& 
+         */
         const TokenType& GetTokenType() const;
 
+        /**
+         * @brief Get the Line of token
+         * 
+         * @return const size_t& 
+         */
         const size_t& GetLine() const;
 
+        /**
+         * @brief Get the Character of token
+         * 
+         * @return const size_t& 
+         */
         const size_t& GetCharacter() const;
     };
 
@@ -51,3 +84,5 @@ namespace Lexer
     
     std::ostream& operator<<(std::ostream& os, const Token& tok);
 }
+
+#endif
