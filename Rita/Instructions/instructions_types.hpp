@@ -9,8 +9,8 @@
  * 
  */
 
-#ifndef instruction_type_hpp
-#define instruction_type_hpp
+#ifndef instruction_types_hpp
+#define instruction_types_hpp
 
 enum class InstructionType
 {
