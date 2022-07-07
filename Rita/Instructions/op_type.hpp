@@ -12,6 +12,11 @@
 #ifndef op_type_h
 #define op_type_h
 
+
+/**
+ * @brief Operations types.
+ * 
+ */
 enum class OpType
 {
     PLUS,
