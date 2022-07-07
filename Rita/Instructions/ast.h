@@ -34,7 +34,7 @@ public:
 class IfInstruction : public Instruction
 {
 protected:
-    std::shared_ptr<BinOpInstruction> expr;
+    std::shared_ptr<Instruction> expr;
     std::vector<std::shared_ptr<Instruction>>& body;
 
 public:
