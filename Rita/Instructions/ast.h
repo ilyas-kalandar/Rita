@@ -10,31 +10,6 @@ enum class InstructionType
 };
 
 
-class BinOpInstruction : public Instruction
-{
-private:
-    std::shared_ptr<Instruction> first;
-    std::shared_ptr<Instruction> second;
-    OpType operation_type;
-public:
-    BinOpInstruction(std::shared_ptr<Instruction> first, std::shared_ptr<Instruction> second, OpType op_type)
-    {
-        this->type = InstructionType::BINOP;
-    }
-    std::shared_ptr<Instruction> GetFirst()
-    {
-        return this->first;
-    } 
-    std::shared_ptr<Instruction> GetSecond()
-    {
-        return this->second;
-    }
-    OpType GetOperationType()
-    {
-        return this->operation_type;
-    }
-};
-
 class AssignmentInstruction : public Instruction
 {
 private:
