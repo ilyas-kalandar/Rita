@@ -9,16 +9,6 @@ enum class InstructionType
     WHILE,
 };
 
-class Instruction
-{
-protected: 
-    InstructionType type;
-public:
-    InstructionType GetType()
-    {
-        return this->type;
-    }
-};
 
 class Leaf : public Instruction
 {
