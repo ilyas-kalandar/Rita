@@ -10,22 +10,6 @@ enum class InstructionType
 };
 
 
-class Leaf : public Instruction
-{
-private: 
-    RitaObject* obj;
-public:
-    Leaf(RitaObject* obj)
-    {
-        this->type = InstructionType::LEAF;
-        this->obj = obj;
-    }
-    RitaObject* GetObj()
-    {
-        return this->obj;
-    }
-};
-
 class BinOpInstruction : public Instruction
 {
 private:
