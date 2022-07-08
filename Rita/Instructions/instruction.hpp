@@ -1,7 +1,7 @@
 /**
  * @file instruction.hpp
  * @author your name (you@domain.com)
- * @brief 
+ * @brief Instruction definition.
  * @version 0.1
  * @date 2022-07-07
  * 
@@ -9,7 +9,7 @@
  * 
  */
 
-#include "instruction_type.hpp"
+#include "instructions_types.hpp"
 
 #ifndef instruction_hpp
 #define instruction_hpp
