@@ -13,7 +13,7 @@
 
 #include <vector>
 
-#include "token.h"
+#include "token.hpp"
 
 namespace Lexer
 {
