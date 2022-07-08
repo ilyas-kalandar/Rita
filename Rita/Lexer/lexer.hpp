@@ -17,7 +17,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "tokenator.h"
+#include "tokenator.hpp"
 
 namespace Lexer 
 {

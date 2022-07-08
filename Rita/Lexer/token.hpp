@@ -12,7 +12,7 @@
 #include <string>
 #include <memory>
 
-#include "token_types.h"
+#include "token_types.hpp"
 
 #ifndef token_hpp
 #define token_hpp
