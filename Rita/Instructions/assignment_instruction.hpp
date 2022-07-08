@@ -34,7 +34,7 @@ public:
      * @param id 
      * @param inst 
      */
-    AssignmentInstruction(std::string& id, std::shared_ptr<Instruction> inst) : identifier(id);
+    AssignmentInstruction(std::string& id, std::shared_ptr<Instruction> inst);
     /**
      * @brief Get the Right Instr object
      * 
