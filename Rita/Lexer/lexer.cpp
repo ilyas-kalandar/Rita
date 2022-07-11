@@ -42,12 +42,6 @@ namespace Lexer
         return true;
     }
 
-    void Lexer::Reset()
-    {
-        currChar = 0;
-        currentLine = 1;
-    }
-
     inline char Lexer::Current()
     {
         return this->givenSource[this->currChar];
@@ -138,8 +132,8 @@ namespace Lexer
 
     Tokenator Lexer::Tokenize(std::string& code)
     {
-        Reset();
-
+        this->currChar = 0;
+        this->currentLine = 1;
         this->givenSource = std::string(std::move(code));
         this->sourceLength = givenSource.size();
 

@@ -36,11 +36,6 @@ namespace Lexer
         std::vector<Token> parsedTokens;
 
         /**
-         * @brief Resets inner fields
-         */
-        void Reset();
-
-        /**
          * @brief 
          * 
          * @param t 
