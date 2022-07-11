@@ -78,6 +78,12 @@ namespace Lexer
         case TokenType::ELSE:
             os << "ELSE";
             break;
+        case TokenType::END_OF_LINE:
+            os << "END_OF_LINE";
+            break;
+        case TokenType::PRINT:
+            os << "PRINT";
+            break;
         default:
             os << "Unknown token!";
         }
