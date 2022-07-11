@@ -10,7 +10,7 @@
  */
 
 #include "instruction.hpp"
-#include "../Core/object.hpp"
+#include "../object.hpp"
 
 #ifndef leaf_hpp
 #define leaf_hpp
