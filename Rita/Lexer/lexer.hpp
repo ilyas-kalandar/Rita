@@ -10,7 +10,8 @@
  */
 
 
-#pragma once
+#ifndef lexer_hpp
+#define lexer_hpp
 
 #include <vector>
 #include <memory>
@@ -107,3 +108,5 @@ namespace Lexer
         Tokenator Tokenize(std::string& code);
     };
 }
+
+#endif
