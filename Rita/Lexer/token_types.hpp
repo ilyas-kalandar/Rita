@@ -39,6 +39,7 @@ namespace Lexer
         ELSE,
         WHILE,
         FOR,
+        PRINT,
 
         // Other
         DOT,
