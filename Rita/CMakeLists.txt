@@ -10,4 +10,5 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_subdirectory("Lexer")
 add_subdirectory("Core")
+add_subdirectory("Parser")
 add_subdirectory("Interpreter")
