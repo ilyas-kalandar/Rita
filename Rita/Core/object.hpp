@@ -33,6 +33,7 @@ class RitaObject
     std::vector<RitaObject> arr;
 public:
     RitaObject();
+    RitaObject(bool data);
     RitaObject(int data);
     RitaObject(double data);
     RitaObject(const std::string& data);
@@ -43,6 +44,11 @@ public:
     RitaObject* Minus(RitaObject& another);
     RitaObject* Multiply(RitaObject& another);
     RitaObject* Divide(RitaObject& another);
+    RitaObject* Greater(RitaObject& another);
+    // RitaObject* Smaller(RitaObject& another);
+    // RitaObject* GreaterOrEqual(RitaObject& another);
+    // RitaObject* SmallerOrEqual(RitaObject& another);
+    // RitaObject* Equals(RitaObject& another);
     std::string ToString();
 };
 
