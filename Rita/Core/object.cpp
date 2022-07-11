@@ -9,11 +9,18 @@
  * 
  */
 
+#include <iostream>
+
 #include "object.hpp"
 
 RitaObject::RitaObject()
 {
     this->type = RITA_NONE;
+}
+RitaObject::RitaObject(bool data)
+{
+    this->data = data;
+    this->type = RITA_BOOL;
 }
 RitaObject::RitaObject(int data)
 {
@@ -144,7 +151,11 @@ std::string RitaObject::ToString()
     switch(this->type.GetDataType())
     {
     case DataType::BOOL:
-        return std::to_string(std::get<bool>(this->data));
+        if(std::get<bool>(this->data))
+        {
+            return "true";
+        }
+        return "false";
     case DataType::FLOAT:
         return std::to_string(std::get<double>(this->data));
     case DataType::STRING:
@@ -168,3 +179,31 @@ std::string RitaObject::ToString()
     }
     return "obj";
 }
+
+RitaObject* RitaObject::Greater(RitaObject& another)
+{
+
+    if(this->type.GetDataType() != another.type.GetDataType())
+    {
+        throw std::runtime_error("Runtime error, can't check different types!");
+    }
+
+    switch(this->type.GetDataType())
+    {
+    case DataType::BOOL:
+        return new RitaObject(std::get<bool>(this->data) > std::get<bool>(another.data));
+    case DataType::INT:
+        return new RitaObject(std::get<int>(this->data) > std::get<int>(another.data));
+    case DataType::FLOAT:
+        return new RitaObject(std::get<double>(this->data) > std::get<double>(another.data));
+    default:
+        throw std::runtime_error("Using '>' operator for unsupported type!");
+    }
+}
+
+// TODO(Ilyas) : Implement later
+
+// RitaObject* RitaObject::Smaller(RitaObject& another);
+// RitaObject* RitaObject::GreaterOrEqual(RitaObject& another);
+// RitaObject* RitaObject::SmallerOrEqual(RitaObject& another);
+// RitaObject* RitaObject::Equals(RitaObject& another);
