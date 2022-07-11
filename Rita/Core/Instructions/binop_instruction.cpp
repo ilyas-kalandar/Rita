@@ -13,6 +13,7 @@
 
 BinOpInstruction::BinOpInstruction(std::shared_ptr<Instruction> first, std::shared_ptr<Instruction> second, OpType op_type)
 {
+    this->operation_type = op_type;
     this->type = InstructionType::BINOP;
 }
 
