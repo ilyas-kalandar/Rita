@@ -1,8 +1,8 @@
 #include <stdexcept>
 
-#include "lexer.h"
-#include "tokenator.h"
-#include "Constants/keywords.h"
+#include "lexer.hpp"
+#include "tokenator.hpp"
+#include "Constants/keywords.hpp"
 
 namespace Lexer
 {
