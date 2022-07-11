@@ -1,8 +1,32 @@
 project (Parser)
 
-set(SOURCE_PARSER foo.cpp)
-set(HEADER_PARSER blyat.h)
+set(
+	PARSER_HEADERS
+		parser.hpp
+)
 
-add_library(Parser STATIC ${SOURCE_PARSER} ${HEADER_PARSER})
+set(
+	PARSER_SOURCES
+		parser.cpp
+)
 
-target_include_directories(Parser PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+add_library(
+	Parser
+	STATIC
+		${PARSER_HEADERS}
+		${PARSER_SOURCES}
+)
+
+include_directories(
+	../Lexer
+	Lexer
+	../Core
+	Core
+)
+
+target_link_libraries(
+	Parser
+	PUBLIC 
+		Lexer
+		Core
+)
