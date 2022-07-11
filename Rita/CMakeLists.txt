@@ -3,8 +3,11 @@
 #
 cmake_minimum_required (VERSION 3.8)
 
-add_subdirectory("Lexer")
-add_subdirectory("Parser")
-add_subdirectory("Interpreter")
+# Add global configuration 
 
-# TODO: Add tests and install targets if needed.
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+add_subdirectory("Lexer")
+add_subdirectory("Core")
+add_subdirectory("Interpreter")
