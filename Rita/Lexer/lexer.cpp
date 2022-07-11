@@ -92,7 +92,7 @@ namespace Lexer
                 }
                 break;
             case TokenType::IDENTIFIER:
-                if (Current() == ' ' || Current() == '\n')
+                if(!std::isalnum(Current()) && Current() != '_')
                 {
                     working = false;
                 }
