@@ -8,6 +8,8 @@ add_executable(rita ${SOURCE_EXE})
 
 include_directories("../Lexer/")
 include_directories("../Core/")
+include_directories("../Parser")
 
 target_link_libraries(rita PUBLIC Lexer)
 target_link_libraries(rita PUBLIC Core)
+target_link_libraries(rita PUBLIC Parser)
