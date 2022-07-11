@@ -36,9 +36,9 @@ public:
     RitaObject(bool data);
     RitaObject(int data);
     RitaObject(double data);
-    RitaObject(const std::string& data);
-    RitaObject(const std::vector<RitaObject> vec);
-    RitaObject(const std::map<std::string, RitaObject>& flds);
+    RitaObject(std::string& data);
+    RitaObject(std::vector<RitaObject> vec);
+    RitaObject(std::map<std::string, RitaObject>& flds);
     void PushBack(RitaObject& obj);
     RitaObject* Plus(RitaObject& another);
     RitaObject* Minus(RitaObject& another);

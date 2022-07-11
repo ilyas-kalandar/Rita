@@ -32,17 +32,17 @@ RitaObject::RitaObject(double data)
     this->data = data;
     this->type = RITA_FLOAT;
 }
-RitaObject::RitaObject(const std::string& data)
+RitaObject::RitaObject(std::string& data)
 {
     this->data = std::string(std::move(data));
     this->type = RITA_STRING;
 }
-RitaObject::RitaObject(const std::vector<RitaObject> vec)
+RitaObject::RitaObject(std::vector<RitaObject> vec)
 {
     this->arr = std::vector<RitaObject>(std::move(vec));
     this->type = RITA_LIST;
 }
-RitaObject::RitaObject(const std::map<std::string, RitaObject>& flds)
+RitaObject::RitaObject(std::map<std::string, RitaObject>& flds)
 {
     this->type = RITA_STRUCTURE;
     this->fields = std::map<std::string, RitaObject>(std::move(flds));
