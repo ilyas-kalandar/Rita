@@ -375,3 +375,9 @@ install_manifest.txt
 compile_commands.json
 CTestTestfile.cmake
 _deps
+
+# Visual Studio Code files
+.vscode
+
+# My builds
+*builds
