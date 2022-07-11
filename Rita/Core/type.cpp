@@ -11,7 +11,7 @@
 
 #include "type.hpp"
 
-Type::Type(const std::string& typeName, DataType type)
+Type::Type(std::string& typeName, DataType type)
 {
     this->typeName = std::string(std::move(typeName));
     this->type = type;

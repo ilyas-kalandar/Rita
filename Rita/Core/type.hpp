@@ -37,7 +37,7 @@ public:
      * @param typeName 
      * @param type 
      */
-    Type(const std::string& typeName, DataType type);
+    Type(std::string& typeName, DataType type);
     /**
      * @brief Get the Name object
      * 
