@@ -1,8 +1,30 @@
 project (Core)
 
-set(SOURCE_CORE "type.h")
-set(HEADER_CORE "type.cpp")
+set(
+    CORE_SOURCES
+        object.cpp
+        type.cpp
 
-add_library(CORE STATIC ${SOURCE_LEXER} ${HEADER_LEXER})
+)
 
-target_include_directories(CORE PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+set(
+    CORE_HEADERS
+        object.hpp
+        type.hpp
+        types.hpp
+        data_types.hpp
+)
+
+add_library(
+    Core
+    STATIC
+        ${CORE_SOURCES}
+        ${CORE_HEADERS}
+)
+
+# set_target_properties(
+#     Core
+#     PROPERTIES
+#     CXX_STANDARD 20
+#     CXX_STANDARD_REQUIRED ON
+# )
