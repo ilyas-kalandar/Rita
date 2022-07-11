@@ -36,6 +36,15 @@ namespace Lexer
         bool HasNext();
 
         /**
+        * @brief Checks next token
+        *
+        * @return true If next's token's type is ``tokenType``
+        * @return false If next's token's type is not ``tokenType``
+        */
+        bool CheckNext(const TokenType tokenType);
+        
+
+        /**
          * @brief Get next Token
          * 
          * @return const Token& Just next token
