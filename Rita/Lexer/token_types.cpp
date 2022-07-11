@@ -1,4 +1,4 @@
-#include "token_types.h"
+#include "token_types.hpp"
 
 namespace Lexer
 {
