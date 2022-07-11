@@ -1,7 +1,7 @@
 /**
  * @file leaf.cpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief Leaf's implementation
  * @version 0.1
  * @date 2022-07-07
  * 
