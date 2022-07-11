@@ -4,7 +4,10 @@ project (Interpreter)
 
 set(SOURCE_EXE main.cpp)
 
-add_executable(main ${SOURCE_EXE})
+add_executable(rita ${SOURCE_EXE})
 
-target_link_libraries(main PUBLIC Lexer)
-target_link_libraries(main PUBLIC Parser)
+include_directories("../Lexer/")
+include_directories("../Core/")
+
+target_link_libraries(rita PUBLIC Lexer)
+target_link_libraries(rita PUBLIC Core)
