@@ -14,12 +14,12 @@
 #ifndef types_hpp
 #define types_hpp
 
-const auto RITA_INT = Type("int", DataType::INT);
-const auto RITA_FLOAT = Type("float", DataType::FLOAT);
-const auto RITA_STRUCTURE = Type("structure", DataType::STRUCTURE);
-const auto RITA_STRING = Type("str", DataType::STRING);
-const auto RITA_BOOL = Type("bool", DataType::BOOL);
-const auto RITA_LIST = Type("list", DataType::LIST);
-const auto RITA_NONE = Type("None", DataType::NONE);
+const auto RITA_INT = Type(std::string("int"), DataType::INT);
+const auto RITA_FLOAT = Type(std::string("float"), DataType::FLOAT);
+const auto RITA_STRUCTURE = Type(std::string("structure"), DataType::STRUCTURE);
+const auto RITA_STRING = Type(std::string("str"), DataType::STRING);
+const auto RITA_BOOL = Type(std::string("bool"), DataType::BOOL);
+const auto RITA_LIST = Type(std::string("list"), DataType::LIST);
+const auto RITA_NONE = Type(std::string("None"), DataType::NONE);
 
 #endif
