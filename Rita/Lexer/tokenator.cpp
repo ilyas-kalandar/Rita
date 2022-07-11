@@ -28,7 +28,7 @@ namespace Lexer
         this->currentToken = 0;
         this->Tokens = std::vector<Token>();
     }
-    
+
     const Token& Tokenator::Current()
     {
         if (this->currentToken >= Tokens.size())
@@ -48,5 +48,10 @@ namespace Lexer
             return this->Tokens[this->currentToken++];
         }
         return EOF_TOKEN;
+    }
+
+    bool Tokenator::CheckNext(const TokenType tokenType)
+    {
+        return this->Next().GetTokenType() == tokenType;
     }
 }
