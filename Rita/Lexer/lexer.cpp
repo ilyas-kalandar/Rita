@@ -182,6 +182,7 @@ namespace Lexer
                 case ' ':
                     break;
                 case '\n':
+                    PushToken(TokenType::END_OF_LINE);
                     currentLine++;
                     break;
                 case '.':
