@@ -43,6 +43,7 @@ namespace Lexer
 
         // Other
         DOT,
+        END_OF_LINE,
         END_OF_FILE
     };
 
