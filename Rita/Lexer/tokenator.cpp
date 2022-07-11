@@ -9,7 +9,7 @@
  * 
  */
 
-#include "tokenator.h"
+#include "tokenator.hpp"
 
 namespace Lexer
 {
