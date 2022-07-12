@@ -1,11 +1,11 @@
 /**
  * @file object.hpp
- * @author your name (you@domain.com)
- * @brief 
- * @version 0.1
- * @date 2022-07-10
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief RitaObject's definition.
+ * @version 0.2
+ * @date 2022-07-12
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright Awaitable (c) 2022
  * 
  */
 
@@ -26,30 +26,25 @@
  */
 class RitaObject
 {
-    std::variant<int, double, std::string, bool> data;
-    size_t referenceCounter = 0;
-    Type type = RITA_NONE;
-    std::map<std::string, RitaObject> fields;
-    std::vector<RitaObject> arr;
+protected:
+    size_t referenceCounter;
+    Type type;
 public:
+    /**
+    * @brief Constructs new RitaObject
+    */
     RitaObject();
-    RitaObject(bool data);
-    RitaObject(int data);
-    RitaObject(double data);
-    RitaObject(std::string& data);
-    RitaObject(std::vector<RitaObject> vec);
-    RitaObject(std::map<std::string, RitaObject>& flds);
-    void PushBack(RitaObject& obj);
-    RitaObject* Plus(RitaObject& another);
-    RitaObject* Minus(RitaObject& another);
-    RitaObject* Multiply(RitaObject& another);
-    RitaObject* Divide(RitaObject& another);
-    RitaObject* Greater(RitaObject& another);
-    // RitaObject* Smaller(RitaObject& another);
-    // RitaObject* GreaterOrEqual(RitaObject& another);
-    // RitaObject* SmallerOrEqual(RitaObject& another);
-    // RitaObject* Equals(RitaObject& another);
-    std::string ToString();
+
+    /*
+    * @brief Get Object's type.
+    */
+    const Type& GetType();
+
+    /**
+    * @brief Get total references count
+    * 
+    */
+    const size_t& GetReferenceCount();
 };
 
 #endif
