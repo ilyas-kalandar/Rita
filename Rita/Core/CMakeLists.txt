@@ -10,7 +10,7 @@ set(
     CORE_SOURCES
         object.cpp
         type.cpp
-
+        int_obj.cpp
 )
 
 set(
@@ -18,7 +18,9 @@ set(
         object.hpp
         type.hpp
         types.hpp
-        data_types.hpp
+        string_obj.hpp
+        native_function.hpp
+        int_obj.hpp
 )
 
 
