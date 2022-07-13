@@ -24,6 +24,11 @@ void Type::AddField(std::string& field, RitaObject* obj)
 	this->definedFields[field] = obj;
 }
 
+RitaObject* Type::GetField(std::string& fieldName)
+{
+	return this->definedFields[fieldName];
+}
+
 const std::map<std::string, RitaObject*>& Type::GetFields()
 {
 	return this->definedFields;
