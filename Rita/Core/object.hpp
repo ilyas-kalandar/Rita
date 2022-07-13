@@ -15,36 +15,29 @@
 #include <vector>
 #include <map>
 
-#include "types.hpp"
-
 #ifndef rita_object_hpp
 #define rita_object_hpp
 
-/**
- * @brief 
- * 
- */
 class RitaObject
 {
 protected:
-    size_t referenceCounter;
-    Type type;
+    size_t refCounter;
+    RitaObject* objectType;
 public:
     /**
-    * @brief Constructs new RitaObject
-    */
-    RitaObject();
+     * @brief Get count of references
+     * 
+     * @return size_t 
+     */
+    size_t GetRefCount();
 
-    /*
-    * @brief Get Object's type.
-    */
-    const Type& GetType();
 
     /**
-    * @brief Get total references count
-    * 
-    */
-    const size_t& GetReferenceCount();
+     * @brief Get the Type object
+     * 
+     * @return RitaObject* 
+     */
+    RitaObject* GetType();
 };
 
 #endif
