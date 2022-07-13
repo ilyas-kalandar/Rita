@@ -9,19 +9,22 @@
  * 
  */
 
+#include <string>
+
 #include "type.hpp"
 
-Type::Type(std::string& typeName, DataType type)
+Type::Type(std::string name) : typeName(name)
 {
-    this->typeName = std::string(std::move(typeName));
-    this->type = type;
-}
-const std::string& Type::GetName() const 
-{
-    return this->typeName;
+	this->refCounter = 0;
+	this->objectType = this;
 }
 
-const DataType& Type::GetDataType() const 
+void Type::AddField(std::string& field, RitaObject* obj)
 {
-    return this->type;
+	this->definedFields[field] = obj;
+}
+
+const std::map<std::string, RitaObject*>& Type::GetFields()
+{
+	return this->definedFields;
 }
