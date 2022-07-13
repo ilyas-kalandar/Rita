@@ -16,12 +16,12 @@
 #include <map>
 #include <variant>
 
-#include "data_types.hpp"
+#include "object.hpp"
 
 #ifndef type_hpp
 #define type_hpp
 
-class Type : RitaObject
+class Type : public RitaObject
 {
 protected:
     std::string typeName;
@@ -41,6 +41,13 @@ public:
      * @param obj Object of field
      */
     void AddField(std::string& name, RitaObject* obj);
+    
+    /**
+     * @brief Get the Field object
+     * 
+     * @param name 
+     */
+    RitaObject* GetField(std::string& name);
 
     /**
      * @brief Get fields of object
