@@ -1,16 +1,13 @@
 /**
  * @file type.h
- * @author your name (you@domain.com)
- * @brief 
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief Definition of Rita's type.
  * @version 0.1
  * @date 2022-07-04
  * 
  * @copyright Copyright (c) 2022
  * 
  */
-
-#pragma once
-
 
 #include <stdexcept>
 #include <string>
@@ -21,33 +18,36 @@
 
 #include "data_types.hpp"
 
-/**
- * @brief 
- * 
- */
-class Type
+#ifndef type_hpp
+#define type_hpp
+
+class Type : RitaObject
 {
-private:
+protected:
     std::string typeName;
-    DataType type;
+    std::map<std::string, RitaObject*> definedFields;
 public:
     /**
      * @brief Construct a new Type object
      * 
-     * @param typeName 
-     * @param type 
+     * @param name 
      */
-    Type(std::string& typeName, DataType type);
+    Type(std::string name);
+
     /**
-     * @brief Get the Name object
+     * @brief Add field to type
      * 
-     * @return const std::string& 
+     * @param name Field's name
+     * @param obj Object of field
      */
-    const std::string& GetName() const;
+    void AddField(std::string& name, RitaObject* obj);
+
     /**
-     * @brief Get the Data Type object
+     * @brief Get fields of object
      * 
-     * @return const DataType& 
+     * @return const std::map<std::string, RitaObject*>& 
      */
-    const DataType& GetDataType() const;
+    const std::map<std::string, RitaObject*>& GetFields();
 };
+
+#endif
