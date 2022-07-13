@@ -18,7 +18,7 @@ size_t RitaObject::GetRefCount()
 	return this->refCounter;
 }
 
-RitaObject* GetType()
+RitaObject* RitaObject::GetType()
 {
 	return this->objectType;
 }
