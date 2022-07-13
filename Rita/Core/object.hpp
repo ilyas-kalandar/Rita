@@ -10,11 +10,6 @@
  */
 
 
-#include <variant>
-#include <string>
-#include <vector>
-#include <map>
-
 #ifndef rita_object_hpp
 #define rita_object_hpp
 
