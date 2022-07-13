@@ -13,18 +13,12 @@
 
 #include "object.hpp"
 
-RitaObject::RitaObject() : type(RITA_NONE)
+size_t RitaObject::GetRefCount()
 {
-	this->referenceCounter = 0;
+	return this->refCounter;
 }
 
-const Type& RitaObject::GetType()
+RitaObject* GetType()
 {
-	return this->type;
+	return this->objectType;
 }
-
-const size_t& RitaObject::GetReferenceCount()
-{
-	return this->referenceCounter;
-}
-
