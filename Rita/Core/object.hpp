@@ -9,6 +9,7 @@
  * 
  */
 
+#include <cstddef>
 
 #ifndef rita_object_hpp
 #define rita_object_hpp
