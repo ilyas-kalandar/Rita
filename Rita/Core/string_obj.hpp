@@ -1,3 +1,14 @@
+/**
+ * @file string_obj.hpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief Definition of String object.
+ * @version 0.1
+ * @date 2022-07-14
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include <string>
 
 #include "object.hpp"
@@ -6,20 +17,31 @@
 #ifndef string_obj_hpp
 #define string_obj_hpp
 
-class String : public RitaObject
+namespace Core
 {
-protected:
-	std::string value;
-public:
 	/**
-	 * @brief Construct a new String object
+	 * @brief String-class provides a storage for string and contains useful methods for working with contained string
 	 * 
-	 * @param val 
-	 * @param type 
 	 */
-	String(std::string val, Type* type);
+	class String : public RitaObject
+	{
+	protected:
+		std::string value;
+	public:
+		/**
+		 * @brief Construct a new String object
+		 * 
+		 * @param val Value for string
+		 * @param type Type of object.
+		 */
+		String(std::string val, Type* type);
 
-	const std::string& GetValue();
-};
-
+		/**
+		 * @brief Get the Value object
+		 * 
+		 * @return const std::string& 
+		 */
+		const std::string& GetValue();
+	};
+}
 #endif
