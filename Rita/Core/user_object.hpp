@@ -4,38 +4,43 @@
 #ifndef user_object_hpp
 #define user_object_hpp
 
-/**
- * @brief 
- * 
- */
-class UserObject : public RitaObject
+namespace Core
 {
-protected:
-    std::map<std::string, RitaObject*> fields;
-public:
     /**
-     * @brief Construct a new User Object object
+     * @brief Container for storing Rita's user's object.
      * 
-     * @param type 
-     */
-    UserObject(Type* type);
-
-    /**
-     * @brief 
+     * Contains fields of some object.
      * 
-     * @param field 
-     * @return RitaObject* 
      */
-    RitaObject* Get(std::string& field);
+    class UserObject : public RitaObject
+    {
+    protected:
+        std::map<std::string, RitaObject*> fields;
+    public:
+        /**
+         * @brief Construct a new User Object object
+         * 
+         * @param type 
+         */
+        UserObject(Type* type);
+
+        /**
+         * @brief Get some field of UserObject
+         * 
+         * @param field Field's name
+         * @return RitaObject* 
+         */
+        RitaObject* Get(std::string& field);
 
 
-    /**
-     * @brief 
-     * 
-     * @param field 
-     * @param obj 
-     */
-    void Set(std::string& field, RitaObject* obj);
-};
+        /**
+         * @brief Binds object to field
+         * 
+         * @param field Field's name
+         * @param obj Object for binding
+         */
+        void Set(std::string& field, RitaObject* obj);
+    };
+}
 
 #endif
