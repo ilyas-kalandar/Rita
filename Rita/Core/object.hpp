@@ -14,26 +14,28 @@
 #ifndef rita_object_hpp
 #define rita_object_hpp
 
-class RitaObject
+namespace Core
 {
-protected:
-    size_t refCounter;
-    RitaObject* objectType;
-public:
-    /**
-     * @brief Get count of references
-     * 
-     * @return size_t 
-     */
-    size_t GetRefCount();
+    class RitaObject
+    {
+    protected:
+        size_t refCounter;
+        RitaObject* objectType;
+    public:
+        /**
+         * @brief Get count of references
+         * 
+         * @return size_t 
+         */
+        size_t GetRefCount();
 
 
-    /**
-     * @brief Get the Type object
-     * 
-     * @return RitaObject* 
-     */
-    RitaObject* GetType();
-};
-
+        /**
+         * @brief Get the Type object
+         * 
+         * @return RitaObject* 
+         */
+        RitaObject* GetType();
+    };
+}
 #endif
