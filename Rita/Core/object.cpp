@@ -13,12 +13,15 @@
 
 #include "object.hpp"
 
-size_t RitaObject::GetRefCount()
+namespace Core
 {
-	return this->refCounter;
-}
+	size_t RitaObject::GetRefCount()
+	{
+		return this->refCounter;
+	}
 
-RitaObject* RitaObject::GetType()
-{
-	return this->objectType;
+	RitaObject* RitaObject::GetType()
+	{
+		return this->objectType;
+	}
 }
