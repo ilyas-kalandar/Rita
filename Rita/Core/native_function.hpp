@@ -1,4 +1,13 @@
-#pragma once
+/**
+ * @file native_function.hpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief NativeFunction definition.
+ * @version 0.1
+ * @date 2022-07-14
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
 
 #include <functional>
 
@@ -8,19 +17,32 @@
 #ifndef native_function_hpp
 #define native_function_hpp
 
-class NativeFunction : public RitaObject
+namespace Core
 {
-protected:
-	std::function<RitaObject* (RitaObject*)> nativeCallback;
-public:
-	NativeFunction(std::function<RitaObject* (RitaObject*)> f, Type* type);
-
     /**
-     * @brief Start the function executing.
-     *
-     * @return RitaObject* object-result.
+     * @brief NativeFunction stores a (C++) function for calling directly from Rita.
+     * 
      */
-	RitaObject* Execute(RitaObject* arg);
-};
+    class NativeFunction : public RitaObject
+    {
+    protected:
+        std::function<RitaObject* (RitaObject*)> nativeCallback;
+    public:
+        /**
+         * @brief Construct a new NativeFunction object
+         * 
+         * @param f C++ function.
+         * @param type Type of object.
+         */
+        NativeFunction(std::function<RitaObject* (RitaObject*)> f, Type* type);
+
+        /**
+         * @brief Start the function executing.
+         *
+         * @return RitaObject* object-result.
+         */
+        RitaObject* Execute(RitaObject* arg);
+    };
+}
 
 #endif
