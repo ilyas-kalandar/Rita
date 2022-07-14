@@ -21,40 +21,43 @@
 #ifndef type_hpp
 #define type_hpp
 
-class Type : public RitaObject
+namespace Core
 {
-protected:
-    std::string typeName;
-    std::map<std::string, RitaObject*> definedFields;
-public:
-    /**
-     * @brief Construct a new Type object
-     * 
-     * @param name 
-     */
-    Type(std::string name);
+    class Type : public RitaObject
+    {
+    protected:
+        std::string typeName;
+        std::map<std::string, RitaObject*> definedFields;
+    public:
+        /**
+         * @brief Construct a new Type object
+         * 
+         * @param name 
+         */
+        Type(std::string name);
 
-    /**
-     * @brief Add field to type
-     * 
-     * @param name Field's name
-     * @param obj Object of field
-     */
-    void AddField(std::string& name, RitaObject* obj);
-    
-    /**
-     * @brief Get the Field object
-     * 
-     * @param name 
-     */
-    RitaObject* GetField(std::string& name);
+        /**
+         * @brief Add field to type
+         * 
+         * @param name Field's name
+         * @param obj Object of field
+         */
+        void AddField(std::string& name, RitaObject* obj);
+        
+        /**
+         * @brief Get the Field object
+         * 
+         * @param name 
+         */
+        RitaObject* GetField(std::string& name);
 
-    /**
-     * @brief Get fields of object
-     * 
-     * @return const std::map<std::string, RitaObject*>& 
-     */
-    const std::map<std::string, RitaObject*>& GetFields();
-};
+        /**
+         * @brief Get fields of object
+         * 
+         * @return const std::map<std::string, RitaObject*>& 
+         */
+        const std::map<std::string, RitaObject*>& GetFields();
+    };
+}
 
 #endif

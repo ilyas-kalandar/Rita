@@ -13,23 +13,26 @@
 
 #include "type.hpp"
 
-Type::Type(std::string name) : typeName(name)
+namespace Core
 {
-	this->refCounter = 0;
-	this->objectType = this;
-}
+	Type::Type(std::string name) : typeName(name)
+	{
+		this->refCounter = 0;
+		this->objectType = this;
+	}
 
-void Type::AddField(std::string& field, RitaObject* obj)
-{
-	this->definedFields[field] = obj;
-}
+	void Type::AddField(std::string& field, RitaObject* obj)
+	{
+		this->definedFields[field] = obj;
+	}
 
-RitaObject* Type::GetField(std::string& fieldName)
-{
-	return this->definedFields[fieldName];
-}
+	RitaObject* Type::GetField(std::string& fieldName)
+	{
+		return this->definedFields[fieldName];
+	}
 
-const std::map<std::string, RitaObject*>& Type::GetFields()
-{
-	return this->definedFields;
+	const std::map<std::string, RitaObject*>& Type::GetFields()
+	{
+		return this->definedFields;
+	}
 }
