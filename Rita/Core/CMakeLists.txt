@@ -10,17 +10,20 @@ set(
     CORE_SOURCES
         object.cpp
         type.cpp
+        string_obj.cpp
+        native_function.cpp
         int_obj.cpp
+        list_obj.cpp
 )
 
 set(
     CORE_HEADERS
         object.hpp
         type.hpp
-        types.hpp
         string_obj.hpp
         native_function.hpp
         int_obj.hpp
+        list_obj.hpp
 )
 
 
