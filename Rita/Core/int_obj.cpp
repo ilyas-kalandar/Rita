@@ -2,13 +2,16 @@
 #include "native_function.hpp"
 #include "string_obj.hpp"
 
-Int::Int(int val, Type* objectType)
+namespace Core
 {
-	this->value = val;
-    this->objectType = objectType;
-}
+	Int::Int(int val, Type* objectType)
+	{
+		this->value = val;
+		this->objectType = objectType;
+	}
 
-int Int::GetValue()
-{
-	return this->value;
+	int Int::GetValue()
+	{
+		return this->value;
+	}
 }
