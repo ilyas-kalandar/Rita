@@ -1,12 +1,26 @@
+/**
+ * @file string_obj.cpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief String-object implementation.
+ * @version 0.1
+ * @date 2022-07-14
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include "string_obj.hpp"
 #include "type.hpp"
 
-String::String(std::string val, Type* type) : value(val)
+namespace Core
 {
-    this->objectType = type;
-}
+    String::String(std::string val, Type* type) : value(val)
+    {
+        this->objectType = type;
+    }
 
-const std::string& String::GetValue()
-{
-    return this->value;
+    const std::string& String::GetValue()
+    {
+        return this->value;
+    }
 }
