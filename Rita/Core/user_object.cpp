@@ -2,9 +2,8 @@
 
 namespace Core
 {
-    UserObject::UserObject(Type* type)
+    UserObject::UserObject(Type* type) : RitaObject(type)
     {
-        this->objectType = type;
     }
 
     RitaObject* UserObject::Get(std::string& field)
