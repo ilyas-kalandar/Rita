@@ -12,18 +12,23 @@
 #ifndef op_type_h
 #define op_type_h
 
-
-/**
- * @brief Operations types.
- * 
- */
-enum class OpType
+namespace Core
 {
-    PLUS,
-    MINUS,
-    MUL,
-    DIV,
-    EQUAL_EQUAL,
-};
+    namespace Instructions
+    {
+        /**
+         * @brief Operations types.
+         * 
+         */
+        enum class OpType
+        {
+            PLUS,
+            MINUS,
+            MUL,
+            DIV,
+            EQUAL_EQUAL,
+        };
+    }
+}
 
 #endif
