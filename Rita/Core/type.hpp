@@ -11,10 +11,7 @@
 
 #include <stdexcept>
 #include <string>
-#include <vector>
-#include <memory>
 #include <map>
-#include <variant>
 
 #include "object.hpp"
 
@@ -26,6 +23,7 @@ namespace Core
     class Type : public RitaObject
     {
     protected:
+        Type* inheritedFrom;
         std::string typeName;
         std::map<std::string, RitaObject*> definedFields;
     public:
@@ -34,7 +32,7 @@ namespace Core
          * 
          * @param name 
          */
-        Type(std::string name);
+        Type(const std::string& name, Type* inheritedFrom);
 
         /**
          * @brief Add field to type

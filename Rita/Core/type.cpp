@@ -15,9 +15,10 @@
 
 namespace Core
 {
-	Type::Type(std::string name) : RitaObject(this), typeName(name)
+	Type::Type(const std::string& name, Type* inheritedFrom=nullptr) : RitaObject(this), typeName(name)
 	{
 		this->refCounter = 0;
+		this->inheritedFrom = inheritedFrom;
 	}
 
 	const std::string& Type::GetTypeName()
@@ -32,7 +33,20 @@ namespace Core
 
 	RitaObject* Type::GetField(std::string& fieldName)
 	{
-		return this->definedFields[fieldName];
+		// Lookup
+		if(this->definedFields.find(fieldName) != this->definedFields.end())
+		{
+			return this->definedFields[fieldName];
+		}
+
+		//lookup base-class for field
+		
+		if(this->inheritedFrom != nullptr)
+		{
+			return this->inheritedFrom->GetField(fieldName);
+		}
+
+		throw std::runtime_error("Field not found!");
 	}
 
 	const std::map<std::string, RitaObject*>& Type::GetFields()
