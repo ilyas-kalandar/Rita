@@ -11,23 +11,29 @@
 
 #include "binop_instruction.hpp"
 
-BinOpInstruction::BinOpInstruction(std::shared_ptr<Instruction> first, std::shared_ptr<Instruction> second, OpType op_type)
+namespace Core
 {
-    this->operation_type = op_type;
-    this->type = InstructionType::BINOP;
-}
+    namespace Instructions
+    {
+        BinOpInstruction::BinOpInstruction(std::shared_ptr<Instruction> first, std::shared_ptr<Instruction> second, OpType op_type)
+        {
+            this->operation_type = op_type;
+            this->type = InstructionType::BINOP;
+        }
 
-std::shared_ptr<Instruction> BinOpInstruction::GetFirst()
-{
-    return this->first;
-} 
+        std::shared_ptr<Instruction> BinOpInstruction::GetFirst()
+        {
+            return this->first;
+        } 
 
-std::shared_ptr<Instruction> BinOpInstruction::GetSecond()
-{
-    return this->second;
-}
+        std::shared_ptr<Instruction> BinOpInstruction::GetSecond()
+        {
+            return this->second;
+        }
 
-OpType BinOpInstruction::GetOperationType()
-{
-    return this->operation_type;
+        OpType BinOpInstruction::GetOperationType()
+        {
+            return this->operation_type;
+        }
+    }
 }
