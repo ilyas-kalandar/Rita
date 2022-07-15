@@ -15,27 +15,33 @@
 #ifndef leaf_hpp
 #define leaf_hpp
 
-/**
- * @brief Class for storing Objects into instructions.
- * 
- */
-class Leaf : public Instruction
+namespace Core
 {
-private: 
-    RitaObject* obj;
-public:
-    /**
-     * @brief Construct a new Leaf object
-     * 
-     * @param obj Object for storing
-     */
-    Leaf(RitaObject* obj);
-    /**
-     * @brief Get the stored object
-     * 
-     * @return RitaObject* 
-     */
-    RitaObject* GetObj();
-};
+    namespace Instructions
+    {
+        /**
+         * @brief Class for storing Objects into instructions.
+         * 
+         */
+        class Leaf : public Instruction
+        {
+        private: 
+            RitaObject* obj;
+        public:
+            /**
+             * @brief Construct a new Leaf object
+             * 
+             * @param obj Object for storing
+             */
+            Leaf(RitaObject* obj);
+            /**
+             * @brief Get the stored object
+             * 
+             * @return RitaObject* 
+             */
+            RitaObject* GetObj();
+        };
+    }
+}
 
 #endif
