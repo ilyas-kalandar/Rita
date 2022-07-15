@@ -16,23 +16,29 @@
 #ifndef instruction_hpp
 #define instruction_hpp
 
- /**
-  * @brief Base class for Interpreter's instruction
-  * Don't create instance of this class, use inherited classes instead
-  */
-class Instruction
+namespace Core
 {
-protected:
-	InstructionType type;
-public:
-	/**
-	 * @brief Get the Type of bject
-	 *
-	 * @return InstructionType
-	 */
-	InstructionType GetType() const;
-};
+	namespace Instructions
+	{
+		/**
+		 * @brief Base class for Interpreter's instruction
+		 * Don't create instance of this class, use inherited classes instead
+		 */
+		class Instruction
+		{
+		protected:
+			InstructionType type;
+		public:
+			/**
+			 * @brief Get the Type of bject
+			 *
+			 * @return InstructionType
+			 */
+			InstructionType GetType() const;
+		};
 
-std::ostream& operator<<(std::ostream& os, const Instruction& instr);
+		std::ostream& operator<<(std::ostream& os, const Instruction& instr);
+	}
+}
 
 #endif
