@@ -11,7 +11,13 @@
 
 #include "while_instruction.hpp"
 
-WhileInstruction::WhileInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr) : IfInstruction(body, expr)
+namespace Core
 {
-    this->type = InstructionType::WHILE;
+    namespace Instructions
+    {
+        WhileInstruction::WhileInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr) : IfInstruction(body, expr)
+        {
+            this->type = InstructionType::WHILE;
+        }
+    }
 }

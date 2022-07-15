@@ -14,36 +14,41 @@
 #ifndef if_instruction_hpp
 #define if_instruction_hpp
 
-
-/**
- * @brief Class for storing instructions like:
- *  
- *  while(a > 3) {
- *      print(a);
- *      a = a - 1;
- *  }
- * 
- *  This will be stored like
- *      
- *      WhileInstruction(
- *          {
- *              PrintInstruction(a),
- *              AssignmentInstruction(a, BinOpInstruction(a, 1, -)),
- *          },
- *          BinOpInstruction(a, 3, >)
- *      )
- * 
- */
-class WhileInstruction : public IfInstruction
+namespace Core
 {
-public:
-    /**
-     * @brief Construct a new While Instruction object
-     * 
-     * @param body Vector with instructions of body
-     * @param expr Expression for checking
-     */
-    WhileInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr);
-};
+    namespace Instructions
+    {
+        /**
+         * @brief Class for storing instructions like:
+         *  
+         *  while(a > 3) {
+         *      print(a);
+         *      a = a - 1;
+         *  }
+         * 
+         *  This will be stored like
+         *      
+         *      WhileInstruction(
+         *          {
+         *              PrintInstruction(a),
+         *              AssignmentInstruction(a, BinOpInstruction(a, 1, -)),
+         *          },
+         *          BinOpInstruction(a, 3, >)
+         *      )
+         * 
+         */
+        class WhileInstruction : public IfInstruction
+        {
+        public:
+            /**
+             * @brief Construct a new While Instruction object
+             * 
+             * @param body Vector with instructions of body
+             * @param expr Expression for checking
+             */
+            WhileInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr);
+        };
+    }
+}
 
 #endif
