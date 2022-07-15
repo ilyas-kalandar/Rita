@@ -11,33 +11,40 @@
 
 #include "instruction.hpp"
 
-InstructionType Instruction::GetType() const
+namespace Core
 {
-    return this->type;
-}
-
-std::ostream& operator<<(std::ostream& os, const Instruction& instr)
-{
-	os << "Instruction<";
-
-	switch (instr.GetType())
+	namespace Instructions
 	{
-	case InstructionType::ASSIGNMENT:
-		os << "ASSIGNMENT";
-		break;
-	case InstructionType::BINOP:
-		os << "BINOP";
-		break;
-	case InstructionType::IF:
-		os << "IF";
-		break;
-	case InstructionType::LEAF:
-		os << "LEAF";
-		break;
-	case InstructionType::WHILE:
-		os << "WHILE";
-		break;
+		InstructionType Instruction::GetType() const
+		{
+			return this->type;
+		}
+
+		std::ostream& operator<<(std::ostream& os, const Instruction& instr)
+		{
+			os << "Instruction<";
+
+			switch (instr.GetType())
+			{
+			case InstructionType::ASSIGNMENT:
+				os << "ASSIGNMENT";
+				break;
+			case InstructionType::BINOP:
+				os << "BINOP";
+				break;
+			case InstructionType::IF:
+				os << "IF";
+				break;
+			case InstructionType::LEAF:
+				os << "LEAF";
+				break;
+			case InstructionType::WHILE:
+				os << "WHILE";
+				break;
+			}
+			os << ">";
+			return os;
+		}
+
 	}
-	os << ">";
-	return os;
 }
