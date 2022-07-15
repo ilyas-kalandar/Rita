@@ -9,6 +9,7 @@
  * 
  */
 
+#include <vector>
 
 #include "object.hpp"
 #include "type.hpp"
