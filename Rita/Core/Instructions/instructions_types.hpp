@@ -12,13 +12,16 @@
 #ifndef instruction_types_hpp
 #define instruction_types_hpp
 
-enum class InstructionType
+namespace Core
 {
-    BINOP,
-    LEAF,
-    ASSIGNMENT,
-    IF,
-    WHILE,
-};
+    enum class InstructionType
+    {
+        BINOP,
+        LEAF,
+        ASSIGNMENT,
+        IF,
+        WHILE,
+    };
+}
 
 #endif
