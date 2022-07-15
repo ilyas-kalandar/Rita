@@ -15,10 +15,14 @@
 
 namespace Core
 {
-	Type::Type(std::string name) : typeName(name)
+	Type::Type(std::string name) : RitaObject(this), typeName(name)
 	{
 		this->refCounter = 0;
-		this->objectType = this;
+	}
+
+	const std::string& Type::GetTypeName()
+	{
+		return this->typeName;
 	}
 
 	void Type::AddField(std::string& field, RitaObject* obj)
