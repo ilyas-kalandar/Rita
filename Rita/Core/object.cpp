@@ -15,6 +15,11 @@
 
 namespace Core
 {
+	RitaObject::RitaObject(RitaObject* type)
+	{
+		this->objectType = type;
+	}
+
 	size_t RitaObject::GetRefCount()
 	{
 		return this->refCounter;
