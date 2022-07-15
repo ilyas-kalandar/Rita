@@ -11,13 +11,19 @@
 
 #include "leaf.hpp"
 
-Leaf::Leaf(RitaObject* obj)
+namespace Core
 {
-    this->type = InstructionType::LEAF;
-    this->obj = obj;
-}
+    namespace Instructions
+    {
+        Leaf::Leaf(RitaObject* obj)
+        {
+            this->type = InstructionType::LEAF;
+            this->obj = obj;
+        }
 
-RitaObject* Leaf::GetObj()
-{
-    return this->obj;
+        RitaObject* Leaf::GetObj()
+        {
+            return this->obj;
+        }
+    }
 }
