@@ -14,9 +14,8 @@
 
 namespace Core
 {
-    String::String(std::string val, Type* type) : value(val)
+    String::String(std::string val, Type* type) : RitaObject(type), value(val)
     {
-        this->objectType = type;
     }
 
     const std::string& String::GetValue()
