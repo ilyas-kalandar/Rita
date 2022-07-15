@@ -4,10 +4,9 @@
 
 namespace Core
 {
-	Int::Int(int val, Type* objectType)
+	Int::Int(int val, Type* objectType) : RitaObject(objectType)
 	{
 		this->value = val;
-		this->objectType = objectType;
 	}
 
 	int Int::GetValue()
