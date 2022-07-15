@@ -13,9 +13,8 @@
 
 namespace Core
 {
-    List::List(Type* type)
+    List::List(Type* type) : RitaObject(type)
     {
-        this->objectType = type;
     }
 
     void List::Insert(size_t index, RitaObject* obj)
