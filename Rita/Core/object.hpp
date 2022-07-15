@@ -22,6 +22,8 @@ namespace Core
         size_t refCounter;
         RitaObject* objectType;
     public:
+        RitaObject(RitaObject* type);
+
         /**
          * @brief Get count of references
          * 
