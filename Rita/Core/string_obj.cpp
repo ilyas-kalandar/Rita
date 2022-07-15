@@ -14,7 +14,7 @@
 
 namespace Core
 {
-    String::String(std::string val, Type* type) : RitaObject(type), value(val)
+    String::String(std::string& val, Type* type) : RitaObject(type), value(val)
     {
     }
 

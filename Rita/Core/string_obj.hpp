@@ -34,7 +34,7 @@ namespace Core
 		 * @param val Value for string
 		 * @param type Type of object.
 		 */
-		String(std::string val, Type* type);
+		String(std::string& val, Type* type);
 
 		/**
 		 * @brief Get the Value object
