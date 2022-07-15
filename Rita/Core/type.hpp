@@ -57,6 +57,13 @@ namespace Core
          * @return const std::map<std::string, RitaObject*>& 
          */
         const std::map<std::string, RitaObject*>& GetFields();
+
+        /**
+         * @brief Get the Type Name object
+         * 
+         * @return const std::string& 
+         */
+        const std::string& GetTypeName();
     };
 }
 
