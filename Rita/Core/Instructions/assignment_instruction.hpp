@@ -17,37 +17,43 @@
 #ifndef assignment_instruction_hpp
 #define assignment_instruction_hpp
 
-/**
- * @brief Class for storing instructions like:
- *              var x = 1;
- * Stores identifier (variable), and parameter (may be another instruction).
- */
-class AssignmentInstruction : public Instruction
+namespace Core
 {
-private:
-    std::string& identifier;
-    std::shared_ptr<Instruction> instr;
-public: 
-    /**
-     * @brief Construct a new Assignment Instruction object
-     * 
-     * @param id 
-     * @param inst 
-     */
-    AssignmentInstruction(std::string& id, std::shared_ptr<Instruction> inst);
-    /**
-     * @brief Get the Right Instr object
-     * 
-     * @return std::shared_ptr<Instruction> 
-     */
-    std::shared_ptr<Instruction> GetRightInstr();
+    namespace Instructions
+    {
+        /**
+         * @brief Class for storing instructions like:
+         *              var x = 1;
+         * Stores identifier (variable), and parameter (may be another instruction).
+         */
+        class AssignmentInstruction : public Instruction
+        {
+        private:
+            std::string& identifier;
+            std::shared_ptr<Instruction> instr;
+        public: 
+            /**
+             * @brief Construct a new Assignment Instruction object
+             * 
+             * @param id 
+             * @param inst 
+             */
+            AssignmentInstruction(std::string& id, std::shared_ptr<Instruction> inst);
+            /**
+             * @brief Get the Right Instr object
+             * 
+             * @return std::shared_ptr<Instruction> 
+             */
+            std::shared_ptr<Instruction> GetRightInstr();
 
-    /**
-     * @brief Get the Identifier object
-     * 
-     * @return const std::string& 
-     */
-    const std::string& GetIdentifier();
-};
+            /**
+             * @brief Get the Identifier object
+             * 
+             * @return const std::string& 
+             */
+            const std::string& GetIdentifier();
+        };
+    }
+}
 
 #endif
