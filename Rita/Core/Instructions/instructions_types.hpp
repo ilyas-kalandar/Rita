@@ -21,6 +21,7 @@ namespace Core
         ASSIGNMENT,
         IF,
         WHILE,
+        FUNCTION_CALL,
     };
 }
 
