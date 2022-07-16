@@ -7,5 +7,6 @@ namespace Lexer
         {"fun", TokenType::FUN},
         {"while", TokenType::WHILE},
         {"print", TokenType::PRINT},
+        {"var", TokenType::VAR},
     };
 }
