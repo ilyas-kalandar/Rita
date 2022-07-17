@@ -17,6 +17,7 @@ namespace Core
 {
 	RitaObject::RitaObject(RitaObject* type)
 	{
+		this->refCounter = 0;
 		this->objectType = type;
 	}
 
