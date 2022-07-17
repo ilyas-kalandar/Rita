@@ -14,6 +14,9 @@
 
 #include "instruction.hpp"
 
+#ifndef if_instruction_hpp
+#define if_instruction_hpp
+
 namespace Core
 {
     namespace Instructions
@@ -66,3 +69,5 @@ namespace Core
         };
     }
 }
+
+#endif
