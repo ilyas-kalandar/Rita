@@ -52,7 +52,9 @@ namespace Lexer
 
     bool Tokenator::CheckNext(const TokenType tokenType)
     {
-        return this->Next().GetTokenType() == tokenType;
+        if (!this->HasNext())
+            return false;
+        return this->Tokens[this->currentToken + 1].GetTokenType() == tokenType;
     }
 
     void Tokenator::Reset()
