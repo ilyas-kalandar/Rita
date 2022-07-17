@@ -9,6 +9,8 @@
 #include "Instructions/leaf.hpp"
 #include "parser.hpp"
 
+#include "ast_printer.hpp"
+
 #include "string_obj.hpp"
 
 
@@ -22,7 +24,7 @@ int main()
 
     while(toks.Current().GetTokenType() != Lexer::TokenType::END_OF_FILE)
     {
-        std::cout << toks.Current() << std::endl;
+        //std::cout << toks.Current() << std::endl;
         toks.Next();
     }
 
@@ -30,5 +32,7 @@ int main()
 
     Parser parser;
     auto expr = parser.ParseExpression(toks);
+
+    Utils::AstPrinter::PrintAstTree(expr.get(), 0);
 
 }   
