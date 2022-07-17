@@ -1,9 +1,3 @@
-#include "Instructions/binop_instruction.hpp"
-#include "Instructions/function_call_instruction.hpp"
-#include "Instructions/op_type.hpp"
-#include "Instructions/leaf.hpp"
-#include "Instructions/binop_instruction.hpp"
-
 #include "parser.hpp"
 
 size_t GetPriority(const Lexer::TokenType& type)
@@ -107,6 +101,7 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseByPriority(size_t 
                 }
 
                 args.push_back(ParseByPriority(1));
+
                 if (this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
                     tokens.Next();
             }
@@ -114,8 +109,11 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseByPriority(size_t 
            
             return std::shared_ptr<Core::Instructions::FunctionCallInstruction>(new Core::Instructions::FunctionCallInstruction(funcName, args));
         }
-
-        return std::make_shared<Core::Instructions::Leaf>(this->tokens.Current().GetLiteral());
+        {
+            auto leaf = std::make_shared<Core::Instructions::Leaf>(this->tokens.Current().GetLiteral());
+            this->tokens.Next();
+            return leaf;
+        }
     default:
         throw std::runtime_error(std::string("Unexpected token ") + this->tokens.Current().GetLiteral());
     }
