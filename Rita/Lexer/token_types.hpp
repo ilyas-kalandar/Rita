@@ -34,17 +34,19 @@ namespace Lexer
         RIGHT_BRACE,
 
         // Keywords
+        VAR,
         FUN, 
         IF,
         ELSE,
         WHILE,
         FOR,
+        CLASS,
         PRINT,
 
         // Other
         DOT,
         END_OF_LINE,
-        END_OF_FILE
+        END_OF_FILE,
     };
 
     /*
