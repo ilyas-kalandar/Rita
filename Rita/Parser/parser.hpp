@@ -12,6 +12,12 @@
 
 #include <vector>
 
+#include "Instructions/binop_instruction.hpp"
+#include "Instructions/function_call_instruction.hpp"
+#include "Instructions/op_type.hpp"
+#include "Instructions/leaf.hpp"
+#include "Instructions/binop_instruction.hpp"
+
 #include "tokenator.hpp"
 #include "Instructions/instruction.hpp"
 
