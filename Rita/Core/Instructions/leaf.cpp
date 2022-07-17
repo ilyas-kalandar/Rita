@@ -15,15 +15,14 @@ namespace Core
 {
     namespace Instructions
     {
-        Leaf::Leaf(RitaObject* obj)
+        Leaf::Leaf(const std::string& id) : identifier(id)
         {
             this->type = InstructionType::LEAF;
-            this->obj = obj;
         }
 
-        RitaObject* Leaf::GetObj()
+        const std::string& Leaf::GetID()
         {
-            return this->obj;
+            return this->identifier;
         }
     }
 }
