@@ -13,8 +13,8 @@
 #include "type.hpp"
 #include "constants.hpp"
 
-#ifndef executor_types.hpp
-#define executor_types.hpp
+#ifndef executor_types_hpp
+#define executor_types_hpp
 
 namespace Executor
 {
