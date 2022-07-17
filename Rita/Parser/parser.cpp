@@ -73,7 +73,7 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseByPriority(size_t 
         this->tokens.Next();
         auto expr = ParseByPriority(1);
 
-        if (this->tokens.Next().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+        if (this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
         {
             throw std::runtime_error("Expected ')'!");
         }
@@ -89,32 +89,39 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseByPriority(size_t 
             std::string funcName = this->tokens.Current().GetLiteral();
             std::vector<std::shared_ptr<Core::Instructions::Instruction>> args;
 
-            this->tokens.Next();
-            this->tokens.Next();
+            this->tokens.Next(); // skip func-name
+            this->tokens.Next(); // skip right paren
 
-            while (this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+
+            // Start arguments parsing
+            while (true)
             {
-
                 if (this->tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_FILE)
                 {
-                    throw std::runtime_error("Unexpected EOF!");
+                    throw std::runtime_error("Unexpected EOF!!!");
+                }
+                else if(this->tokens.Current().GetTokenType() == Lexer::TokenType::RIGHT_PAREN)
+                {
+                    this->tokens.Next();
+                    break;
                 }
 
                 args.push_back(ParseByPriority(1));
 
-                if (this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
-                    tokens.Next();
+                if(this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
+                    this->tokens.Next();
             }
 
-           
             return std::shared_ptr<Core::Instructions::FunctionCallInstruction>(new Core::Instructions::FunctionCallInstruction(funcName, args));
         }
+        else
         {
             auto leaf = std::make_shared<Core::Instructions::Leaf>(this->tokens.Current().GetLiteral());
-            this->tokens.Next();
+            this->tokens.Next(); // skip ID
             return leaf;
         }
     default:
-        throw std::runtime_error(std::string("Unexpected token ") + this->tokens.Current().GetLiteral());
+        std::cout << this->tokens.Current() << std::endl;
+        throw std::runtime_error(std::string("Unexpected token (on default) ") + this->tokens.Current().GetLiteral());
     }
 }
