@@ -58,6 +58,8 @@ namespace Lexer
          */
         const Token& Current();
 
+        void Reset();
+
         /**
          * @brief Construct a new Tokenator object
          * 
