@@ -84,6 +84,9 @@ namespace Lexer
         case TokenType::PRINT:
             os << "PRINT";
             break;
+        case TokenType::VAR:
+            os << "VAR"; 
+            break;
         default:
             os << "Unknown token!";
         }
