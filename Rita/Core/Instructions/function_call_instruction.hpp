@@ -15,7 +15,7 @@
 #include "instruction.hpp"
 
 #ifndef function_call_instruction_hpp
-#define function_call_instruction_hppa
+#define function_call_instruction_hpp
 
 namespace Core
 {
