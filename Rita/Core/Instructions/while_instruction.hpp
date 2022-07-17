@@ -11,8 +11,8 @@
 
 #include "if_instruction.hpp"
 
-#ifndef if_instruction_hpp
-#define if_instruction_hpp
+#ifndef while_instruction_hpp
+#define while_instruction_hpp
 
 namespace Core
 {
