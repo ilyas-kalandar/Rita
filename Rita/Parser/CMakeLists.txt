@@ -19,9 +19,7 @@ add_library(
 
 include_directories(
 	../Lexer
-	Lexer
 	../Core
-	Core
 )
 
 target_link_libraries(
