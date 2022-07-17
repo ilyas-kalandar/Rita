@@ -15,8 +15,11 @@
 #include <deque>
 
 #include "object.hpp"
-#include "Builtins/functions.hpp"
+
 #include "Instructions/instruction.hpp"
+
+#include "Builtins/functions.hpp"
+#include "Builtins/types.hpp"
 
 class Engine
 {
