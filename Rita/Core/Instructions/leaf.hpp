@@ -20,26 +20,26 @@ namespace Core
     namespace Instructions
     {
         /**
-         * @brief Class for storing Objects into instructions.
+         * @brief Class for storing Identifiers
          * 
          */
         class Leaf : public Instruction
         {
         private: 
-            RitaObject* obj;
+            std::string identifier;
         public:
             /**
              * @brief Construct a new Leaf object
              * 
              * @param obj Object for storing
              */
-            Leaf(RitaObject* obj);
+            Leaf(const std::string& id);
             /**
-             * @brief Get the stored object
+             * @brief Get the stored IDENTIFIER
              * 
-             * @return RitaObject* 
+             * @return id
              */
-            RitaObject* GetObj();
+            const std::string& GetID();
         };
     }
 }
