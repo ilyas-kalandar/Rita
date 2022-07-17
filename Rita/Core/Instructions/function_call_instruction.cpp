@@ -21,5 +21,15 @@ namespace Core
         {
             this->type = InstructionType::FUNCTION_CALL;
         }
+
+        const std::string& FunctionCallInstruction::GetFunctionName()
+        {
+            return this->functionName;
+        }
+
+        const std::vector<std::shared_ptr<Instruction>> FunctionCallInstruction::GetFunctionArguments()
+        {
+            return this->functionArguments;
+        }
     }
 }
