@@ -38,6 +38,7 @@ set(
         Instructions/assignment_instruction.hpp
         Instructions/binop_instruction.hpp
         Instructions/op_type.hpp
+        Instructions/function_call_instruction.hpp
 )
 
 set(
@@ -48,6 +49,7 @@ set(
         Instructions/assignment_instruction.cpp
         Instructions/leaf.cpp
         Instructions/binop_instruction.cpp
+        Instructions/function_call_instruction.cpp
 )
 
 
