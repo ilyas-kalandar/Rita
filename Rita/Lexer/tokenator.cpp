@@ -54,4 +54,9 @@ namespace Lexer
     {
         return this->Next().GetTokenType() == tokenType;
     }
+
+    void Tokenator::Reset()
+    {
+        this->currentToken = 0;
+    }
 }
