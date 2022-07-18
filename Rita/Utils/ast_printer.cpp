@@ -7,6 +7,23 @@ void _PrintSpaces(size_t spaces)
 
 namespace Utils::AstPrinter
 {
+    const std::string& OpTypeToString(Core::Instructions::OpType type)
+    {
+        switch (type)
+        {
+        case Core::Instructions::OpType::PLUS:
+            return "+"; 
+        case Core::Instructions::OpType::DIV:
+            return "/";
+        case Core::Instructions::OpType::MUL:
+            return "*";
+        case Core::Instructions::OpType::MINUS:
+            return "-";
+        default:
+            throw std::runtime_error("Printing unimplemented for this OpType!");
+        }
+    }
+
     void PrintBinaryOperation(Core::Instructions::BinOpInstruction* instr, size_t level)
     {
         _PrintSpaces(level);
@@ -54,7 +71,12 @@ namespace Utils::AstPrinter
         
         std::cout << "FunctionCall(" << std::endl;
         _PrintSpaces(level + 2);
-        std::cout << "FuncName: " << instr->GetFunctionName() << std::endl;
+        std::cout << "Func=(" << std::endl;
+        
+        PrintAstTree(instr->GetFunction().get(), level + 4);
+
+        _PrintSpaces(level + 2);
+        std::cout << ")" << std::endl;
 
         _PrintSpaces(level + 2);
 
@@ -78,6 +100,64 @@ namespace Utils::AstPrinter
     }
 
     void PrintAssignment(Core::Instructions::AssignmentInstruction* instr, size_t level){}
+    
+    void PrintAttribute(Core::Instructions::AttributeInstruction* instr, size_t level)
+    {
+        _PrintSpaces(level);
+        std::cout << "Attribute(" << std::endl;
+        _PrintSpaces(level + 2);
+        std::cout << "Value=(" << std::endl;
+        PrintAstTree(instr->GetValue().get(), level + 4);
+
+        _PrintSpaces(level + 2);
+        std::cout << ")" << std::endl;
+
+        _PrintSpaces(level + 2);
+
+        std::cout << "Attr=(" << std::endl;
+        
+        _PrintSpaces(level + 4);
+        std::cout << instr->GetAttr() << std::endl;
+        _PrintSpaces(level + 2);
+        std::cout << ")" << std::endl;
+        _PrintSpaces(level);
+        std::cout << ")";
+    }
+
+    void PrintUnaryOp(Core::Instructions::UnaryOperatorInstruction* instr, size_t level)
+    {
+        _PrintSpaces(level);
+        std::cout << "UnaryOperation(" << std::endl;
+        _PrintSpaces(level + 2);
+
+        switch (instr->GetOperationType())
+        {
+        case Core::Instructions::OpType::PLUS:
+            std::cout << "+" << std::endl;
+            break;
+        case Core::Instructions::OpType::DIV:
+            std::cout << "/" << std::endl;
+            break;
+        case Core::Instructions::OpType::MUL:
+            std::cout << "*" << std::endl;
+            break;
+        case Core::Instructions::OpType::MINUS:
+            std::cout << "-" << std::endl;
+            break;
+        default:
+            throw std::runtime_error("Printing unimplemented for this OpType!");
+        }
+
+        _PrintSpaces(level + 2);
+        std::cout << "Value=(" << std::endl;
+        PrintAstTree(instr->GetValue().get(), level + 4);
+
+        _PrintSpaces(level + 2);
+        std::cout << ")" << std::endl;
+
+        _PrintSpaces(level  );
+        std::cout << ")" << std::endl;
+    }
 
     void PrintAstTree(Core::Instructions::Instruction* instr, size_t level)
     {
@@ -92,6 +172,12 @@ namespace Utils::AstPrinter
             break;
         case Core::InstructionType::LEAF:
             PrintLeaf(static_cast<Core::Instructions::Leaf*>(instr), level);
+            break;
+        case Core::InstructionType::ATTRIBUTE:
+            PrintAttribute(static_cast<Core::Instructions::AttributeInstruction*>(instr), level);
+            break;
+        case Core::InstructionType::UNOP:
+            PrintUnaryOp(static_cast<Core::Instructions::UnaryOperatorInstruction*>(instr), level);
             break;
         default:
             std::cout << "Instr: " << *instr << std::endl;
