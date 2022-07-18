@@ -39,6 +39,8 @@ set(
         Instructions/binop_instruction.hpp
         Instructions/op_type.hpp
         Instructions/function_call_instruction.hpp
+        Instructions/unop_instruction.hpp
+        Instructions/attribute_instruction.hpp
 )
 
 set(
@@ -50,6 +52,8 @@ set(
         Instructions/leaf.cpp
         Instructions/binop_instruction.cpp
         Instructions/function_call_instruction.cpp
+        Instructions/unop_instruction.cpp
+        Instructions/attribute_instruction.cpp
 )
 
 
