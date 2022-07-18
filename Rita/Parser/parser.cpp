@@ -1,127 +1,198 @@
 #include "parser.hpp"
 
+#include "Instructions/unop_instruction.hpp"
+#include "Instructions/attribute_instruction.hpp"
+
 size_t GetPriority(const Lexer::TokenType& type)
 {
-    switch(type)
-    {
-    case Lexer::TokenType::PLUS:
-    case Lexer::TokenType::MINUS:
-        return 1;
-    case Lexer::TokenType::DIVISION:
-    case Lexer::TokenType::MULTIPLY:
-        return 2;
-    case Lexer::TokenType::IDENTIFIER:
-        return 3;
-    default:
-        return 0;
-    }
+	switch (type)
+	{
+	case Lexer::TokenType::PLUS:
+	case Lexer::TokenType::MINUS:
+		return 1;
+	case Lexer::TokenType::DIVISION:
+	case Lexer::TokenType::MULTIPLY:
+		return 2;
+	case Lexer::TokenType::DOT:
+	case Lexer::TokenType::LEFT_PAREN:
+		return 3;
+	case Lexer::TokenType::IDENTIFIER:
+		return 4;
+	default:
+		return 0;
+	}
 }
 
 Core::Instructions::OpType GetOpType(const Lexer::Token& tok)
 {
-    switch(tok.GetTokenType())
-    {
-    case Lexer::TokenType::PLUS:
-        return Core::Instructions::OpType::PLUS;
-    case Lexer::TokenType::MINUS:
-        return Core::Instructions::OpType::MINUS;
-    case Lexer::TokenType::MULTIPLY:
-        return Core::Instructions::OpType::MUL;
-    case Lexer::TokenType::DIVISION:
-        return Core::Instructions::OpType::DIV;
-    default:
-        throw std::runtime_error("Blyat, unknown token");
-    }
+	switch (tok.GetTokenType())
+	{
+	case Lexer::TokenType::PLUS:
+		return Core::Instructions::OpType::PLUS;
+	case Lexer::TokenType::MINUS:
+		return Core::Instructions::OpType::MINUS;
+	case Lexer::TokenType::MULTIPLY:
+		return Core::Instructions::OpType::MUL;
+	case Lexer::TokenType::DIVISION:
+		return Core::Instructions::OpType::DIV;
+	case Lexer::TokenType::NOT:
+		return Core::Instructions::OpType::NOT;
+	default:
+		throw std::runtime_error("Blyat, unknown token");
+	}
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseNotExpr()
+{
+	if (this->tokens.Current().GetTokenType() != Lexer::TokenType::NOT)
+	{
+		return this->ParseBinop(1);
+	}
+
+	this->tokens.Next(); // skip '!'
+
+	return std::make_shared<Core::Instructions::UnaryOperatorInstruction>(ParseNotExpr(), Core::Instructions::OpType::NOT);
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseBinop(size_t priority)
+{
+	std::shared_ptr<Core::Instructions::Instruction> result;
+
+	if (priority < 2)
+	{
+		result = ParseBinop(priority + 1);
+	}
+	else
+	{
+		result = ParseUnaryMinus();
+	}
+
+	while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == priority)
+	{
+		Core::Instructions::OpType opType = GetOpType(this->tokens.Current());
+		this->tokens.Next(); // Skip Operator
+
+		if (priority < 2)
+		{
+			result = std::make_shared<Core::Instructions::BinOpInstruction>(result, ParseBinop(2), opType);
+		}
+		else
+		{
+			result = std::make_shared<Core::Instructions::BinOpInstruction>(result, ParseUnaryMinus(), opType);
+		}
+	}
+
+	return result;
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseUnaryMinus()
+{
+	if (this->tokens.Current().GetTokenType() == Lexer::TokenType::MINUS)
+	{
+		this->tokens.Next();
+		return std::make_shared<Core::Instructions::UnaryOperatorInstruction>(ParseUnaryMinus(), Core::Instructions::OpType::MINUS);
+	}
+	
+	return ParseHighPriorityExpr();
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
+{
+	std::shared_ptr<Core::Instructions::Instruction> result;
+	auto leaf = ParseLeaf();
+
+	bool resultIsEmpty = true;
+
+	if (leaf.has_value())
+	{
+		result = leaf.value();
+		resultIsEmpty = false;
+	}
+
+	while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == 3)
+	{
+		switch (this->tokens.Current().GetTokenType())
+		{
+		case Lexer::TokenType::DOT:
+			this->tokens.Next(); // skip dot
+			if (resultIsEmpty)
+			{
+				throw std::runtime_error("Expected expression before '.'!");
+			}
+			else
+			{
+				if (this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
+				{
+					throw std::runtime_error("Expected identifier after '.'!");
+				}
+
+				result = std::make_shared<Core::Instructions::AttributeInstruction>(result, this->tokens.Current().GetLiteral());
+				this->tokens.Next(); // skip id
+			}
+			break;
+		case Lexer::TokenType::LEFT_PAREN:
+			if (resultIsEmpty) // not func-call
+			{
+				this->tokens.Next(); // skip left paren
+				result = ParseNotExpr();
+				if (this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+				{
+					throw std::runtime_error("Expected ')'!");
+				}
+				this->tokens.Next(); // skip right paren
+				return result;
+			}
+			else
+			{
+				std::vector<std::shared_ptr<Core::Instructions::Instruction>> funcArgs;
+				this->tokens.Next(); // skip left paren
+
+				while (this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+				{
+					funcArgs.push_back(ParseNotExpr());
+					if (this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
+					{
+						this->tokens.Next(); // skip comma
+					}
+				}
+				this->tokens.Next(); // skip right paren
+
+				result = std::make_shared<Core::Instructions::FunctionCallInstruction>(result, funcArgs);
+			}
+		}
+	}
+
+	if (!resultIsEmpty)
+		return result;
+
+	throw std::runtime_error("Expected ID or const, given " + this->tokens.Current().GetLiteral() + "\"");
+}
+
+std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLeaf()
+{
+	if (this->tokens.Current().GetTokenType() == Lexer::TokenType::IDENTIFIER)
+	{
+		auto name = this->tokens.Current().GetLiteral();
+		this->tokens.Next();
+		return std::make_shared<Core::Instructions::Leaf>(name);
+	}
+
+	return std::nullopt;
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseExpression()
+{
+	return this->ParseNotExpr();
 }
 
 std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexer::Tokenator& tokens)
 {
-    this->tokens = tokens;
+	this->tokens = tokens;
+	this->tokens.Reset();
 
-    return std::vector<std::shared_ptr<Core::Instructions::Instruction>>();
-}
+	std::vector<std::shared_ptr<Core::Instructions::Instruction>> program;
 
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseExpression(Lexer::Tokenator& tok)
-{
-    this->tokens = tok;
-    return ParseByPriority(1);
-}
+	program.push_back(ParseExpression());
 
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseByPriority(size_t priority = 1)
-{
-    if(priority < 3)
-    {
-        std::shared_ptr<Core::Instructions::Instruction> result = ParseByPriority(priority + 1);
-
-        while(this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == priority)
-        {
-            Core::Instructions::OpType opType = GetOpType(tokens.Current());
-            tokens.Next();
-            
-            auto tmp = std::shared_ptr<Core::Instructions::Instruction>(new Core::Instructions::BinOpInstruction(result, ParseByPriority(priority + 1), opType));
-            result.swap(tmp);
-        }   
-
-        return result;
-    }
-
-    switch (this->tokens.Current().GetTokenType())
-    {
-    case Lexer::TokenType::LEFT_PAREN:
-    {
-        // ok
-        this->tokens.Next();
-        auto expr = ParseByPriority(1);
-
-        if (this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
-        {
-            throw std::runtime_error("Expected ')'!");
-        }
-
-        this->tokens.Next();
-
-        return expr;
-    }
-    case Lexer::TokenType::IDENTIFIER:
-        // Check for function-call
-        if (this->tokens.CheckNext(Lexer::TokenType::LEFT_PAREN))
-        { 
-            std::string funcName = this->tokens.Current().GetLiteral();
-            std::vector<std::shared_ptr<Core::Instructions::Instruction>> args;
-
-            this->tokens.Next(); // skip func-name
-            this->tokens.Next(); // skip right paren
-
-
-            // Start arguments parsing
-            while (true)
-            {
-                if (this->tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_FILE)
-                {
-                    throw std::runtime_error("Unexpected EOF!!!");
-                }
-                else if(this->tokens.Current().GetTokenType() == Lexer::TokenType::RIGHT_PAREN)
-                {
-                    this->tokens.Next();
-                    break;
-                }
-
-                args.push_back(ParseByPriority(1));
-
-                if(this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
-                    this->tokens.Next();
-            }
-
-            return std::shared_ptr<Core::Instructions::FunctionCallInstruction>(new Core::Instructions::FunctionCallInstruction(funcName, args));
-        }
-        else
-        {
-            auto leaf = std::make_shared<Core::Instructions::Leaf>(this->tokens.Current().GetLiteral());
-            this->tokens.Next(); // skip ID
-            return leaf;
-        }
-    default:
-        std::cout << this->tokens.Current() << std::endl;
-        throw std::runtime_error(std::string("Unexpected token (on default) ") + this->tokens.Current().GetLiteral());
-    }
+	return program;
 }

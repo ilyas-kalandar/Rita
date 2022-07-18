@@ -11,6 +11,7 @@
  */
 
 #include <vector>
+#include <optional>
 
 #include "Instructions/binop_instruction.hpp"
 #include "Instructions/function_call_instruction.hpp"
@@ -30,7 +31,11 @@ class Parser
 protected:
     Lexer::Tokenator tokens;
 public:
+    std::optional<std::shared_ptr<Core::Instructions::Instruction>> ParseLeaf();
+    std::shared_ptr<Core::Instructions::Instruction> ParseHighPriorityExpr();
+    std::shared_ptr<Core::Instructions::Instruction> ParseUnaryMinus();
+    std::shared_ptr<Core::Instructions::Instruction> ParseBinop(size_t priority);
+    std::shared_ptr<Core::Instructions::Instruction> ParseNotExpr();
+    std::shared_ptr<Core::Instructions::Instruction> ParseExpression();
     std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parse(Lexer::Tokenator& tokens);
-    std::shared_ptr<Core::Instructions::Instruction> ParseByPriority(size_t);
-    std::shared_ptr<Core::Instructions::Instruction> ParseExpression(Lexer::Tokenator& tok);
 };
