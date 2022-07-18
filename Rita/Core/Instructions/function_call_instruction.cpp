@@ -15,16 +15,16 @@ namespace Core
 {
     namespace Instructions
     {
-        FunctionCallInstruction::FunctionCallInstruction(const std::string& functionName, const std::vector<std::shared_ptr<Instruction>>& args)
+        FunctionCallInstruction::FunctionCallInstruction(std::shared_ptr<Core::Instructions::Instruction> func, const std::vector<std::shared_ptr<Instruction>>& args)
         :
-        functionName(functionName), functionArguments(args)
+        func(func), functionArguments(std::move(args))
         {
             this->type = InstructionType::FUNCTION_CALL;
         }
 
-        const std::string& FunctionCallInstruction::GetFunctionName()
+        std::shared_ptr<Core::Instructions::Instruction> FunctionCallInstruction::GetFunction()
         {
-            return this->functionName;
+            return this->func;
         }
 
         const std::vector<std::shared_ptr<Instruction>> FunctionCallInstruction::GetFunctionArguments()
