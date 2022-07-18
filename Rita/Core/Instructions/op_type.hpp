@@ -27,6 +27,7 @@ namespace Core
             MUL,
             DIV,
             EQUAL_EQUAL,
+            NOT,
         };
     }
 }
