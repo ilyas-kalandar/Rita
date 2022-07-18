@@ -28,7 +28,7 @@ namespace Core
         class FunctionCallInstruction : public Instruction
         {
         protected:
-            std::string functionName;
+            std::shared_ptr<Instruction> func;
             std::vector<std::shared_ptr<Instruction>> functionArguments;
         public:
             /**
@@ -37,13 +37,13 @@ namespace Core
              * @param functionName 
              * @param args 
              */
-            FunctionCallInstruction(const std::string& functionName, const std::vector<std::shared_ptr<Instruction>>& args);
+            FunctionCallInstruction(std::shared_ptr<Instruction> func, const std::vector<std::shared_ptr<Instruction>>& args);
             /**
              * @brief Get the Function Name object
              * 
              * @return const std::string& 
              */
-            const std::string& GetFunctionName();
+            std::shared_ptr<Core::Instructions::Instruction> GetFunction();
             /**
              * @brief Get the Function Arguments object
              * 
