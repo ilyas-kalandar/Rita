@@ -22,6 +22,8 @@ namespace Core
         IF,
         WHILE,
         FUNCTION_CALL,
+        ATTRIBUTE,
+        UNOP,
     };
 }
 
