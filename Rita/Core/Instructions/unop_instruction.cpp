@@ -1,3 +1,14 @@
+/**
+ * @file unop_instruction.cpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief UnaryOperatorInstruction implementation.
+ * @version 0.1
+ * @date 2022-07-18
+ * 
+ * @copyright Copyright Awaitable(c) 2022
+ * 
+ */
+
 #include "unop_instruction.hpp"
 
 namespace Core
