@@ -24,6 +24,7 @@ namespace Core
         FUNCTION_CALL,
         ATTRIBUTE,
         UNOP,
+        CONSTANT,
     };
 }
 
