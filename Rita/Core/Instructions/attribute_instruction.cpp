@@ -1,3 +1,14 @@
+/**
+ * @file attribute_instruction.cpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief AttributeInstruction implementation
+ * @version 0.1
+ * @date 2022-07-18
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include "attribute_instruction.hpp"
 
 namespace Core
