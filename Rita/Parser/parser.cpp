@@ -1,8 +1,25 @@
+/**
+ * @file parser.cpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief Parser's implementation
+ * @version 0.1
+ * @date 2022-07-18
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include "parser.hpp"
 
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
 
+/**
+ * @brief Get token's priority
+ * 
+ * @param type 
+ * @return size_t 
+ */
 size_t GetPriority(const Lexer::TokenType& type)
 {
 	switch (type)
@@ -19,7 +36,7 @@ size_t GetPriority(const Lexer::TokenType& type)
 	case Lexer::TokenType::IDENTIFIER:
 		return 4;
 	default:
-		return 0;
+		return 0; // by default, any token have 0-priority
 	}
 }
 
