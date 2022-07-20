@@ -16,23 +16,26 @@
 
 int main()
 {
-    Lexer::Lexer lex;
-    std::string buff;
+	Lexer::Lexer lex;
+	std::string buff;
 
-    std::getline(std::cin, buff);
-    auto toks = lex.Tokenize(buff);
+	std::getline(std::cin, buff);
+	auto toks = lex.Tokenize(buff);
 
-    while(toks.Current().GetTokenType() != Lexer::TokenType::END_OF_FILE)
-    {
-        //std::cout << toks.Current() << std::endl;
-        toks.Next();
-    }
+	while (toks.Current().GetTokenType() != Lexer::TokenType::END_OF_FILE)
+	{
+		//std::cout << toks.Current() << std::endl;
+		toks.Next();
+	}
 
-    toks.Reset();
+	toks.Reset();
 
-    Parser parser;
-    auto expr = parser.ParseExpression(toks);
+	Parser parser;
+	auto program = parser.Parse(toks);
 
-    Utils::AstPrinter::PrintAstTree(expr.get(), 0);
 
-}   
+	for (auto instr : program)
+	{
+		Utils::AstPrinter::PrintAstTree(instr.get(), 0);
+	}
+}
