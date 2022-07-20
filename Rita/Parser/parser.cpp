@@ -13,6 +13,7 @@
 
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
+#include "Instructions/constant_instruction.hpp"
 
 /**
  * @brief Get token's priority
@@ -187,11 +188,29 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
 
 std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLeaf()
 {
-	if (this->tokens.Current().GetTokenType() == Lexer::TokenType::IDENTIFIER)
+	switch(this->tokens.Current().GetTokenType())
 	{
-		auto name = this->tokens.Current().GetLiteral();
+	case Lexer::TokenType::IDENTIFIER:
+	{
+		const std::string& name = this->tokens.Current().GetLiteral();
 		this->tokens.Next();
 		return std::make_shared<Core::Instructions::Leaf>(name);
+	}
+	case Lexer::TokenType::FLOAT:
+	{
+		// I think will be better if I create my own converter...
+		long double value = std::atof(this->tokens.Current().GetLiteral().c_str());
+		this->tokens.Next();
+		return std::make_shared<Core::Instructions::ConstantInstruction<long double>>(value);
+	}
+	case Lexer::TokenType::INTEGER:
+	{
+		// I think will be better if I create my own converter...
+		int value = std::stoi(this->tokens.Current().GetLiteral());
+		this->tokens.Next();
+		return std::make_shared<Core::Instructions::ConstantInstruction<int>>(value);
+	}
+	// TODO(Ilyas): Add List support.
 	}
 
 	return std::nullopt;
