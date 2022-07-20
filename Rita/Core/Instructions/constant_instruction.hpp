@@ -34,7 +34,7 @@ namespace Core
              * 
              * @param data data for storing.
              */
-            ConstantInstruction(T data);
+            ConstantInstruction(T& data);
             /**
              * @brief Get the Data object
              * 
