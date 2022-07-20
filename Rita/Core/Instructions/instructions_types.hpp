@@ -24,7 +24,10 @@ namespace Core
         FUNCTION_CALL,
         ATTRIBUTE,
         UNOP,
-        CONSTANT,
+        CONSTANT_INT,
+        CONSTANT_FLOAT,
+        CONSTANT_STRING,
+        CONSTANT_LIST,
     };
 }
 
