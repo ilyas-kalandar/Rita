@@ -174,6 +174,23 @@ namespace Utils::AstPrinter
         std::cout << ")" << std::endl;
     }
 
+    void PrintConstList(Core::Instructions::ConstantList* list, size_t level)
+    {
+         _PrintSpaces(level);
+        std::cout << "List[" << std::endl;
+
+        for(auto now : list->GetList())
+        {
+            PrintAstTree(now.get(), level + 2);
+            _PrintSpaces(level + 2);
+            std::cout << "," << std::endl;
+        }
+
+        _PrintSpaces(level);
+
+        std::cout << "]" << std::endl;
+    }
+
     void PrintAstTree(Core::Instructions::Instruction* instr, size_t level)
     {
        // Unpack the instruction.
@@ -202,6 +219,9 @@ namespace Utils::AstPrinter
             break;
         case Core::InstructionType::CONSTANT_STRING:
             PrintConst<const std::string&>((static_cast<Core::Instructions::ConstantString*>(instr))->GetData(), level);
+            break;
+        case Core::InstructionType::CONSTANT_LIST:
+            PrintConstList(static_cast<Core::Instructions::ConstantList*>(instr), level);
             break;
         default:
             std::cout << "Instr: " << *instr << std::endl;
