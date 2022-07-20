@@ -203,6 +203,12 @@ namespace Lexer
                 case '{':
                     PushToken(TokenType::LEFT_BRACE);
                     break;
+                case '[':
+                    PushToken(TokenType::LEFT_BRACKET);
+                    break;
+                case ']':
+                    PushToken(TokenType::RIGHT_BRACKET);
+                    break;
                 case '-':
                     PushToken(TokenType::MINUS);
                     break;
