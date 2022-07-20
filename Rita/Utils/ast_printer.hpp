@@ -8,6 +8,10 @@
 #include "Instructions/while_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
 #include "Instructions/function_call_instruction.hpp"
+#include "Instructions/constant_float.hpp"
+#include "Instructions/constant_int.hpp"
+#include "Instructions/constant_list.hpp"
+#include "Instructions/constant_string.hpp"
 
 #ifndef utils_ast_printer_hpp
 #define utils_ast_printer_hpp
