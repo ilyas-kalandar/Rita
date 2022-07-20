@@ -41,6 +41,10 @@ set(
         Instructions/function_call_instruction.hpp
         Instructions/unop_instruction.hpp
         Instructions/attribute_instruction.hpp
+        Instructions/constant_string.hpp
+        Instructions/constant_int.hpp
+        Instructions/constant_float.hpp
+        Instructions/constant_list.hpp
 )
 
 set(
@@ -54,6 +58,10 @@ set(
         Instructions/function_call_instruction.cpp
         Instructions/unop_instruction.cpp
         Instructions/attribute_instruction.cpp
+        Instructions/constant_string.cpp
+        Instructions/constant_int.cpp
+        Instructions/constant_float.cpp
+        Instructions/constant_list.cpp
 )
 
 
