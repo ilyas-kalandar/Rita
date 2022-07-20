@@ -221,7 +221,37 @@ std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLea
 		this->tokens.Next();
 		return std::make_shared<Core::Instructions::ConstantString>(val);
 	}
-	// TODO(Ilyas): Add List support.
+	case Lexer::TokenType::LEFT_BRACKET:
+	{
+		// skip bracket
+		this->tokens.Next();
+		std::vector<std::shared_ptr<Core::Instructions::Instruction>> list;
+
+
+		while(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET && this->tokens.HasNext())
+		{
+			list.push_back(this->ParseNotExpr());
+
+			// also we expect ','
+
+			if(this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
+			{
+				this->tokens.Next(); // skip comma
+			}
+
+			if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET)
+				this->tokens.Next();
+		}
+
+		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET)
+		{
+			throw std::runtime_error("Expected ']'!");
+		}
+
+		this->tokens.Next(); // skip right bracket
+
+		return std::make_shared<Core::Instructions::ConstantList>(list);
+	}
 	}
 
 	return std::nullopt;
