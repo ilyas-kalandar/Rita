@@ -17,9 +17,8 @@ namespace Core
     namespace Instructions
     {
         template<class T>
-        ConstantInstruction<T>::ConstantInstruction(T data)
+        ConstantInstruction<T>::ConstantInstruction(T& data) : data(std::move(data))
         {
-            this->data = data;
             this->type = InstructionType::CONSTANT;
         }
 
@@ -28,5 +27,8 @@ namespace Core
         {
             return this->data;
         }
+
+        template class ConstantInstruction<int>;
+        template class ConstantInstruction<long double>;
     }
 }
