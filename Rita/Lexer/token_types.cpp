@@ -87,6 +87,12 @@ namespace Lexer
         case TokenType::VAR:
             os << "VAR"; 
             break;
+        case TokenType::LEFT_BRACKET:
+            os << "LEFT_BRACKET";
+            break;
+        case TokenType::RIGHT_BRACKET:
+            os << "RIGHT_BRACKET";
+            break;
         default:
             os << "Unknown token!";
         }
