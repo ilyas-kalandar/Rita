@@ -32,6 +32,7 @@ set(
     INSTRUCTIONS_HEADERS
         Instructions/instruction.hpp
         Instructions/instructions_types.hpp
+        Instructions/constants_types.hpp
         Instructions/leaf.hpp
         Instructions/while_instruction.hpp
         Instructions/if_instruction.hpp
