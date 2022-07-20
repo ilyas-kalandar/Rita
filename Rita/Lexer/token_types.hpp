@@ -33,6 +33,11 @@ namespace Lexer
         LEFT_BRACE,
         RIGHT_BRACE,
 
+        // Square brackets
+
+        LEFT_BRACKET,
+        RIGHT_BRACKET,
+
         // Keywords
         VAR,
         FUN, 
