@@ -12,12 +12,18 @@
 #ifndef constants_types_hpp
 #define constants_types_hpp
 
-enum class ConstantType
+namespace Core
 {
-    INT, 
-    STRING,
-    FLOAT,
-    LIST,
-};
+    namespace Instructions
+    {
+        enum class ConstantType
+        {
+            INT, 
+            STRING,
+            FLOAT,
+            LIST,
+        };
+    }
+}
 
 #endif
