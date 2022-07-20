@@ -159,6 +159,21 @@ namespace Utils::AstPrinter
         std::cout << ")" << std::endl;
     }
 
+    template<class T>
+    void PrintConst(const T& data, size_t level)
+    {
+        _PrintSpaces(level);
+        std::cout << "Constant(" << std::endl;
+
+        _PrintSpaces(level + 2);
+
+        std::cout << data << std::endl;
+
+        _PrintSpaces(level);
+
+        std::cout << ")" << std::endl;
+    }
+
     void PrintAstTree(Core::Instructions::Instruction* instr, size_t level)
     {
        // Unpack the instruction.
@@ -178,6 +193,15 @@ namespace Utils::AstPrinter
             break;
         case Core::InstructionType::UNOP:
             PrintUnaryOp(static_cast<Core::Instructions::UnaryOperatorInstruction*>(instr), level);
+            break;
+        case Core::InstructionType::CONSTANT_FLOAT:
+            PrintConst<long double>((static_cast<Core::Instructions::ConstantFloat*>(instr))->GetData(), level);
+            break;
+        case Core::InstructionType::CONSTANT_INT:
+            PrintConst<int>((static_cast<Core::Instructions::ConstantInt*>(instr))->GetData(), level);
+            break;
+        case Core::InstructionType::CONSTANT_STRING:
+            PrintConst<const std::string&>((static_cast<Core::Instructions::ConstantString*>(instr))->GetData(), level);
             break;
         default:
             std::cout << "Instr: " << *instr << std::endl;
