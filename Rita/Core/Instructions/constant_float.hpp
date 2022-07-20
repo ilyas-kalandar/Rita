@@ -10,7 +10,6 @@
  */
 
 #include "instruction.hpp"
-#include "constants_types.hpp"
 
 #ifndef constant_float_hpp
 #define constant_float_hpp
