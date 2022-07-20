@@ -13,7 +13,10 @@
 
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
-#include "Instructions/constant_instruction.hpp"
+#include "Instructions/constant_float.hpp"
+#include "Instructions/constant_int.hpp"
+#include "Instructions/constant_string.hpp"
+#include "Instructions/constant_list.hpp"
 
 /**
  * @brief Get token's priority
@@ -201,14 +204,22 @@ std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLea
 		// I think will be better if I create my own converter...
 		long double value = std::atof(this->tokens.Current().GetLiteral().c_str());
 		this->tokens.Next();
-		return std::make_shared<Core::Instructions::ConstantInstruction<long double>>(value);
+		
+		return std::make_shared<Core::Instructions::ConstantFloat>(value);
 	}
 	case Lexer::TokenType::INTEGER:
 	{
 		// I think will be better if I create my own converter...
 		int value = std::stoi(this->tokens.Current().GetLiteral());
 		this->tokens.Next();
-		return std::make_shared<Core::Instructions::ConstantInstruction<int>>(value);
+		return std::make_shared<Core::Instructions::ConstantInt>(value);
+	}
+	case Lexer::TokenType::STRING:
+	{
+		// I think will be better if I create my own converter...
+		auto val = this->tokens.Current().GetLiteral();
+		this->tokens.Next();
+		return std::make_shared<Core::Instructions::ConstantString>(val);
 	}
 	// TODO(Ilyas): Add List support.
 	}
