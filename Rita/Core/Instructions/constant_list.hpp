@@ -29,7 +29,7 @@ namespace Core
          *  a = [1, 2, 3] <= this will be stored here 
          * 
          */
-        class ConstantList : Instruction
+        class ConstantList : public Instruction
         {
         protected:
             std::vector<std::shared_ptr<Instruction>> list;
