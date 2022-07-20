@@ -10,6 +10,7 @@
  */
 
 #include "instruction.hpp"
+#include "constants_types.hpp"
 
 #ifndef constant_instruction_hpp
 #define constant_instruction_hpp
@@ -28,19 +29,27 @@ namespace Core
         {
         protected:
             T data;
+            ConstantType constantType;
         public:
             /**
              * @brief Construct a new Constant Instruction object
              * 
              * @param data data for storing.
              */
-            ConstantInstruction(T& data);
+            ConstantInstruction(T& data, ConstantType constType);
             /**
              * @brief Get the Data object
              * 
              * @return T 
              */
             T GetData();
+
+            /**
+             * @brief Get the ConstantType object
+             * 
+             * @return ConstantType 
+             */
+            ConstantType GetConstantType();
         };
     }
 }
