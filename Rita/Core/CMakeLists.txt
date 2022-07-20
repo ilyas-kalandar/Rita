@@ -41,6 +41,7 @@ set(
         Instructions/function_call_instruction.hpp
         Instructions/unop_instruction.hpp
         Instructions/attribute_instruction.hpp
+        Instructions/constant_instruction.hpp
 )
 
 set(
@@ -54,6 +55,7 @@ set(
         Instructions/function_call_instruction.cpp
         Instructions/unop_instruction.cpp
         Instructions/attribute_instruction.cpp
+        Instructions/constant_instruction.cpp
 )
 
 
