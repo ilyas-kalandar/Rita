@@ -23,6 +23,8 @@ namespace Lexer
         MULTIPLY,
         MINUS,
         PLUS,
+        AND,
+        OR,
 
         // Parens
 
