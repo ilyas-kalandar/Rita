@@ -218,10 +218,12 @@ namespace Lexer
                 case '*':
                     PushToken(TokenType::MULTIPLY);
                     break;
+                case '!':
+                    PushToken(TokenType::NOT);
+                    break;
                 case '>':
                     PushToken(TokenType::GREATER_THAN);
                     break;
-                
                 case '\"':
                     currentTokenType = TokenType::STRING;
                     Next();
