@@ -8,5 +8,7 @@ namespace Lexer
         {"while", TokenType::WHILE},
         {"print", TokenType::PRINT},
         {"var", TokenType::VAR},
+        {"or", TokenType::OR}, 
+        {"and", TokenType::AND},
     };
 }
