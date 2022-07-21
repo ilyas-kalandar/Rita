@@ -11,12 +11,15 @@
 
 #include "parser.hpp"
 
+#include "Instructions/if_instruction.hpp"
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
 #include "Instructions/constant_float.hpp"
 #include "Instructions/constant_int.hpp"
 #include "Instructions/constant_string.hpp"
 #include "Instructions/constant_list.hpp"
+#include "Instructions/var_decl_instruction.hpp"
+
 #include "Instructions/index_instruction.hpp"
 
 /**
@@ -29,18 +32,24 @@ size_t GetPriority(const Lexer::TokenType& type)
 {
 	switch (type)
 	{
+	case Lexer::TokenType::EQUAL_EQUAL:
+	case Lexer::TokenType::LESS_OR_EQUAL_THAN:
+	case Lexer::TokenType::LESS_THAN:
+	case Lexer::TokenType::GREATER_OR_EQUAL_THAN:
+	case Lexer::TokenType::GREATER_THAN:
+		return 1;
 	case Lexer::TokenType::PLUS:
 	case Lexer::TokenType::MINUS:
-		return 1;
+		return 2;
 	case Lexer::TokenType::DIVISION:
 	case Lexer::TokenType::MULTIPLY:
-		return 2;
+		return 3;
 	case Lexer::TokenType::DOT:
 	case Lexer::TokenType::LEFT_PAREN:
 	case Lexer::TokenType::LEFT_BRACKET:
-		return 3;
-	case Lexer::TokenType::IDENTIFIER:
 		return 4;
+	case Lexer::TokenType::IDENTIFIER:
+		return 5;
 	default:
 		return 0; // by default, any token have 0-priority
 	}
@@ -60,6 +69,20 @@ Core::Instructions::OpType GetOpType(const Lexer::Token& tok)
 		return Core::Instructions::OpType::DIV;
 	case Lexer::TokenType::NOT:
 		return Core::Instructions::OpType::NOT;
+	case Lexer::TokenType::LESS_OR_EQUAL_THAN:
+		return Core::Instructions::OpType::LESS_OR_EQUAL_THAN;
+	case Lexer::TokenType::GREATER_THAN:
+		return Core::Instructions::OpType::GREATER_THAN;
+	case Lexer::TokenType::GREATER_OR_EQUAL_THAN:
+		return Core::Instructions::OpType::GREATER_OR_EQUAL_THAN;
+	case Lexer::TokenType::EQUAL_EQUAL:
+		return Core::Instructions::OpType::EQUAL_EQUAL;
+	case Lexer::TokenType::LESS_THAN:
+		return Core::Instructions::OpType::LESS_THAN;
+	case Lexer::TokenType::AND:
+		return Core::Instructions::OpType::AND;
+	case Lexer::TokenType::OR:
+		return Core::Instructions::OpType::OR;
 	default:
 		throw std::runtime_error("Blyat, unknown token");
 	}
@@ -81,7 +104,7 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseBinop(size_t prior
 {
 	std::shared_ptr<Core::Instructions::Instruction> result;
 
-	if (priority < 2)
+	if (priority < 3)
 	{
 		result = ParseBinop(priority + 1);
 	}
@@ -95,7 +118,7 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseBinop(size_t prior
 		Core::Instructions::OpType opType = GetOpType(this->tokens.Current());
 		this->tokens.Next(); // Skip Operator
 
-		if (priority < 2)
+		if (priority < 3)
 		{
 			result = std::make_shared<Core::Instructions::BinOpInstruction>(result, ParseBinop(2), opType);
 		}
@@ -132,7 +155,7 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
 		resultIsEmpty = false;
 	}
 
-	while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == 3)
+	while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == 4)
 	{
 		switch (this->tokens.Current().GetTokenType())
 		{
@@ -285,6 +308,80 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseExpression()
 	return this->ParseNotExpr();
 }
 
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseInstruction()
+{
+	switch (this->tokens.Current().GetTokenType())
+	{
+	case Lexer::TokenType::VAR:
+	{
+		this->tokens.Next(); // skip var token
+
+		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
+		{
+			throw std::runtime_error("Expected IDENTIFIER after 'var'!");		
+		}
+
+		std::string varName = this->tokens.Current().GetLiteral();
+		this->tokens.Next(); // skip name
+
+		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::EQUAL)
+		{
+			throw std::runtime_error("expected '=', after IDENTIFIER!");
+		}
+
+		this->tokens.Next();
+
+		return std::make_shared<Core::Instructions::VariableDeclarationInstruction>(varName, ParseExpression());
+	}
+	case Lexer::TokenType::IF:
+	{
+		this->tokens.Next(); // skip if token
+
+		auto expr = ParseExpression();
+
+		auto ifBody = ParseCodeBlock();
+
+		std::vector<std::shared_ptr<Core::Instructions::Instruction>> elseBody;
+
+		if(this->tokens.Current().GetTokenType() == Lexer::TokenType::ELSE)
+		{
+			this->tokens.Next();
+			elseBody = ParseCodeBlock();
+		}
+
+		return std::make_shared<Core::Instructions::IfInstruction>(ifBody, elseBody, expr);
+	}
+	default:
+		throw std::runtime_error("Unexpected token " + this->tokens.Current().GetLiteral());
+	}
+}
+
+std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseCodeBlock()
+{
+	std::vector<std::shared_ptr<Core::Instructions::Instruction>> result;
+
+	if(this->tokens.Current().GetTokenType() != Lexer::TokenType::LEFT_BRACE)
+	{
+		throw std::runtime_error("Expected '{'");
+	}
+
+	this->tokens.Next(); // skip right brace
+
+	while(this->tokens.HasNext() && this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACE)
+	{
+		result.push_back(ParseInstruction());
+	}
+
+	if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACE)
+	{
+		throw std::runtime_error("Expected '}'");
+	}
+
+	this->tokens.Next(); // skip LEFT BRACE
+
+	return result;
+}
+
 std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexer::Tokenator& tokens)
 {
 	this->tokens = tokens;
@@ -292,7 +389,10 @@ std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexe
 
 	std::vector<std::shared_ptr<Core::Instructions::Instruction>> program;
 
-	program.push_back(ParseExpression());
+	while(this->tokens.HasNext())
+	{
+		program.push_back(ParseInstruction());
+	}
 
 	return program;
 }

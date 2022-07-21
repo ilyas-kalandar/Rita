@@ -67,7 +67,12 @@ protected:
      * 
      * @return std::shared_ptr<Core::Instructions::Instruction> 
      */
+
+
     std::shared_ptr<Core::Instructions::Instruction> ParseExpression();
+    std::shared_ptr<Core::Instructions::Instruction> ParseAssignInstruction();
+    std::shared_ptr<Core::Instructions::Instruction> ParseInstruction();
+    std::vector<std::shared_ptr<Core::Instructions::Instruction>> ParseCodeBlock();
 public:
     /**
      * @brief Parses tokens into instructions
