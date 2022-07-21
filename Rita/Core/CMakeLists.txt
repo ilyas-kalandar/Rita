@@ -46,6 +46,7 @@ set(
         Instructions/constant_float.hpp
         Instructions/constant_list.hpp
         Instructions/index_instruction.hpp
+        Instructions/var_decl_instruction.hpp
 )
 
 set(
@@ -64,6 +65,7 @@ set(
         Instructions/constant_float.cpp
         Instructions/constant_list.cpp
         Instructions/index_instruction.cpp
+        Instructions/var_decl_instruction.cpp
 )
 
 
