@@ -23,5 +23,14 @@ namespace Core
         {
             this->type = InstructionType::VAR_DECL;
         }
+        std::shared_ptr<Instruction> VariableDeclarationInstruction::GetExpression()
+        {
+            return this->expr;
+        }
+
+        const std::string& VariableDeclarationInstruction::GetVarName()
+        {
+            return this->varName;
+        }
     }
 }
