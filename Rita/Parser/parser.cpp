@@ -17,6 +17,7 @@
 #include "Instructions/constant_int.hpp"
 #include "Instructions/constant_string.hpp"
 #include "Instructions/constant_list.hpp"
+#include "Instructions/index_instruction.hpp"
 
 /**
  * @brief Get token's priority
@@ -36,6 +37,7 @@ size_t GetPriority(const Lexer::TokenType& type)
 		return 2;
 	case Lexer::TokenType::DOT:
 	case Lexer::TokenType::LEFT_PAREN:
+	case Lexer::TokenType::LEFT_BRACKET:
 		return 3;
 	case Lexer::TokenType::IDENTIFIER:
 		return 4;
@@ -151,6 +153,30 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
 				this->tokens.Next(); // skip id
 			}
 			break;
+		case Lexer::TokenType::LEFT_BRACKET: 
+		{
+			if(resultIsEmpty)
+			{
+				throw std::runtime_error("Expected expression before '['");
+			}
+
+			this->tokens.Next(); // skip LEFT_BRACKET
+
+			auto index = ParseNotExpr();
+
+			if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET)
+			{
+				throw std::runtime_error(
+					"Expected ']'"
+				);
+			}
+
+
+			this->tokens.Next(); // skip right bracket
+
+			result = std::make_shared<Core::Instructions::IndexInstruction>(result, index);
+			break;
+		}
 		case Lexer::TokenType::LEFT_PAREN:
 			if (resultIsEmpty) // not func-call
 			{
@@ -238,9 +264,6 @@ std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLea
 			{
 				this->tokens.Next(); // skip comma
 			}
-
-			if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET)
-				this->tokens.Next();
 		}
 
 		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET)
