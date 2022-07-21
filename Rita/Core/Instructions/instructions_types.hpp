@@ -28,6 +28,7 @@ namespace Core
         CONSTANT_FLOAT,
         CONSTANT_STRING,
         CONSTANT_LIST,
+        INDEX,
     };
 }
 
