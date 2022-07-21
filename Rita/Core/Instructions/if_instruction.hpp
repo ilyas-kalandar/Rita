@@ -29,6 +29,9 @@ namespace Core
          *      if(a == 3) {
          *          print "hello!";
          *      }
+         *      else{
+         *          print "bye!"
+         *      }
          * 
          *      will be
          *  
@@ -44,8 +47,8 @@ namespace Core
         {
         protected:
             std::shared_ptr<Instruction> expr;
-            std::vector<std::shared_ptr<Instruction>>& body;
-
+            std::vector<std::shared_ptr<Instruction>> body;
+            std::vector<std::shared_ptr<Instruction>> elseBody;
         public:
             /**
              * @brief Construct a new IfInstruction object
@@ -53,7 +56,7 @@ namespace Core
              * @param body vector with instructions
              * @param expr expression which will return boolean value
              */
-            IfInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr);
+            IfInstruction(std::vector<std::shared_ptr<Instruction>>& body,std::vector<std::shared_ptr<Instruction>>& elseBody, std::shared_ptr<Instruction> expr);
             /**
              * @brief Get the Expr object
              * 
