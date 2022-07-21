@@ -27,7 +27,13 @@ namespace Core
             MUL,
             DIV,
             EQUAL_EQUAL,
+            LESS_OR_EQUAL_THAN, 
+            LESS_THAN,
+            GREATER_THAN,
+            GREATER_OR_EQUAL_THAN,
             NOT,
+            AND,
+            OR
         };
     }
 }
