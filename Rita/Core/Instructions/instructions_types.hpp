@@ -29,6 +29,7 @@ namespace Core
         CONSTANT_STRING,
         CONSTANT_LIST,
         INDEX,
+        VAR_DECL,
     };
 }
 
