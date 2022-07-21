@@ -7,23 +7,6 @@ void _PrintSpaces(size_t spaces)
 
 namespace Utils::AstPrinter
 {
-    const std::string& OpTypeToString(Core::Instructions::OpType type)
-    {
-        switch (type)
-        {
-        case Core::Instructions::OpType::PLUS:
-            return "+"; 
-        case Core::Instructions::OpType::DIV:
-            return "/";
-        case Core::Instructions::OpType::MUL:
-            return "*";
-        case Core::Instructions::OpType::MINUS:
-            return "-";
-        default:
-            throw std::runtime_error("Printing unimplemented for this OpType!");
-        }
-    }
-
     void PrintBinaryOperation(Core::Instructions::BinOpInstruction* instr, size_t level)
     {
         _PrintSpaces(level);
@@ -46,6 +29,9 @@ namespace Utils::AstPrinter
         case Core::Instructions::OpType::MINUS:
             std::cout << "-" << std::endl;
             break;
+        case Core::Instructions::OpType::GREATER_THAN:
+            std::cout << "<" << std::endl;
+            break;
         default:
             throw std::runtime_error("Printing unimplemented for this OpType!");
         }
@@ -62,8 +48,6 @@ namespace Utils::AstPrinter
         _PrintSpaces(level);
         std::cout << "Leaf(" << instr->GetID() << ")" << std::endl;
     }
-
-    void PrintIf(Core::Instructions::IfInstruction* instr, size_t level){}
 
     void PrintFunctionCall(Core::Instructions::FunctionCallInstruction* instr, size_t level)
     {
@@ -121,7 +105,7 @@ namespace Utils::AstPrinter
         _PrintSpaces(level + 2);
         std::cout << ")" << std::endl;
         _PrintSpaces(level);
-        std::cout << ")";
+        std::cout << ")" << std::endl;
     }
 
     void PrintUnaryOp(Core::Instructions::UnaryOperatorInstruction* instr, size_t level)
@@ -143,6 +127,9 @@ namespace Utils::AstPrinter
             break;
         case Core::Instructions::OpType::MINUS:
             std::cout << "-" << std::endl;
+            break;
+        case Core::Instructions::OpType::GREATER_THAN:
+            std::cout << "<" << std::endl;
             break;
         default:
             throw std::runtime_error("Printing unimplemented for this OpType!");
@@ -220,6 +207,68 @@ namespace Utils::AstPrinter
 
     }
 
+    void PrintVarDecl(Core::Instructions::VariableDeclarationInstruction* instr, size_t level)
+    {
+        _PrintSpaces(level);
+
+        std::cout << "VariableDeclaration(" << std::endl;
+
+        _PrintSpaces(level + 2);
+        std::cout << "Name=(" << std::endl;
+        _PrintSpaces(level + 4);
+        std::cout << instr->GetVarName() << std::endl;
+        _PrintSpaces(level + 2);
+
+        std::cout << ")" << std::endl;
+
+        _PrintSpaces(level + 2);
+
+        std::cout << "Value=(" << std::endl;
+
+        PrintAstTree(instr->GetExpression().get(), level + 4);
+        _PrintSpaces(level + 2);
+
+        std::cout << ")" << std::endl;
+
+        _PrintSpaces(level);
+
+        std::cout << ")" << std::endl;
+    }
+
+    void PrintIf(Core::Instructions::IfInstruction* instr, size_t level)
+    {
+        _PrintSpaces(level);
+        std::cout << "IfStatement(" << std::endl;
+        _PrintSpaces(level + 2);
+
+        std::cout << "Condition=(" << std::endl;
+
+        PrintAstTree(instr->GetExpr().get(), level + 4);
+
+        _PrintSpaces(level + 2);
+
+        std::cout << ")," << std::endl; 
+
+        _PrintSpaces(level + 2);
+
+        std::cout << "Body=(" << std::endl;
+
+        for(auto now : instr->GetBody())
+        {
+            PrintAstTree(now.get(), level + 4);
+            _PrintSpaces(level + 3);
+            std::cout << "," << std::endl;
+        }
+
+        _PrintSpaces(level + 2);
+
+        std::cout << ")" << std::endl;
+
+        _PrintSpaces(level);
+
+        std::cout << ")" << std::endl;
+    }
+
     void PrintAstTree(Core::Instructions::Instruction* instr, size_t level)
     {
        // Unpack the instruction.
@@ -254,6 +303,12 @@ namespace Utils::AstPrinter
             break;
         case Core::InstructionType::INDEX:
             PrintIndex(static_cast<Core::Instructions::IndexInstruction*>(instr), level);
+            break;
+        case Core::InstructionType::VAR_DECL:
+            PrintVarDecl(static_cast<Core::Instructions::VariableDeclarationInstruction*>(instr), level);
+            break;
+        case Core::InstructionType::IF:
+            PrintIf(static_cast<Core::Instructions::IfInstruction*>(instr), level);
             break;
         default:
             std::cout << "Instr: " << *instr << std::endl;

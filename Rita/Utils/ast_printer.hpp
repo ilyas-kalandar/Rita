@@ -11,6 +11,7 @@
 #include "Instructions/constant_float.hpp"
 #include "Instructions/constant_int.hpp"
 #include "Instructions/constant_list.hpp"
+#include "Instructions/var_decl_instruction.hpp"
 #include "Instructions/constant_string.hpp"
 #include "Instructions/index_instruction.hpp"
 
