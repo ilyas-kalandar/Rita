@@ -191,6 +191,35 @@ namespace Utils::AstPrinter
         std::cout << "]" << std::endl;
     }
 
+    void PrintIndex(Core::Instructions::IndexInstruction* instr, size_t level)
+    {
+        _PrintSpaces(level);
+
+        std::cout << "GetIndex(" << std::endl;
+
+        _PrintSpaces(level + 2);
+        std::cout << "Value=(" << std::endl;
+
+        PrintAstTree(instr->GetValue().get(), level + 4);
+        _PrintSpaces(level + 2);
+
+        std::cout << ")" << std::endl;
+
+        _PrintSpaces(level + 2);
+
+        std::cout << "Index=(" << std::endl;
+
+        PrintAstTree(instr->GetIndex().get(), level + 4);
+        _PrintSpaces(level + 2);
+
+        std::cout << ")" << std::endl;
+
+        _PrintSpaces(level);
+
+        std::cout << ")" << std::endl;
+
+    }
+
     void PrintAstTree(Core::Instructions::Instruction* instr, size_t level)
     {
        // Unpack the instruction.
@@ -222,6 +251,9 @@ namespace Utils::AstPrinter
             break;
         case Core::InstructionType::CONSTANT_LIST:
             PrintConstList(static_cast<Core::Instructions::ConstantList*>(instr), level);
+            break;
+        case Core::InstructionType::INDEX:
+            PrintIndex(static_cast<Core::Instructions::IndexInstruction*>(instr), level);
             break;
         default:
             std::cout << "Instr: " << *instr << std::endl;
