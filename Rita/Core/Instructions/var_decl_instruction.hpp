@@ -49,7 +49,7 @@ namespace Core
              * @return std::shared_ptr<Instruction> 
              */
             std::shared_ptr<Instruction> GetExpression();
-        }
+        };
     }
 }
 
