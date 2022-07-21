@@ -45,6 +45,7 @@ set(
         Instructions/constant_int.hpp
         Instructions/constant_float.hpp
         Instructions/constant_list.hpp
+        Instructions/index_instruction.hpp
 )
 
 set(
@@ -62,6 +63,7 @@ set(
         Instructions/constant_int.cpp
         Instructions/constant_float.cpp
         Instructions/constant_list.cpp
+        Instructions/index_instruction.cpp
 )
 
 
