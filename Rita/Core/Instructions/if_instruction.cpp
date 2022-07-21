@@ -15,7 +15,10 @@ namespace Core
 {
     namespace Instructions
     {
-        IfInstruction::IfInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr) : body(body)
+        IfInstruction::IfInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::vector<std::shared_ptr<Instruction>>& elseBody, std::shared_ptr<Instruction> expr) 
+            : 
+            body(std::move(body)),
+            elseBody(std::move(elseBody))
         {
             this->expr = expr;
             this->type = InstructionType::IF;
