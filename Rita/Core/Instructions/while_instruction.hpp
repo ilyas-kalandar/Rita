@@ -37,8 +37,11 @@ namespace Core
          *      )
          * 
          */
-        class WhileInstruction : public IfInstruction
+        class WhileInstruction : public Instruction
         {
+        protected:
+            std::vector<std::shared_ptr<Instruction>> body;
+            std::shared_ptr<Instruction> expr;
         public:
             /**
              * @brief Construct a new While Instruction object
@@ -47,6 +50,20 @@ namespace Core
              * @param expr Expression for checking
              */
             WhileInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr);
+
+            /**
+             * @brief Get the Body object
+             * 
+             * @return const std::vector<std::shared_ptr<Instruction>>& 
+             */
+            const std::vector<std::shared_ptr<Instruction>>& GetBody();
+
+            /**
+             * @brief Get the Expression object
+             * 
+             * @return std::shared_ptr<Instruction> 
+             */
+            std::shared_ptr<Instruction> GetExpression();
         };
     }
 }

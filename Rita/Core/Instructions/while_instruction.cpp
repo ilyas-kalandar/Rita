@@ -15,9 +15,19 @@ namespace Core
 {
     namespace Instructions
     {
-        WhileInstruction::WhileInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr) : IfInstruction(body, expr)
+        WhileInstruction::WhileInstruction(std::vector<std::shared_ptr<Instruction>>& body, std::shared_ptr<Instruction> expr) : body(std::move(body)), expr(expr)
         {
             this->type = InstructionType::WHILE;
+        }
+
+        std::shared_ptr<Instruction> WhileInstruction::GetExpression()
+        {
+            return this->expr;
+        }
+
+        const std::vector<std::shared_ptr<Instruction>>& WhileInstruction::GetBody()
+        {
+            return this->body;
         }
     }
 }
