@@ -12,6 +12,7 @@
 #include "Instructions/constant_int.hpp"
 #include "Instructions/constant_list.hpp"
 #include "Instructions/constant_string.hpp"
+#include "Instructions/index_instruction.hpp"
 
 #ifndef utils_ast_printer_hpp
 #define utils_ast_printer_hpp
