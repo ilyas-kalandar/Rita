@@ -27,7 +27,18 @@ namespace Core
         protected:
             long double data;
         public:
+            /**
+             * @brief Construct a new Constant Float object
+             * 
+             * @param data float for storing
+             */
             ConstantFloat(long double data);
+
+            /**
+             * @brief Get the Data object
+             * 
+             * @return long double 
+             */
             long double GetData();
         };
     }
