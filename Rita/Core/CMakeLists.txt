@@ -52,6 +52,7 @@ set(
 set(
     INSTRUCTIONS_SOURCES
         Instructions/instruction.cpp
+        Instructions/instructions_types.cpp
         Instructions/if_instruction.cpp
         Instructions/while_instruction.cpp
         Instructions/assignment_instruction.cpp
@@ -76,4 +77,14 @@ add_library(
         ${CORE_HEADERS}
         ${INSTRUCTIONS_HEADERS}
         ${INSTRUCTIONS_SOURCES}
+)
+
+include_directories(
+    "../Utils"
+)
+
+target_link_libraries(
+    Core
+    PUBLIC
+        Utils
 )
