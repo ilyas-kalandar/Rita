@@ -9,6 +9,8 @@
  * 
  */
 
+#include <sstream>
+
 #include "instruction.hpp"
 
 namespace Core
@@ -20,30 +22,13 @@ namespace Core
 			return this->type;
 		}
 
-		std::ostream& operator<<(std::ostream& os, const Instruction& instr)
+		Instruction::operator std::string()
 		{
-			os << "Instruction<";
-
-			switch (instr.GetType())
-			{
-			case InstructionType::ASSIGNMENT:
-				os << "ASSIGNMENT";
-				break;
-			case InstructionType::BINOP:
-				os << "BINOP";
-				break;
-			case InstructionType::IF:
-				os << "IF";
-				break;
-			case InstructionType::LEAF:
-				os << "LEAF";
-				break;
-			case InstructionType::WHILE:
-				os << "WHILE";
-				break;
-			}
-			os << ">";
-			return os;
+			std::stringstream ss;
+			ss << "Instruction<";
+			ss << type;
+			ss << ">";
+			return ss.str();	
 		}
 
 	}

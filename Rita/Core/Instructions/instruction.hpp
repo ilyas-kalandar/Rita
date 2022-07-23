@@ -35,9 +35,14 @@ namespace Core
 			 * @return InstructionType
 			 */
 			InstructionType GetType() const;
-		};
 
-		std::ostream& operator<<(std::ostream& os, const Instruction& instr);
+			/**
+			 * @brief Operator for converting an instruction to string.
+			 * 
+			 * @return std::string 
+			 */
+			operator std::string();
+		};
 	}
 }
 
