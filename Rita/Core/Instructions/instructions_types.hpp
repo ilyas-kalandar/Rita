@@ -9,6 +9,8 @@
  * 
  */
 
+#include <iostream>
+
 #ifndef instruction_types_hpp
 #define instruction_types_hpp
 
@@ -32,6 +34,15 @@ namespace Core
         VAR_DECL,
         PRINT,
     };
+
+    /**
+     * @brief For using InstructionType with cout object.
+     * 
+     * @param os 
+     * @param instr_type 
+     * @return std::ostream& 
+     */
+    std::ostream& operator <<(std::ostream& os, InstructionType instr_type);
 }
 
 #endif
