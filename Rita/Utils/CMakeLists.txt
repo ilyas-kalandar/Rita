@@ -3,11 +3,13 @@ Project(Utils)
 set(
     UTILS_SOURCES
         ast_printer.cpp
+        rita_exception.cpp
 )
 
 set(
     UTILS_HEADERS
         ast_printer.hpp
+        rita_exception.hpp
 )
 
 add_library(
