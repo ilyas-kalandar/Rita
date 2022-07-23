@@ -30,6 +30,7 @@ namespace Core
         CONSTANT_LIST,
         INDEX,
         VAR_DECL,
+        PRINT,
     };
 }
 
