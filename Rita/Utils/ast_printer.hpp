@@ -23,18 +23,37 @@ namespace Utils
     class AstPrinter
     {
     protected:
-	size_t depth;
-	size_t indent_level;
+		size_t depth;
+		size_t indent_level;
 
-	void Print(Core::Instructions::ConstantInt*);
-	void Print(Core::Instructions::ConstantString*);
-	void Print(Core::Instructions::ConstantFloat*);
-	void Print(Core::Instructions::ConstantList*);
-	void Print(Core::Instructions::WhileInstruction*);
-	void Print(Core::Instructions::IfInstruction*);
-	void Print(Core::Instructions::AssignmentInstruction*);
+		// for indent
 
-	//TODO(Ilyas): Add another definitions
+		void IncrDepth();
+		void DecrDepth();
+
+		// for output some strings
+
+		void SetCursor();
+		void PrintValue(const char*, Core::Instructions::Instruction*);
+		void PrintValue(const char*, const std::vector<std::shared_ptr<Core::Instructions::Instruction>>&);
+		void PrintValue(const char*, const char*);
+		void Print(const char*, bool);
+		void Print(const std::string&, bool);
+
+		// for instructions
+
+		void Print(Core::Instructions::Leaf*);
+		void Print(Core::Instructions::ConstantInt*);
+		void Print(Core::Instructions::ConstantString*);
+		void Print(Core::Instructions::ConstantFloat*);
+		void Print(Core::Instructions::ConstantList*);
+		void Print(Core::Instructions::WhileInstruction*);
+		void Print(Core::Instructions::IfInstruction*);
+		void Print(Core::Instructions::VariableDeclarationInstruction*);
+		void Print(Core::Instructions::AssignmentInstruction*);
+		void Print(Core::Instructions::BinOpInstruction*);
+
+		//TODO(Ilyas): Add another definitions
 
     public:
 		/**
@@ -43,7 +62,7 @@ namespace Utils
 		*/
         AstPrinter(size_t indent_level);
 
-        void Print(Core::Instructions::Instruction*);
+        void Print(Core::Instructions::Instruction* instr, size_t incr_depth = 1);
     };
 }
 
