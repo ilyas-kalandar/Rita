@@ -18,21 +18,34 @@
 #ifndef utils_ast_printer_hpp
 #define utils_ast_printer_hpp
 
-namespace Utils::AstPrinter
+namespace Utils
 {
-    /**
-    * @brief Prints binary operation
-    * 
-    *
-    */
-    void PrintBinaryOperation(Core::Instructions::BinOpInstruction* instr, size_t level);
-    void PrintIf(Core::Instructions::IfInstruction* instr, size_t level);
-    void PrintFunctionCall(Core::Instructions::FunctionCallInstruction* instr, size_t level);
-    void PrintLeaf(Core::Instructions::Leaf* instr, size_t level);
-    void PrintAssignment(Core::Instructions::AssignmentInstruction* instr, size_t level);
-    void PrintAttribute(Core::Instructions::AttributeInstruction* instr, size_t level);
-    void PrintUnaryOp(Core::Instructions::UnaryOperatorInstruction* insr, size_t level);
-    void PrintAstTree(Core::Instructions::Instruction* instr, size_t level);
+    class AstPrinter
+    {
+    protected:
+	size_t depth;
+	size_t indent_level;
+
+	void Print(Core::Instructions::ConstantInt*);
+	void Print(Core::Instructions::ConstantString*);
+	void Print(Core::Instructions::ConstantFloat*);
+        void Print(Core::Instructions::ConstantList*);
+        void Print(Core::Instructions::WhileInstruction*);
+	void Print(Core::Instructions::IfInstruction*);
+	void Print(Core::Instructions::AssignmentInstruction*);
+
+	//TODO(Ilyas): Add another definitions
+    public:
+	/**
+	* @brief Constructs a new AstPrinter object
+	*
+	*/
+        AstPrinter(size_t indent_level);
+
+        void Print(Core::Instructions::Instruction*);
+	void Print(std::shared_ptr<Core::Instructions::Instruction*>);
+	
+    };
 }
 
 #endif
