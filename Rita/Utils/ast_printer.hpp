@@ -29,22 +29,21 @@ namespace Utils
 	void Print(Core::Instructions::ConstantInt*);
 	void Print(Core::Instructions::ConstantString*);
 	void Print(Core::Instructions::ConstantFloat*);
-        void Print(Core::Instructions::ConstantList*);
-        void Print(Core::Instructions::WhileInstruction*);
+	void Print(Core::Instructions::ConstantList*);
+	void Print(Core::Instructions::WhileInstruction*);
 	void Print(Core::Instructions::IfInstruction*);
 	void Print(Core::Instructions::AssignmentInstruction*);
 
 	//TODO(Ilyas): Add another definitions
+
     public:
-	/**
-	* @brief Constructs a new AstPrinter object
-	*
-	*/
+		/**
+		* @brief Constructs a new AstPrinter object
+		*
+		*/
         AstPrinter(size_t indent_level);
 
         void Print(Core::Instructions::Instruction*);
-	void Print(std::shared_ptr<Core::Instructions::Instruction*>);
-	
     };
 }
 
