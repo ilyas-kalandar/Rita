@@ -16,33 +16,36 @@
 
 namespace Core
 {
-    enum class InstructionType
+    namespace Instructions
     {
-        BINOP,
-        LEAF,
-        ASSIGNMENT,
-        IF,
-        WHILE,
-        FUNCTION_CALL,
-        ATTRIBUTE,
-        UNOP,
-        CONSTANT_INT,
-        CONSTANT_FLOAT,
-        CONSTANT_STRING,
-        CONSTANT_LIST,
-        INDEX,
-        VAR_DECL,
-        PRINT,
-    };
+        enum class InstructionType
+        {
+            BINOP,
+            LEAF,
+            ASSIGNMENT,
+            IF,
+            WHILE,
+            FUNCTION_CALL,
+            ATTRIBUTE,
+            UNOP,
+            CONSTANT_INT,
+            CONSTANT_FLOAT,
+            CONSTANT_STRING,
+            CONSTANT_LIST,
+            INDEX,
+            VAR_DECL,
+            PRINT,
+        };
 
-    /**
-     * @brief For using InstructionType with cout object.
-     * 
-     * @param os 
-     * @param instr_type 
-     * @return std::ostream& 
-     */
-    std::ostream& operator <<(std::ostream& os, InstructionType instr_type);
+        /**
+         * @brief For using InstructionType with cout object.
+         * 
+         * @param os 
+         * @param instr_type 
+         * @return std::ostream& 
+         */
+        std::ostream& operator <<(std::ostream& os, InstructionType instr_type);
+    }
 }
 
 #endif
