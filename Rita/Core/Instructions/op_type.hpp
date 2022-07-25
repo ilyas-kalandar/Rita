@@ -35,6 +35,15 @@ namespace Core
             AND,
             OR
         };
+
+        /**
+         * @brief 
+         * 
+         * @param os 
+         * @param op 
+         * @return std::ostream& 
+         */
+        std::ostream& operator<<(std::ostream& os, OpType op);
     }
 }
 
