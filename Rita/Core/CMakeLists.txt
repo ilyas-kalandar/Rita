@@ -67,6 +67,7 @@ set(
         Instructions/constant_list.cpp
         Instructions/index_instruction.cpp
         Instructions/var_decl_instruction.cpp
+        Instructions/op_type.cpp
 )
 
 
