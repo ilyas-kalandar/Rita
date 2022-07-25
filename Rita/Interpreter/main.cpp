@@ -31,11 +31,13 @@ int main()
 	toks.Reset();
 
 	Parser parser;
+
 	auto program = parser.Parse(toks);
 
+	Utils::AstPrinter printer(2);
 
 	for (auto instr : program)
 	{
-		Utils::AstPrinter::PrintAstTree(instr.get(), 0);
+		printer.Print(instr.get());
 	}
 }
