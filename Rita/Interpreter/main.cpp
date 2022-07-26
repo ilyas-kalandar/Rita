@@ -32,7 +32,18 @@ int main()
 
 	Parser parser;
 
-	auto program = parser.Parse(toks);
+	std::vector<std::shared_ptr<Core::Instructions::Instruction>> program;
+
+	try
+	{
+		program = parser.Parse(toks);
+	}
+	catch(const std::runtime_error& e)
+	{
+		std::cout << e.what() << std::endl;
+
+		return -1;
+	}
 
 	Utils::AstPrinter printer(2);
 
