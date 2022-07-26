@@ -68,7 +68,7 @@ protected:
      * @return std::shared_ptr<Core::Instructions::Instruction> 
      */
 
-
+    void ExpectAndSkip(Lexer::TokenType);
     std::shared_ptr<Core::Instructions::Instruction> ParseExpression();
     std::shared_ptr<Core::Instructions::Instruction> ParseAssignInstruction();
     std::shared_ptr<Core::Instructions::Instruction> ParseInstruction();
