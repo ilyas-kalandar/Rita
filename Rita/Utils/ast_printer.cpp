@@ -80,13 +80,11 @@ namespace Utils
 	{
 		IncrDepth();
 		SetCursor();
-		std::cout << key << "=(" << std::endl;
+		std::cout << key << "[count=" << vec.size() << "]" << "=(" << std::endl;
 
 		for(auto instr : vec)
 		{
-			Print(instr.get());
-			SetCursor();
-			std::cout << "," << std::endl;			
+			Print(instr.get());		
 		}
 
 		SetCursor();
@@ -138,6 +136,52 @@ namespace Utils
 		PrintValue("Value", std::to_string(instr->GetData()).c_str());
 	}
 
+	void AstPrinter::Print(Core::Instructions::IfInstruction* instr)
+	{
+		PrintValue("Condition", instr->GetExpr().get());
+		PrintValue("Body", instr->GetBody());
+	}
+
+	void AstPrinter::Print(Core::Instructions::FunctionCallInstruction* instr)
+	{
+		PrintValue("Function", instr->GetFunction().get());
+		PrintValue("Args", instr->GetFunctionArguments());
+	}
+
+	void AstPrinter::Print(Core::Instructions::ConstantList* instr)
+	{
+		PrintValue("List", instr->GetList());
+	}
+
+	void AstPrinter::Print(Core::Instructions::AttributeInstruction* instr)
+	{
+		PrintValue("Value", instr->GetValue().get());
+		PrintValue("Attr", instr->GetAttr().c_str());
+	}
+
+	void AstPrinter::Print(Core::Instructions::UnaryOperatorInstruction* instr)
+	{
+		PrintValue("OpType", (std::stringstream() << instr->GetOperationType()).str().c_str());
+		PrintValue("Value", instr->GetValue().get());
+	}
+
+	void AstPrinter::Print(Core::Instructions::WhileInstruction* instr)
+	{
+		PrintValue("Condition", instr->GetExpression().get());
+		PrintValue("Body", instr->GetBody());
+	}
+
+	void AstPrinter::Print(Core::Instructions::ConstantString* instr)
+	{
+		PrintValue("Value", instr->GetData().c_str());
+	}
+
+	void AstPrinter::Print(Core::Instructions::AssignmentInstruction* instr)
+	{
+		PrintValue("Object", instr->GetObject().get());
+		PrintValue("Expression", instr->GetRightInstr().get());
+	}
+
     void AstPrinter::Print(Core::Instructions::Instruction* instr, size_t depth_incr)
     {
 		for(auto it = 0; it < depth_incr; ++it)
@@ -149,8 +193,14 @@ namespace Utils
 
 		switch(instr->GetType())
 		{
+		case Core::Instructions::InstructionType::WHILE:
+			Print(static_cast<Core::Instructions::WhileInstruction*>(instr));
+			break;
 		case Core::Instructions::InstructionType::CONSTANT_FLOAT:
 			Print(static_cast<Core::Instructions::ConstantFloat*>(instr));
+			break;
+		case Core::Instructions::InstructionType::CONSTANT_LIST:
+			Print(static_cast<Core::Instructions::ConstantList*>(instr));
 			break;
 		case Core::Instructions::InstructionType::VAR_DECL:
 			Print(static_cast<Core::Instructions::VariableDeclarationInstruction*>(instr));
@@ -163,6 +213,24 @@ namespace Utils
 			break;
 		case Core::Instructions::InstructionType::LEAF:
 			Print(static_cast<Core::Instructions::Leaf*>(instr));
+			break;
+		case Core::Instructions::InstructionType::IF:
+			Print(static_cast<Core::Instructions::IfInstruction*>(instr));
+			break;
+		case Core::Instructions::InstructionType::FUNCTION_CALL:
+			Print(static_cast<Core::Instructions::FunctionCallInstruction*>(instr));
+			break;
+		case Core::Instructions::InstructionType::ATTRIBUTE:
+			Print(static_cast<Core::Instructions::AttributeInstruction*>(instr));
+			break;
+		case Core::Instructions::InstructionType::UNOP:
+			Print(static_cast<Core::Instructions::UnaryOperatorInstruction*>(instr));
+			break;
+		case Core::Instructions::InstructionType::CONSTANT_STRING:
+			Print(static_cast<Core::Instructions::ConstantString*>(instr));
+			break;
+		case Core::Instructions::InstructionType::ASSIGNMENT:
+			Print(static_cast<Core::Instructions::AssignmentInstruction*>(instr));
 			break;
 		default:
 			throw RitaException(
