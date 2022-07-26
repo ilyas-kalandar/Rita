@@ -17,6 +17,11 @@ namespace Core
     {
     }
 
+    RitaObject* List::Get(size_t index)
+    {
+        return vec[index];
+    }
+
     void List::Insert(size_t index, RitaObject* obj)
     {
         this->vec.insert(vec.begin() + index, obj);
