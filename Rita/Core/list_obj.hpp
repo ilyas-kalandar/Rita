@@ -23,7 +23,7 @@ namespace Core
      * @brief Class-container for std::vector<RitaObject*> for using directly from Rita
      * 
      */
-    class List : RitaObject
+    class List : public RitaObject
     {
     protected:
         std::vector<RitaObject*> vec;
@@ -34,6 +34,14 @@ namespace Core
          * @param type Type of object
          */
         List(Type* type);
+
+        /**
+         * @brief 
+         * 
+         * @param index 
+         * @return RitaObject* 
+         */
+        RitaObject* Get(size_t index);
         
         /**
          * @brief Adds object to end of list
