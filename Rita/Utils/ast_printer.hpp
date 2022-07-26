@@ -12,6 +12,7 @@
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/instruction.hpp"
 #include "Instructions/binop_instruction.hpp"
+#include <Instructions/assignment_instruction.hpp>
 #include "Instructions/if_instruction.hpp"
 #include "Instructions/assignment_instruction.hpp"
 #include "Instructions/leaf.hpp"
@@ -58,11 +59,14 @@ namespace Utils
 		void Print(Core::Instructions::ConstantString*);
 		void Print(Core::Instructions::ConstantFloat*);
 		void Print(Core::Instructions::ConstantList*);
-		void Print(Core::Instructions::WhileInstruction*);
 		void Print(Core::Instructions::IfInstruction*);
 		void Print(Core::Instructions::VariableDeclarationInstruction*);
+		void Print(Core::Instructions::AttributeInstruction*);
 		void Print(Core::Instructions::AssignmentInstruction*);
+		void Print(Core::Instructions::FunctionCallInstruction*);
 		void Print(Core::Instructions::BinOpInstruction*);
+		void Print(Core::Instructions::UnaryOperatorInstruction*);
+		void Print(Core::Instructions::WhileInstruction*);
 
 		//TODO(Ilyas): Add another definitions
 
