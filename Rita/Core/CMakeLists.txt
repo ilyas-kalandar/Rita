@@ -14,6 +14,7 @@ set(
         native_function.cpp
         int_obj.cpp
         list_obj.cpp
+        user_object.cpp
 )
 
 set(
@@ -24,6 +25,7 @@ set(
         native_function.hpp
         int_obj.hpp
         list_obj.hpp
+        user_object.hpp
 )
 
 
