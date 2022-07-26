@@ -15,7 +15,7 @@ namespace Core
 {
     namespace Instructions
     {
-        AssignmentInstruction::AssignmentInstruction(std::string& id, std::shared_ptr<Instruction> inst) : identifier(id)
+        AssignmentInstruction::AssignmentInstruction(std::shared_ptr<Instruction> obj, std::shared_ptr<Instruction> inst) : obj(obj)
         {
             this->type = InstructionType::ASSIGNMENT;
             this->instr = inst;
@@ -23,12 +23,12 @@ namespace Core
 
         std::shared_ptr<Instruction> AssignmentInstruction::GetRightInstr()
         {
-            return this->instr;
+            return instr;
         }
 
-        const std::string& AssignmentInstruction::GetIdentifier()
+        std::shared_ptr<Instruction> AssignmentInstruction::GetObject()
         {
-            return this->identifier;
+            return obj;
         }
     }
 }
