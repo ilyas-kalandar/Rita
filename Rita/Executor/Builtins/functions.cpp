@@ -1,17 +1,32 @@
 #include <sstream>
 
+#include "rita_exception.hpp"
 #include "functions.hpp"
 #include "string_obj.hpp"
 #include "types.hpp"
 
 namespace Executor
 {
+    namespace Builtins{
+        namespace Types{
+extern Core::Type* BoolType;
+extern Core::Type* IntType;
+extern Core::Type* BuiltinFunctionType;
+extern Core::Type* UserObject;
+extern Core::Type* StringType;
+extern Core::Type* ObjectType;}
+    }
+}
+namespace Executor
+{
     namespace Builtins
     {
         namespace Functions
         {
-            Core::String* ObjectToStringNative(Core::RitaObject* obj)
+            Core::String* ObjectToStringNative(const std::vector<Core::RitaObject*>& args)
             {
+                auto obj = args[0];
+
                 // Any object in Rita have type, lets get type
                 // Yes, obj->GetType() returns RitaObject*, but believe me, you can safely cast it to Core::Type*
                 Core::Type* objectType = static_cast<Core::Type*>(obj->GetType());
@@ -34,6 +49,48 @@ namespace Executor
                 std::string resultString = ss.str();
 
                 return new Core::String(resultString, Types::StringType);
+            }
+
+            Core::String* IntToStringNative(const std::vector<Core::RitaObject*>& args)
+            {
+                auto obj = static_cast<Core::Int*>(args[0]);
+                auto res = std::to_string(obj->GetValue());
+                return new Core::String(res, Types::StringType);
+            }
+
+            Core::RitaObject* IntOperatorPlus(const std::vector<Core::RitaObject*>& list)
+            {
+                auto self = static_cast<Core::Int*>(list[0]);
+                auto second = list[1];
+
+                auto secType = static_cast<Core::Type*>(second->GetType());
+
+                if(secType->GetTypeName() == Types::IntType->GetTypeName())
+                {
+                    return new Core::Int(self->GetValue() + static_cast<Core::Int*>(second)->GetValue(), Types::IntType);
+                }
+
+                throw Utils::RitaException(
+                    "Executor", 
+                    "Runtime error, expected 'int' or 'float' type, got '" + secType->GetTypeName() + "'"
+                );
+            }
+
+            Core::RitaObject* Print(const std::vector<Core::RitaObject*>& args)
+            {
+                for(auto obj : args)
+                {
+                    if(static_cast<Core::Type*>(obj->GetType())->GetTypeName() != "String")
+                    {
+                        throw Utils::RitaException(
+                            "Print", 
+                            "Expected string, got \"" + static_cast<Core::Type*>(obj->GetType())->GetTypeName() + "\""
+                        );
+                    }
+                    std::cout << static_cast<Core::String*>(obj)->GetValue() << " ";
+                }
+
+                std::cout << std::endl;
             }
         }
     }
