@@ -15,6 +15,7 @@
 
 #include "rita_exception.hpp"
 #include "Instructions/if_instruction.hpp"
+#include "Instructions/assignment_instruction.hpp"
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
 #include "Instructions/constant_float.hpp"
@@ -22,6 +23,7 @@
 #include "Instructions/constant_string.hpp"
 #include "Instructions/constant_list.hpp"
 #include "Instructions/var_decl_instruction.hpp"
+#include "Instructions/while_instruction.hpp"
 
 #include "Instructions/index_instruction.hpp"
 
@@ -303,53 +305,80 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseExpression()
 	return this->ParseNotExpr();
 }
 
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseVarDecl()
+{
+	this->tokens.Next(); // skip var token
+
+	if(this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
+	{
+		throw Utils::RitaException(
+			"Parser",
+			(std::stringstream() << "Expected \"IDENTIFIER after 'var' token, got \"" << tokens.Current().GetTokenType() << "\"").str(),
+			tokens.Current().GetLine(),
+			tokens.Current().GetCharacter()
+		);
+	}
+
+	std::string varName = this->tokens.GetAndNext().GetLiteral();
+
+	ExpectAndSkip(Lexer::TokenType::EQUAL);
+	return std::make_shared<Core::Instructions::VariableDeclarationInstruction>(varName, ParseExpression());
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseIf()
+{
+	tokens.Next(); // skip if token
+
+	auto expr = ParseExpression();
+
+	auto ifBody = ParseCodeBlock();
+
+	std::vector<std::shared_ptr<Core::Instructions::Instruction>> elseBody;
+
+	if(this->tokens.Current().GetTokenType() == Lexer::TokenType::ELSE)
+	{
+		this->tokens.Next();
+		elseBody = ParseCodeBlock();
+	}
+
+	return std::make_shared<Core::Instructions::IfInstruction>(ifBody, elseBody, expr);
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseWhile()
+{
+	// skip while token
+	tokens.Next();
+
+	auto expr = ParseExpression();
+	auto body = ParseCodeBlock();
+
+	return std::make_shared<Core::Instructions::WhileInstruction>(body, expr);
+}
+
 std::shared_ptr<Core::Instructions::Instruction> Parser::ParseInstruction()
 {
-	switch (this->tokens.Current().GetTokenType())
+	switch (tokens.Current().GetTokenType())
 	{
 	case Lexer::TokenType::VAR:
-	{
-		this->tokens.Next(); // skip var token
-
-		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
-		{
-			throw std::runtime_error("Expected IDENTIFIER after 'var'!");		
-		}
-
-		std::string varName = this->tokens.GetAndNext().GetLiteral();
-
-		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::EQUAL)
-		{
-			throw std::runtime_error("expected '=', after IDENTIFIER!");
-		}
-
-		this->tokens.Next();
-
-		return std::make_shared<Core::Instructions::VariableDeclarationInstruction>(varName, ParseExpression());
-	}
+		return ParseVarDecl();
 	case Lexer::TokenType::IF:
-	{
-		this->tokens.Next(); // skip if token
-
-		auto expr = ParseExpression();
-
-		auto ifBody = ParseCodeBlock();
-
-		std::vector<std::shared_ptr<Core::Instructions::Instruction>> elseBody;
-
-		if(this->tokens.Current().GetTokenType() == Lexer::TokenType::ELSE)
-		{
-			this->tokens.Next();
-			elseBody = ParseCodeBlock();
-		}
-
-		return std::make_shared<Core::Instructions::IfInstruction>(ifBody, elseBody, expr);
-	}
+		return ParseIf();
+	case Lexer::TokenType::WHILE:
+		return ParseWhile();
 	default:
-		throw Utils::RitaException(
-			"Parser", (std::stringstream() << "Unexpected token " << tokens.Current().GetTokenType()).str(),
-			tokens.Current().GetLine(), tokens.Current().GetCharacter()
-		);
+		auto expr = ParseExpression();
+		if(
+			(expr->GetType() == Core::Instructions::InstructionType::LEAF 
+			|| 
+			expr->GetType() == Core::Instructions::InstructionType::ATTRIBUTE
+			) && this->tokens.Current().GetTokenType() == Lexer::TokenType::EQUAL
+		)
+		{
+			// assign
+			tokens.Next(); // skip EQUAL-token
+			return std::make_shared<Core::Instructions::AssignmentInstruction>(expr, ParseExpression());
+		}
+		return expr;
 	}
 }
 

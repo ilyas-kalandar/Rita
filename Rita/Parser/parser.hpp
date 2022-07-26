@@ -70,9 +70,11 @@ protected:
 
     void ExpectAndSkip(Lexer::TokenType);
     std::shared_ptr<Core::Instructions::Instruction> ParseExpression();
-    std::shared_ptr<Core::Instructions::Instruction> ParseAssignInstruction();
+    std::shared_ptr<Core::Instructions::Instruction> ParseVarDecl();
     std::shared_ptr<Core::Instructions::Instruction> ParseInstruction();
+    std::shared_ptr<Core::Instructions::Instruction> ParseIf();
     std::vector<std::shared_ptr<Core::Instructions::Instruction>> ParseCodeBlock();
+    std::shared_ptr<Core::Instructions::Instruction> ParseWhile();
 public:
     /**
      * @brief Parses tokens into instructions
