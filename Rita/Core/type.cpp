@@ -11,6 +11,7 @@
 
 #include <string>
 
+#include "rita_exception.hpp"
 #include "type.hpp"
 
 namespace Core
@@ -46,7 +47,10 @@ namespace Core
 			return this->inheritedFrom->GetField(fieldName);
 		}
 
-		throw std::runtime_error("Field not found!");
+		throw Utils::RitaException(
+			"Type",
+			"Type '" + GetTypeName() + "' haven't field \"" + fieldName + "\""
+		);	
 	}
 
 	const std::map<std::string, RitaObject*>& Type::GetFields()
