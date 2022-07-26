@@ -32,6 +32,15 @@ namespace Core
          */
         RitaObject* Get(std::string& field);
 
+        /**
+         * @brief 
+         * 
+         * @param field 
+         * @return true 
+         * @return false 
+         */
+        bool Contains(std::string& field);
+
 
         /**
          * @brief Binds object to field

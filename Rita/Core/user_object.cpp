@@ -1,4 +1,5 @@
 #include "user_object.hpp"
+#include "rita_exception.hpp"
 
 namespace Core
 {
@@ -8,18 +9,17 @@ namespace Core
 
     RitaObject* UserObject::Get(std::string& field)
     {
-        if(this->fields.find(field) != this->fields.end())
-        {
-            return this->fields[field];
-        }
-        
-        Type* objType = static_cast<Type*>(this->objectType);
+        if(Contains(field))
+            return fields[field];
 
-        if(objType->GetFields().find(field) == objType->GetFields().end())
-        {
-            throw std::runtime_error("Blyat, field not found!");
-        }
+        throw Utils::RitaException(
+            "Type.Get",
+            "Field \"" + field + "\" not found."
+        );
+    }
 
-        return objType->GetField(field);
+    bool UserObject::Contains(std::string& f)
+    {
+        return !(fields.find(f) == fields.end());
     }
 }
