@@ -1,3 +1,14 @@
+/**
+ * @file ast_printer.cpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief AstPrinter implementation
+ * @version 0.1
+ * @date 2022-07-26
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include <sstream>
 
 #include "ast_printer.hpp"
