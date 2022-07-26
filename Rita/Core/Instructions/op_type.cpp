@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "rita_exception.hpp"
 #include "op_type.hpp"
 
 namespace Core
@@ -37,6 +38,14 @@ namespace Core
             case OpType::MINUS:
                 os << "Minus -";
                 break;
+            case OpType::GREATER_THAN:
+                os << "Greater than >";
+                break;
+            default:
+                throw Utils::RitaException(
+                    "ostream& operator<<(ostream, OpType)",
+                    "Unsupported OpType " + std::to_string((int)op)
+                );
             }
             return os;
         }
