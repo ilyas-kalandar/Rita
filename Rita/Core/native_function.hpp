@@ -26,7 +26,7 @@ namespace Core
     class NativeFunction : public RitaObject
     {
     protected:
-        std::function<RitaObject* (RitaObject*)> nativeCallback;
+        std::function<RitaObject* (const std::vector<RitaObject*>&)> nativeCallback;
     public:
         /**
          * @brief Construct a new NativeFunction object
@@ -34,14 +34,14 @@ namespace Core
          * @param f C++ function.
          * @param type Type of object.
          */
-        NativeFunction(std::function<RitaObject* (RitaObject*)> f, Type* type);
+        NativeFunction(std::function<RitaObject*(const std::vector<RitaObject*>&)> f, Type* type);
 
         /**
          * @brief Start the function executing.
          *
          * @return RitaObject* object-result.
          */
-        RitaObject* Execute(RitaObject* arg);
+        RitaObject* Execute(const std::vector<RitaObject*>& arg);
     };
 }
 
