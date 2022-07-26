@@ -9,8 +9,11 @@
  * 
  */
 
+#include <sstream>
+
 #include "parser.hpp"
 
+#include "rita_exception.hpp"
 #include "Instructions/if_instruction.hpp"
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
@@ -160,43 +163,47 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
 		switch (this->tokens.Current().GetTokenType())
 		{
 		case Lexer::TokenType::DOT:
-			this->tokens.Next(); // skip dot
 			if (resultIsEmpty)
 			{
-				throw std::runtime_error("Expected expression before '.'!");
+				throw Utils::RitaException(
+					"Parser", 
+					"Expected expression before '.'-token!",
+					this->tokens.Current().GetLine(),
+					this->tokens.Current().GetCharacter()
+				);
 			}
 			else
 			{
+				this->tokens.Next(); // skip dot
 				if (this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
 				{
-					throw std::runtime_error("Expected identifier after '.'!");
+					throw Utils::RitaException(
+						"Parser", 
+						(std::stringstream() << "Expected an identifier, got \"" << tokens.Current().GetTokenType() << "\"").str(),
+						tokens.Current().GetLine(),
+						tokens.Current().GetCharacter()
+					);
 				}
 
-				result = std::make_shared<Core::Instructions::AttributeInstruction>(result, this->tokens.Current().GetLiteral());
-				this->tokens.Next(); // skip id
+				result = std::make_shared<Core::Instructions::AttributeInstruction>(result, tokens.GetAndNext().GetLiteral());
 			}
 			break;
 		case Lexer::TokenType::LEFT_BRACKET: 
 		{
 			if(resultIsEmpty)
 			{
-				throw std::runtime_error("Expected expression before '['");
+				throw Utils::RitaException(
+					"Parser", 
+					"Expected expression before '['",
+					tokens.Current().GetLine(),
+					tokens.Current().GetCharacter()
+				);
 			}
 
 			this->tokens.Next(); // skip LEFT_BRACKET
 
 			auto index = ParseNotExpr();
-
-			if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET)
-			{
-				throw std::runtime_error(
-					"Expected ']'"
-				);
-			}
-
-
-			this->tokens.Next(); // skip right bracket
-
+			ExpectAndSkip(Lexer::TokenType::RIGHT_BRACKET);
 			result = std::make_shared<Core::Instructions::IndexInstruction>(result, index);
 			break;
 		}
@@ -205,28 +212,22 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
 			{
 				this->tokens.Next(); // skip left paren
 				result = ParseNotExpr();
-				if (this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
-				{
-					throw std::runtime_error("Expected ')'!");
-				}
-				this->tokens.Next(); // skip right paren
+				ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
 				return result;
 			}
 			else
 			{
 				std::vector<std::shared_ptr<Core::Instructions::Instruction>> funcArgs;
-				this->tokens.Next(); // skip left paren
+				tokens.Next(); // skip left paren
 
-				while (this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+				while (tokens.HasNext() && tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
 				{
 					funcArgs.push_back(ParseNotExpr());
-					if (this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
-					{
-						this->tokens.Next(); // skip comma
-					}
+					
+					if (tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
+						tokens.Next(); // skip comma
 				}
-				this->tokens.Next(); // skip right paren
-
+				ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
 				result = std::make_shared<Core::Instructions::FunctionCallInstruction>(result, funcArgs);
 			}
 		}
@@ -235,7 +236,12 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
 	if (!resultIsEmpty)
 		return result;
 
-	throw std::runtime_error("Expected ID or const, given " + this->tokens.Current().GetLiteral() + "\"");
+	throw Utils::RitaException(
+		"Parser", 
+		(std::stringstream() << "Expected a constant or identifier, got \"" <<  tokens.Current().GetTokenType() << "\"").str(),
+		tokens.Current().GetLine(),
+		tokens.Current().GetCharacter()
+	);
 }
 
 std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLeaf()
@@ -244,30 +250,25 @@ std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLea
 	{
 	case Lexer::TokenType::IDENTIFIER:
 	{
-		const std::string& name = this->tokens.Current().GetLiteral();
-		this->tokens.Next();
+		const std::string& name = tokens.GetAndNext().GetLiteral();
 		return std::make_shared<Core::Instructions::Leaf>(name);
 	}
 	case Lexer::TokenType::FLOAT:
 	{
 		// I think will be better if I create my own converter...
-		long double value = std::atof(this->tokens.Current().GetLiteral().c_str());
-		this->tokens.Next();
-		
+		long double value = std::atof(tokens.GetAndNext().GetLiteral().c_str());
 		return std::make_shared<Core::Instructions::ConstantFloat>(value);
 	}
 	case Lexer::TokenType::INTEGER:
 	{
 		// I think will be better if I create my own converter...
-		int value = std::stoi(this->tokens.Current().GetLiteral());
-		this->tokens.Next();
+		int value = std::stoi(tokens.GetAndNext().GetLiteral());
 		return std::make_shared<Core::Instructions::ConstantInt>(value);
 	}
 	case Lexer::TokenType::STRING:
 	{
 		// I think will be better if I create my own converter...
-		auto val = this->tokens.Current().GetLiteral();
-		this->tokens.Next();
+		auto val = tokens.GetAndNext().GetLiteral();
 		return std::make_shared<Core::Instructions::ConstantString>(val);
 	}
 	case Lexer::TokenType::LEFT_BRACKET:
@@ -289,13 +290,7 @@ std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLea
 			}
 		}
 
-		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET)
-		{
-			throw std::runtime_error("Expected ']'!");
-		}
-
-		this->tokens.Next(); // skip right bracket
-
+		ExpectAndSkip(Lexer::TokenType::RIGHT_BRACKET);
 		return std::make_shared<Core::Instructions::ConstantList>(list);
 	}
 	}
@@ -321,8 +316,7 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseInstruction()
 			throw std::runtime_error("Expected IDENTIFIER after 'var'!");		
 		}
 
-		std::string varName = this->tokens.Current().GetLiteral();
-		this->tokens.Next(); // skip name
+		std::string varName = this->tokens.GetAndNext().GetLiteral();
 
 		if(this->tokens.Current().GetTokenType() != Lexer::TokenType::EQUAL)
 		{
@@ -352,7 +346,10 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseInstruction()
 		return std::make_shared<Core::Instructions::IfInstruction>(ifBody, elseBody, expr);
 	}
 	default:
-		throw std::runtime_error("Unexpected token " + this->tokens.Current().GetLiteral());
+		throw Utils::RitaException(
+			"Parser", (std::stringstream() << "Unexpected token " << tokens.Current().GetTokenType()).str(),
+			tokens.Current().GetLine(), tokens.Current().GetCharacter()
+		);
 	}
 }
 
@@ -360,26 +357,30 @@ std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseCodeB
 {
 	std::vector<std::shared_ptr<Core::Instructions::Instruction>> result;
 
-	if(this->tokens.Current().GetTokenType() != Lexer::TokenType::LEFT_BRACE)
-	{
-		throw std::runtime_error("Expected '{'");
-	}
-
-	this->tokens.Next(); // skip right brace
+	ExpectAndSkip(Lexer::TokenType::LEFT_BRACE);
 
 	while(this->tokens.HasNext() && this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACE)
 	{
 		result.push_back(ParseInstruction());
 	}
 
-	if(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACE)
-	{
-		throw std::runtime_error("Expected '}'");
-	}
-
-	this->tokens.Next(); // skip LEFT BRACE
-
+	ExpectAndSkip(Lexer::TokenType::RIGHT_BRACE);
 	return result;
+}
+
+void Parser::ExpectAndSkip(Lexer::TokenType type)
+{
+	auto tok = tokens.GetAndNext();
+
+	if(tok.GetTokenType() != type)
+	{
+		throw Utils::RitaException(
+			"Parser", 
+			(std::stringstream() << "Expected \"" << type << "\" got \"" << tok.GetTokenType() << "\"").str(),
+			tok.GetLine(),
+			tok.GetCharacter()
+		);
+	}
 }
 
 std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexer::Tokenator& tokens)
