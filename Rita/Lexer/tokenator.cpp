@@ -29,6 +29,13 @@ namespace Lexer
         this->Tokens = std::vector<Token>();
     }
 
+    const Token& Tokenator::GetAndNext()
+    {
+        const Token& cur = Current();
+        Next();
+        return cur;
+    }
+
     const Token& Tokenator::Current()
     {
         if (this->currentToken >= Tokens.size())

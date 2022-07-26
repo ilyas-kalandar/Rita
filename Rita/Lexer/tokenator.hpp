@@ -9,11 +9,12 @@
  * 
  */
 
-#pragma once
-
 #include <vector>
 
 #include "token.hpp"
+
+#ifndef tokenator_hpp
+#define tokenator_hpp
 
 namespace Lexer
 {
@@ -58,6 +59,13 @@ namespace Lexer
          */
         const Token& Current();
 
+        /**
+         * @brief Get Current token and go to next token
+         * 
+         * @return const Token& 
+         */
+        const Token& GetAndNext();
+
         void Reset();
 
         /**
@@ -74,3 +82,5 @@ namespace Lexer
         Tokenator();
     };
 }
+
+#endif
