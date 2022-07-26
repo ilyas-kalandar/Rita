@@ -15,6 +15,7 @@ set(
 )
 
 include_directories("../Core")
+include_directories("../Utils")
 
 add_library(
     Executor
@@ -23,4 +24,8 @@ add_library(
         ${EXECUTOR_SOURCES}
 )
 
-target_link_libraries(Executor PUBLIC Core)
+target_link_libraries(Executor 
+    PUBLIC 
+        Core
+        Utils
+)
