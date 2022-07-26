@@ -1,3 +1,14 @@
+/**
+ * @file ast_printer.hpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief AstPrinter definition.
+ * @version 0.1
+ * @date 2022-07-26
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/instruction.hpp"
 #include "Instructions/binop_instruction.hpp"
