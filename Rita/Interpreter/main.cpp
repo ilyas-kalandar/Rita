@@ -8,20 +8,27 @@
 #include "native_function.hpp"
 #include "Instructions/leaf.hpp"
 #include "parser.hpp"
-
+#include "engine.hpp"
 #include "ast_printer.hpp"
 
 #include "string_obj.hpp"
 
-
 int main()
 {
 	Lexer::Lexer lex;
+	std::string source;
 	std::string buff;
 
-	std::getline(std::cin, buff);
-	auto toks = lex.Tokenize(buff);
+	Engine engine;
+	
 
+	do
+	{
+		std::getline(std::cin, buff);
+		source += buff;
+	}while(buff.size() > 0);
+
+	auto toks = lex.Tokenize(source);
 	while (toks.Current().GetTokenType() != Lexer::TokenType::END_OF_FILE)
 	{
 		//std::cout << toks.Current() << std::endl;
@@ -50,5 +57,10 @@ int main()
 	for (auto instr : program)
 	{
 		printer.Print(instr.get());
+	}
+
+	for(auto instr : program)
+	{
+		engine.ExecuteInstruction(instr);
 	}
 }
