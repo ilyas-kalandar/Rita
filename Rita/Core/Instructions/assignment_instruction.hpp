@@ -23,22 +23,23 @@ namespace Core
     {
         /**
          * @brief Class for storing instructions like:
-         *              var x = 1;
-         * Stores identifier (variable), and parameter (may be another instruction).
+         *              test = a,
+         *              test.a = 3
+         * Stores an identifier (or attribe) and expr.
          */
         class AssignmentInstruction : public Instruction
         {
         private:
-            std::string& identifier;
+            std::shared_ptr<Instruction> obj;
             std::shared_ptr<Instruction> instr;
         public: 
             /**
              * @brief Construct a new Assignment Instruction object
              * 
-             * @param id 
+             * @param obj
              * @param inst 
              */
-            AssignmentInstruction(std::string& id, std::shared_ptr<Instruction> inst);
+            AssignmentInstruction(std::shared_ptr<Instruction>, std::shared_ptr<Instruction> inst);
             /**
              * @brief Get the Right Instr object
              * 
@@ -51,7 +52,7 @@ namespace Core
              * 
              * @return const std::string& 
              */
-            const std::string& GetIdentifier();
+            std::shared_ptr<Instruction> GetObject();
         };
     }
 }
