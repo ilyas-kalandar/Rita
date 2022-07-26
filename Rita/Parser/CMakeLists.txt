@@ -20,6 +20,7 @@ add_library(
 include_directories(
 	../Lexer
 	../Core
+	../Utils
 )
 
 target_link_libraries(
@@ -27,4 +28,5 @@ target_link_libraries(
 	PUBLIC 
 		Lexer
 		Core
+		Utils
 )
