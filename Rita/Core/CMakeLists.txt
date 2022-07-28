@@ -49,6 +49,7 @@ set(
         Instructions/constant_list.hpp
         Instructions/index_instruction.hpp
         Instructions/var_decl_instruction.hpp
+        Instructions/function_definition.hpp
 )
 
 set(
@@ -70,6 +71,7 @@ set(
         Instructions/index_instruction.cpp
         Instructions/var_decl_instruction.cpp
         Instructions/op_type.cpp
+        Instructions/function_definition.cpp
 )
 
 
