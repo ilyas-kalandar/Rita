@@ -1,3 +1,14 @@
+/**
+ * @file function_definition.cpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief FunctionDefinitionInstruction implementation
+ * @version 0.1
+ * @date 2022-07-28
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include "function_definition.hpp"
 
 namespace Core
