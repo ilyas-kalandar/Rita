@@ -435,6 +435,9 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseFunction()
 	while(tokens.HasNext() && tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
 	{
 		args.push_back(ExpectAndSkip(Lexer::TokenType::IDENTIFIER).GetLiteral());
+
+		if(tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+			ExpectAndSkip(Lexer::TokenType::COMMA);
 	}
 
 	ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
