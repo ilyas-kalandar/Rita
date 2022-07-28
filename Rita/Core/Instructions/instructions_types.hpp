@@ -35,6 +35,7 @@ namespace Core
             INDEX,
             VAR_DECL,
             PRINT,
+            FUNCTION_DEFINITION,
         };
 
         /**
