@@ -84,7 +84,7 @@ namespace Utils
 
 		for(auto val : vec)
 		{
-			Print(val.c_str());		
+			Print((val + ",").c_str());
 		}
 
 		SetCursor();
