@@ -24,6 +24,7 @@
 #include "Instructions/constant_int.hpp"
 #include "Instructions/constant_list.hpp"
 #include "Instructions/var_decl_instruction.hpp"
+#include "Instructions/function_definition.hpp"
 #include "Instructions/constant_string.hpp"
 #include "Instructions/index_instruction.hpp"
 
@@ -49,6 +50,8 @@ namespace Utils
 		void PrintValue(const char*, Core::Instructions::Instruction*);
 		void PrintValue(const char*, const std::vector<std::shared_ptr<Core::Instructions::Instruction>>&);
 		void PrintValue(const char*, const char*);
+		void PrintValue(const char* key, const std::vector<std::string>& vec);
+
 		void Print(const char*, bool);
 		void Print(const std::string&, bool);
 
@@ -67,6 +70,7 @@ namespace Utils
 		void Print(Core::Instructions::BinOpInstruction*);
 		void Print(Core::Instructions::UnaryOperatorInstruction*);
 		void Print(Core::Instructions::WhileInstruction*);
+		void Print(Core::Instructions::FunctionDefinitionInstruction*);
 
 		//TODO(Ilyas): Add another definitions
 

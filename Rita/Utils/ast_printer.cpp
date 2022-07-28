@@ -76,6 +76,22 @@ namespace Utils
 		DecrDepth();
 	}
 
+	void AstPrinter::PrintValue(const char* key, const std::vector<std::string>& vec)
+	{
+		IncrDepth();
+		SetCursor();
+		std::cout << key << "=(" << std::endl;
+
+		for(auto val : vec)
+		{
+			Print(val.c_str());		
+		}
+
+		SetCursor();
+		std::cout << ")" << std::endl;
+		DecrDepth();
+	}
+
 	void AstPrinter::PrintValue(const char* key, const std::vector<std::shared_ptr<Core::Instructions::Instruction>>& vec)
 	{
 		IncrDepth();
@@ -182,6 +198,13 @@ namespace Utils
 		PrintValue("Expression", instr->GetRightInstr().get());
 	}
 
+	void AstPrinter::Print(Core::Instructions::FunctionDefinitionInstruction* instr)
+	{
+		PrintValue("Function name", instr->GetName().c_str());
+		PrintValue("Args", instr->GetArgs());
+		PrintValue("Body", instr->GetBody());
+	}
+
     void AstPrinter::Print(Core::Instructions::Instruction* instr, size_t depth_incr)
     {
 		for(auto it = 0; it < depth_incr; ++it)
@@ -231,6 +254,9 @@ namespace Utils
 			break;
 		case Core::Instructions::InstructionType::ASSIGNMENT:
 			Print(static_cast<Core::Instructions::AssignmentInstruction*>(instr));
+			break;
+		case Core::Instructions::InstructionType::FUNCTION_DEFINITION:
+			Print(static_cast<Core::Instructions::FunctionDefinitionInstruction*>(instr));
 			break;
 		default:
 			throw RitaException(
