@@ -18,12 +18,14 @@
 #include "Instructions/assignment_instruction.hpp"
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/attribute_instruction.hpp"
+#include "Instructions/function_definition.hpp"
 #include "Instructions/constant_float.hpp"
 #include "Instructions/constant_int.hpp"
 #include "Instructions/constant_string.hpp"
 #include "Instructions/constant_list.hpp"
 #include "Instructions/var_decl_instruction.hpp"
 #include "Instructions/while_instruction.hpp"
+
 
 #include "Instructions/index_instruction.hpp"
 
@@ -365,6 +367,8 @@ std::shared_ptr<Core::Instructions::Instruction> Parser::ParseInstruction()
 		return ParseIf();
 	case Lexer::TokenType::WHILE:
 		return ParseWhile();
+	case Lexer::TokenType::FUN:
+		return ParseFunction();
 	default:
 		auto expr = ParseExpression();
 		if(
@@ -397,7 +401,7 @@ std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseCodeB
 	return result;
 }
 
-void Parser::ExpectAndSkip(Lexer::TokenType type)
+Lexer::Token Parser::ExpectAndSkip(Lexer::TokenType type)
 {
 	auto tok = tokens.GetAndNext();
 
@@ -410,6 +414,34 @@ void Parser::ExpectAndSkip(Lexer::TokenType type)
 			tok.GetCharacter()
 		);
 	}
+
+	return tok;
+}
+
+std::shared_ptr<Core::Instructions::Instruction> Parser::ParseFunction()
+{
+	tokens.Next(); // skip function token
+	
+	// expect identifier for token
+
+	std::string functionName = ExpectAndSkip(Lexer::TokenType::IDENTIFIER).GetLiteral();
+
+	// parse arguments
+
+	std::vector<std::string> args;
+
+	ExpectAndSkip(Lexer::TokenType::LEFT_PAREN);
+
+	while(tokens.HasNext() && tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+	{
+		args.push_back(ExpectAndSkip(Lexer::TokenType::IDENTIFIER).GetLiteral());
+	}
+
+	ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
+
+	auto body = ParseCodeBlock();
+
+	return std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(functionName, args, body);
 }
 
 std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexer::Tokenator& tokens)

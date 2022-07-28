@@ -36,6 +36,15 @@ protected:
      * 
      * @return std::optional<std::shared_ptr<Core::Instructions::Instruction>> 
      */
+
+    // Utility functions
+
+    /**
+     * @brief Expects token & skp it
+     * @param tok_type Type of token for expecting.
+     */
+    Lexer::Token ExpectAndSkip(Lexer::TokenType tok_type);
+
     std::optional<std::shared_ptr<Core::Instructions::Instruction>> ParseLeaf();
     /**
      * @brief Parses an expression with very high priority (calls, etc...)
@@ -68,13 +77,13 @@ protected:
      * @return std::shared_ptr<Core::Instructions::Instruction> 
      */
 
-    void ExpectAndSkip(Lexer::TokenType);
     std::shared_ptr<Core::Instructions::Instruction> ParseExpression();
     std::shared_ptr<Core::Instructions::Instruction> ParseVarDecl();
     std::shared_ptr<Core::Instructions::Instruction> ParseInstruction();
     std::shared_ptr<Core::Instructions::Instruction> ParseIf();
     std::vector<std::shared_ptr<Core::Instructions::Instruction>> ParseCodeBlock();
     std::shared_ptr<Core::Instructions::Instruction> ParseWhile();
+    std::shared_ptr<Core::Instructions::Instruction> ParseFunction();
 public:
     /**
      * @brief Parses tokens into instructions
