@@ -21,5 +21,21 @@ namespace Core
         {
             type = InstructionType::FUNCTION_DEFINITION;
         }
+
+        const std::vector<std::shared_ptr<Core::Instructions::Instruction>>& FunctionDefinitionInstruction::GetBody()
+        {
+            return body;
+        }
+
+        const std::vector<std::string>& FunctionDefinitionInstruction::GetArgs()
+        {
+            return args;
+        }
+
+
+        const std::string& FunctionDefinitionInstruction::GetName()
+        {
+            return name;
+        }
     }
 }
