@@ -15,17 +15,22 @@
 
 int main()
 {
+	size_t line = 1;
+
 	Lexer::Lexer lex;
 	std::string source;
 	std::string buff;
+
 
 	Engine engine;
 	
 
 	do
 	{
+		std::cout << "[Line " << line << "]: ";
 		std::getline(std::cin, buff);
 		source += buff;
+		line++;
 	}while(buff.size() > 0);
 
 	auto toks = lex.Tokenize(source);
@@ -48,8 +53,7 @@ int main()
 	catch(const std::runtime_error& e)
 	{
 		std::cout << e.what() << std::endl;
-
-		return -1;
+		return -1; // compilation error
 	}
 
 	Utils::AstPrinter printer(2);
@@ -61,6 +65,15 @@ int main()
 
 	for(auto instr : program)
 	{
-		engine.ExecuteInstruction(instr);
+		try
+		{
+			engine.ExecuteInstruction(instr);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+			return 20; // runtime error.
+		}
+		
 	}
 }
