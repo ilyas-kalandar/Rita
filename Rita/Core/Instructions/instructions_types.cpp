@@ -62,6 +62,9 @@ namespace Core
             case InstructionType::WHILE:
                 os << "WhileStatement";
                 break;
+            case InstructionType::FUNCTION_DEFINITION:
+                os << "FunctionDefinition";
+                break;
             default:
                 throw Utils::RitaException("ostream operator<<", "Unsupported instruction type: " + std::to_string((int)instr_type));
             }
