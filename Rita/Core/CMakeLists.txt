@@ -15,6 +15,7 @@ set(
         int_obj.cpp
         list_obj.cpp
         user_object.cpp
+        func_obj.cpp
 )
 
 set(
@@ -26,6 +27,7 @@ set(
         int_obj.hpp
         list_obj.hpp
         user_object.hpp
+        func_obj.hpp
 )
 
 
