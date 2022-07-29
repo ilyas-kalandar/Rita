@@ -16,10 +16,12 @@
 
 #include "object.hpp"
 
+#include "Instructions/constant_string.hpp"
 #include "Instructions/instruction.hpp"
 #include "Instructions/binop_instruction.hpp"
 #include "Instructions/function_call_instruction.hpp"
 #include "Instructions/if_instruction.hpp"
+#include "Instructions/function_definition.hpp"
 #include "Instructions/while_instruction.hpp"
 #include "Instructions/constant_float.hpp"
 #include "Instructions/constant_int.hpp"
@@ -56,12 +58,23 @@ protected:
     Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionCallInstruction* instr);
     Core::RitaObject* ExecuteInstruction(Core::Instructions::AttributeInstruction* instr);
     Core::RitaObject* ExecuteInstruction(Core::Instructions::Leaf* instr);
+    Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr);
+    Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantString* instr);
     //Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantList* instr);
 
 public:
+    /**
+     * @brief Construct a new Engine object
+     * 
+     */
     Engine();
-    Core::RitaObject* LookupName(std::string& name);
+    
     void Initialize();  
+
+    /**
+     * @brief 
+     * 
+     * @return Core::RitaObject* 
+     */
     Core::RitaObject* ExecuteInstruction(std::shared_ptr<Core::Instructions::Instruction>);
-    void CollectGarbage();
 };

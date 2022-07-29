@@ -3,22 +3,28 @@
 #include "user_object.hpp"
 #include "rita_exception.hpp"
 #include "Instructions/constant_list.hpp"
+#include "Instructions/constant_string.hpp"
 #include "type.hpp"
 #include "engine.hpp"
+#include "func_obj.hpp"
 #include "native_function.hpp"
 #include "string_obj.hpp"
 
 
 namespace Executor
 {
-    namespace Builtins{
-        namespace Types{
-extern Core::Type* BoolType;
-extern Core::Type* IntType;
-extern Core::Type* BuiltinFunctionType;
-extern Core::Type* UserObject;
-extern Core::Type* StringType;
-extern Core::Type* ObjectType;}
+    namespace Builtins
+    {
+        namespace Types
+        {
+            extern Core::Type* BoolType;
+            extern Core::Type* IntType;
+            extern Core::Type* BuiltinFunctionType;
+            extern Core::Type* UserObject;
+            extern Core::Type* StringType;
+            extern Core::Type* ObjectType;
+            extern Core::Type* FunctionType;
+        }
     }
 }
 
@@ -51,6 +57,8 @@ Engine::Engine()
     );
 
     nameSpace.emplace_back();
+
+    // add functions to global namespace
     nameSpace[0]["print"] = new Core::NativeFunction(Executor::Builtins::Functions::Print, Executor::Builtins::Types::BuiltinFunctionType);
 }
 
@@ -89,8 +97,13 @@ Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::BinOpInstructio
             "operatorMinus"
         );
         break;
+    case Core::Instructions::OpType::DIV:
+        resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(instr->GetFirst(),
+        "operatorDiv"
+        );
+        break;
     default:
-        throw std::runtime_error("ExecuteInstruction: Unexpected operator!!!!");
+        throw Utils::RitaException("Executor", (std::stringstream() << "Runtime error, unexpected operator " << instr->GetOperationType()).str());
     }
 
     std::shared_ptr<Core::Instructions::Instruction> result = std::make_shared<Core::Instructions::FunctionCallInstruction>(resultFunction, list);
@@ -98,8 +111,33 @@ Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::BinOpInstructio
     return ExecuteInstruction(result);    
 }
 
+Core::RitaObject* LinkSelf(Core::RitaObject* value, Core::RitaObject* functionObj)
+{
+
+    throw Utils::RitaException("Executor", "Unimplemented!!!");
+
+    // std::shared_ptr<Core::Instructions::FunctionCallInstruction> call = std::make_shared<Core::Instructions::FunctionCallInstruction>(
+
+    // );
+
+    // std::vector<std::shared_ptr<Core::Instructions::Instruction>> fnBody{
+        
+    // };
+}
+
+Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantString* instr)
+{
+    auto data = instr->GetData();
+    return new Core::String(data, Executor::Builtins::Types::StringType);
+}
+
 Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::AttributeInstruction* instr)
 {
+    //TODO(Ilyas):
+    // Here we must check
+    // if attr from instr->GetValue() is method, make function like f(args) => method(instr.GetValue(), args) from it
+
+
     Core::RitaObject* val = ExecuteInstruction(instr->GetValue());
     std::string attr = instr->GetAttr();
 
@@ -116,27 +154,50 @@ Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::AttributeInstru
     return type->GetField(attr);
 }
 
+Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr)
+{
+    // initialize object
+    auto functionObject = new Core::Function(instr, Executor::Builtins::Types::FunctionType);
+
+    this->nameSpace[this->currentNamespaceIndex][instr->GetName()] = functionObject;
+
+    return functionObject;
+}
+
 Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::FunctionCallInstruction* instr)
 {
     auto func = ExecuteInstruction(instr->GetFunction());
 
     auto type = static_cast<Core::Type*>(func->GetType());
 
-    if(type != Executor::Builtins::Types::BuiltinFunctionType)
+    if(type == Executor::Builtins::Types::BuiltinFunctionType)
     {
-        throw Utils::RitaException("Executor", "Object \"" + type->GetTypeName() + "\" is not callable.");
+        auto nativeFunction = static_cast<Core::NativeFunction*>(func);
+        std::vector<Core::RitaObject*> functionArguments;
+
+        for(auto arg : instr->GetFunctionArguments())
+        {
+            functionArguments.push_back(ExecuteInstruction(arg));
+        }
+
+        return nativeFunction->Execute(functionArguments);
+    }
+    else if(type == Executor::Builtins::Types::FunctionType)
+    {
+        Core::Function* ritaFunction = static_cast<Core::Function*>(func);
+        currentNamespaceIndex++;
+
+        for(auto body_instr : ritaFunction->GetFuncDef()->GetBody())
+        {
+            ExecuteInstruction(body_instr);
+        }
+
+        currentNamespaceIndex--;
+        
+        return nullptr;
     }
 
-    auto nativeFunction = static_cast<Core::NativeFunction*>(func);
-
-    std::vector<Core::RitaObject*> functionArguments;
-
-    for(auto arg : instr->GetFunctionArguments())
-    {
-        functionArguments.push_back(ExecuteInstruction(arg));
-    }
-
-    return nativeFunction->Execute(functionArguments);
+    throw Utils::RitaException("Executor", "Object \"" + type->GetTypeName() + "\" is not callable.");
 }
 
 Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantInt* instr)
@@ -169,6 +230,10 @@ Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions:
         return ExecuteInstruction(static_cast<Core::Instructions::AttributeInstruction*>(instr.get()));
     case Core::Instructions::InstructionType::VAR_DECL:
         return ExecuteInstruction(static_cast<Core::Instructions::VariableDeclarationInstruction*>(instr.get()));
+    case Core::Instructions::InstructionType::FUNCTION_DEFINITION:
+        return ExecuteInstruction(static_cast<Core::Instructions::FunctionDefinitionInstruction*>(instr.get()));
+    case Core::Instructions::InstructionType::CONSTANT_STRING:
+        return ExecuteInstruction(static_cast<Core::Instructions::ConstantString*>(instr.get()));
     default:
         throw Utils::RitaException("Executor", (std::stringstream() << "Unsupported instruction for execute \"" << instr->GetType() << "\"").str());
     }
