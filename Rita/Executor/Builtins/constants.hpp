@@ -13,6 +13,7 @@ namespace Executor
         const std::string BuiltinFunctionName = "Builtin-function";
         const std::string ListName = "List";
         const std::string StringName = "String";
+        const std::string FunctionName = "Function";
     }
 }
 
