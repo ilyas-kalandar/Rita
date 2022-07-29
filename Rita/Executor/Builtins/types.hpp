@@ -28,6 +28,7 @@ namespace Executor
             Core::Type* BoolType = new Core::Type(Constants::BoolName, ObjectType);
             Core::Type* BuiltinFunctionType = new Core::Type(Constants::BuiltinFunctionName, ObjectType);
             Core::Type* UserObject = new Core::Type(Constants::ObjectName, ObjectType);
+            Core::Type* FunctionType = new Core::Type(Constants::FunctionName, ObjectType);
         }
     }
 }
