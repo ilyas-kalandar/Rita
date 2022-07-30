@@ -28,3 +28,11 @@ set_target_properties(
 	PROPERTIES
 	CXX_STANDARD_REQUIRED 17
 )
+
+include_directories("../Utils")
+
+target_link_libraries(
+	Lexer
+	PUBLIC
+		Utils	
+)
