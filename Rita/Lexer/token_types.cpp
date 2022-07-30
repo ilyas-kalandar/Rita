@@ -1,4 +1,7 @@
+#include <sstream>
+
 #include "token_types.hpp"
+#include "rita_exception.hpp"
 
 namespace Lexer
 {
@@ -93,8 +96,14 @@ namespace Lexer
         case TokenType::RIGHT_BRACKET:
             os << "RIGHT_BRACKET";
             break;
+        case TokenType::FUN:
+            os << "FUN";
+            break;
         default:
-            os << "Unknown token!";
+            throw Utils::RitaException(
+                "Lexer::TokenType::operator<<", 
+                (std::stringstream() << "Unsupported token \"" << (int)type << "\"").str()
+            );
         }
         return os;
     }
