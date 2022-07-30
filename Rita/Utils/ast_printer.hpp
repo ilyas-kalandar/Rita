@@ -36,49 +36,49 @@ namespace Utils
     class AstPrinter
     {
     protected:
-		size_t depth;
-		size_t indent_level;
+        size_t depth;
+        size_t indent_level;
 
-		// for indent
+        // for indent
 
-		void IncrDepth();
-		void DecrDepth();
+        void IncrDepth();
+        void DecrDepth();
 
-		// for output some strings
+        // for output some strings
 
-		void SetCursor();
-		void PrintValue(const char*, Core::Instructions::Instruction*);
-		void PrintValue(const char*, const std::vector<std::shared_ptr<Core::Instructions::Instruction>>&);
-		void PrintValue(const char*, const char*);
-		void PrintValue(const char* key, const std::vector<std::string>& vec);
+        void SetCursor();
+        void PrintValue(const char*, Core::Instructions::Instruction*);
+        void PrintValue(const char*, const std::vector<std::shared_ptr<Core::Instructions::Instruction>>&);
+        void PrintValue(const char*, const char*);
+        void PrintValue(const char* key, const std::vector<std::string>& vec);
 
-		void Print(const char*, bool);
-		void Print(const std::string&, bool);
+        void Print(const char*, bool);
+        void Print(const std::string&, bool);
 
-		// for instructions
+        // for instructions
 
-		void Print(Core::Instructions::Leaf*);
-		void Print(Core::Instructions::ConstantInt*);
-		void Print(Core::Instructions::ConstantString*);
-		void Print(Core::Instructions::ConstantFloat*);
-		void Print(Core::Instructions::ConstantList*);
-		void Print(Core::Instructions::IfInstruction*);
-		void Print(Core::Instructions::VariableDeclarationInstruction*);
-		void Print(Core::Instructions::AttributeInstruction*);
-		void Print(Core::Instructions::AssignmentInstruction*);
-		void Print(Core::Instructions::FunctionCallInstruction*);
-		void Print(Core::Instructions::BinOpInstruction*);
-		void Print(Core::Instructions::UnaryOperatorInstruction*);
-		void Print(Core::Instructions::WhileInstruction*);
-		void Print(Core::Instructions::FunctionDefinitionInstruction*);
+        void Print(Core::Instructions::Leaf*);
+        void Print(Core::Instructions::ConstantInt*);
+        void Print(Core::Instructions::ConstantString*);
+        void Print(Core::Instructions::ConstantFloat*);
+        void Print(Core::Instructions::ConstantList*);
+        void Print(Core::Instructions::IfInstruction*);
+        void Print(Core::Instructions::VariableDeclarationInstruction*);
+        void Print(Core::Instructions::AttributeInstruction*);
+        void Print(Core::Instructions::AssignmentInstruction*);
+        void Print(Core::Instructions::FunctionCallInstruction*);
+        void Print(Core::Instructions::BinOpInstruction*);
+        void Print(Core::Instructions::UnaryOperatorInstruction*);
+        void Print(Core::Instructions::WhileInstruction*);
+        void Print(Core::Instructions::FunctionDefinitionInstruction*);
 
-		//TODO(Ilyas): Add another definitions
+        //TODO(Ilyas): Add another definitions
 
     public:
-		/**
-		* @brief Constructs a new AstPrinter object
-		*
-		*/
+        /**
+        * @brief Constructs a new AstPrinter object
+        *
+        */
         AstPrinter(size_t indent_level);
 
         void Print(Core::Instructions::Instruction* instr, size_t incr_depth = 1);
