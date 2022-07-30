@@ -91,7 +91,10 @@ Core::Instructions::OpType GetOpType(const Lexer::Token& tok)
 	case Lexer::TokenType::OR:
 		return Core::Instructions::OpType::OR;
 	default:
-		throw std::runtime_error("Blyat, unknown token");
+		throw Utils::RitaException(
+			"OpType::GetOpType",
+			(std::stringstream() << "Unsupported token \"" << tok << "\"").str()
+		);
 	}
 }
 
