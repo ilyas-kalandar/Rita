@@ -9,5 +9,7 @@ namespace Lexer
         {"var", TokenType::VAR},
         {"or", TokenType::OR}, 
         {"and", TokenType::AND},
+        {"break", TokenType::BREAK},
+        {"return", TokenType::RETURN},
     };
 }
