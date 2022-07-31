@@ -49,6 +49,8 @@ namespace Lexer
         FOR,
         CLASS,
         PRINT,
+        RETURN,
+        BREAK,
 
         // Other
         DOT,

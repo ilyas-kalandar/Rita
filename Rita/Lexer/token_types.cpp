@@ -99,6 +99,12 @@ namespace Lexer
         case TokenType::FUN:
             os << "FUN";
             break;
+        case TokenType::RETURN:
+            os << "RETURN";
+            break;
+        case TokenType::BREAK:
+            os << "BREAK";
+            break;
         default:
             throw Utils::RitaException(
                 "Lexer::TokenType::operator<<", 
