@@ -12,7 +12,6 @@
 #include <sstream>
 
 #include "parser.hpp"
-
 #include "rita_exception.hpp"
 #include "Instructions/if_instruction.hpp"
 #include "Instructions/assignment_instruction.hpp"
@@ -25,442 +24,444 @@
 #include "Instructions/constant_list.hpp"
 #include "Instructions/var_decl_instruction.hpp"
 #include "Instructions/while_instruction.hpp"
-
-
 #include "Instructions/index_instruction.hpp"
 
-/**
- * @brief Get token's priority
- * 
- * @param type 
- * @return size_t 
- */
-size_t GetPriority(const Lexer::TokenType& type)
+
+namespace Parser
 {
-    switch (type)
+    /**
+     * @brief Get token's priority
+     * 
+     * @param type 
+     * @return size_t 
+     */
+    size_t GetPriority(const Lexer::TokenType& type)
     {
-    case Lexer::TokenType::EQUAL_EQUAL:
-    case Lexer::TokenType::LESS_OR_EQUAL_THAN:
-    case Lexer::TokenType::LESS_THAN:
-    case Lexer::TokenType::GREATER_OR_EQUAL_THAN:
-    case Lexer::TokenType::GREATER_THAN:
-        return 1;
-    case Lexer::TokenType::PLUS:
-    case Lexer::TokenType::MINUS:
-        return 2;
-    case Lexer::TokenType::DIVISION:
-    case Lexer::TokenType::MULTIPLY:
-        return 3;
-    case Lexer::TokenType::DOT:
-    case Lexer::TokenType::LEFT_PAREN:
-    case Lexer::TokenType::LEFT_BRACKET:
-        return 4;
-    case Lexer::TokenType::IDENTIFIER:
-        return 5;
-    default:
-        return 0; // by default, any token have 0-priority
-    }
-}
-
-Core::Instructions::OpType GetOpType(const Lexer::Token& tok)
-{
-    switch (tok.GetTokenType())
-    {
-    case Lexer::TokenType::PLUS:
-        return Core::Instructions::OpType::PLUS;
-    case Lexer::TokenType::MINUS:
-        return Core::Instructions::OpType::MINUS;
-    case Lexer::TokenType::MULTIPLY:
-        return Core::Instructions::OpType::MUL;
-    case Lexer::TokenType::DIVISION:
-        return Core::Instructions::OpType::DIV;
-    case Lexer::TokenType::NOT:
-        return Core::Instructions::OpType::NOT;
-    case Lexer::TokenType::LESS_OR_EQUAL_THAN:
-        return Core::Instructions::OpType::LESS_OR_EQUAL_THAN;
-    case Lexer::TokenType::GREATER_THAN:
-        return Core::Instructions::OpType::GREATER_THAN;
-    case Lexer::TokenType::GREATER_OR_EQUAL_THAN:
-        return Core::Instructions::OpType::GREATER_OR_EQUAL_THAN;
-    case Lexer::TokenType::EQUAL_EQUAL:
-        return Core::Instructions::OpType::EQUAL_EQUAL;
-    case Lexer::TokenType::LESS_THAN:
-        return Core::Instructions::OpType::LESS_THAN;
-    case Lexer::TokenType::AND:
-        return Core::Instructions::OpType::AND;
-    case Lexer::TokenType::OR:
-        return Core::Instructions::OpType::OR;
-    default:
-        throw Utils::RitaException(
-            "OpType::GetOpType",
-            (std::stringstream() << "Unsupported token \"" << tok << "\"").str()
-        );
-    }
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseNotExpr()
-{
-    if (this->tokens.Current().GetTokenType() != Lexer::TokenType::NOT)
-    {
-        return this->ParseBinop(1);
+        switch (type)
+        {
+        case Lexer::TokenType::EQUAL_EQUAL:
+        case Lexer::TokenType::LESS_OR_EQUAL_THAN:
+        case Lexer::TokenType::LESS_THAN:
+        case Lexer::TokenType::GREATER_OR_EQUAL_THAN:
+        case Lexer::TokenType::GREATER_THAN:
+            return 1;
+        case Lexer::TokenType::PLUS:
+        case Lexer::TokenType::MINUS:
+            return 2;
+        case Lexer::TokenType::DIVISION:
+        case Lexer::TokenType::MULTIPLY:
+            return 3;
+        case Lexer::TokenType::DOT:
+        case Lexer::TokenType::LEFT_PAREN:
+        case Lexer::TokenType::LEFT_BRACKET:
+            return 4;
+        case Lexer::TokenType::IDENTIFIER:
+            return 5;
+        default:
+            return 0; // by default, any token have 0-priority
+        }
     }
 
-    this->tokens.Next(); // skip '!'
-
-    return std::make_shared<Core::Instructions::UnaryOperatorInstruction>(ParseNotExpr(), Core::Instructions::OpType::NOT);
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseBinop(size_t priority)
-{
-    std::shared_ptr<Core::Instructions::Instruction> result;
-
-    if (priority < 3)
+    Core::Instructions::OpType GetOpType(const Lexer::Token& tok)
     {
-        result = ParseBinop(priority + 1);
+        switch (tok.GetTokenType())
+        {
+        case Lexer::TokenType::PLUS:
+            return Core::Instructions::OpType::PLUS;
+        case Lexer::TokenType::MINUS:
+            return Core::Instructions::OpType::MINUS;
+        case Lexer::TokenType::MULTIPLY:
+            return Core::Instructions::OpType::MUL;
+        case Lexer::TokenType::DIVISION:
+            return Core::Instructions::OpType::DIV;
+        case Lexer::TokenType::NOT:
+            return Core::Instructions::OpType::NOT;
+        case Lexer::TokenType::LESS_OR_EQUAL_THAN:
+            return Core::Instructions::OpType::LESS_OR_EQUAL_THAN;
+        case Lexer::TokenType::GREATER_THAN:
+            return Core::Instructions::OpType::GREATER_THAN;
+        case Lexer::TokenType::GREATER_OR_EQUAL_THAN:
+            return Core::Instructions::OpType::GREATER_OR_EQUAL_THAN;
+        case Lexer::TokenType::EQUAL_EQUAL:
+            return Core::Instructions::OpType::EQUAL_EQUAL;
+        case Lexer::TokenType::LESS_THAN:
+            return Core::Instructions::OpType::LESS_THAN;
+        case Lexer::TokenType::AND:
+            return Core::Instructions::OpType::AND;
+        case Lexer::TokenType::OR:
+            return Core::Instructions::OpType::OR;
+        default:
+            throw Utils::RitaException(
+                "OpType::GetOpType",
+                (std::stringstream() << "Unsupported token \"" << tok << "\"").str()
+            );
+        }
     }
-    else
+
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseNotExpr()
     {
-        result = ParseUnaryMinus();
+        if (this->tokens.Current().GetTokenType() != Lexer::TokenType::NOT)
+        {
+            return this->ParseBinop(1);
+        }
+
+        this->tokens.Next(); // skip '!'
+
+        return std::make_shared<Core::Instructions::UnaryOperatorInstruction>(ParseNotExpr(), Core::Instructions::OpType::NOT);
     }
 
-    while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == priority)
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseBinop(size_t priority)
     {
-        Core::Instructions::OpType opType = GetOpType(this->tokens.Current());
-        this->tokens.Next(); // Skip Operator
+        std::shared_ptr<Core::Instructions::Instruction> result;
 
         if (priority < 3)
         {
-            result = std::make_shared<Core::Instructions::BinOpInstruction>(result, ParseBinop(2), opType);
+            result = ParseBinop(priority + 1);
         }
         else
         {
-            result = std::make_shared<Core::Instructions::BinOpInstruction>(result, ParseUnaryMinus(), opType);
+            result = ParseUnaryMinus();
         }
-    }
 
-    return result;
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseUnaryMinus()
-{
-    if (this->tokens.Current().GetTokenType() == Lexer::TokenType::MINUS)
-    {
-        this->tokens.Next();
-        return std::make_shared<Core::Instructions::UnaryOperatorInstruction>(ParseUnaryMinus(), Core::Instructions::OpType::MINUS);
-    }
-    
-    return ParseHighPriorityExpr();
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
-{
-    std::shared_ptr<Core::Instructions::Instruction> result;
-    auto leaf = ParseLeaf();
-
-    bool resultIsEmpty = true;
-
-    if (leaf.has_value())
-    {
-        result = leaf.value();
-        resultIsEmpty = false;
-    }
-
-    while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == 4)
-    {
-        switch (this->tokens.Current().GetTokenType())
+        while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == priority)
         {
-        case Lexer::TokenType::DOT:
-            if (resultIsEmpty)
+            Core::Instructions::OpType opType = GetOpType(this->tokens.Current());
+            this->tokens.Next(); // Skip Operator
+
+            if (priority < 3)
             {
-                throw Utils::RitaException(
-                    "Parser", 
-                    "Expected expression before '.'-token!",
-                    this->tokens.Current().GetLine(),
-                    this->tokens.Current().GetCharacter()
-                );
+                result = std::make_shared<Core::Instructions::BinOpInstruction>(result, ParseBinop(2), opType);
             }
             else
             {
-                this->tokens.Next(); // skip dot
-                if (this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
+                result = std::make_shared<Core::Instructions::BinOpInstruction>(result, ParseUnaryMinus(), opType);
+            }
+        }
+
+        return result;
+    }
+
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseUnaryMinus()
+    {
+        if (this->tokens.Current().GetTokenType() == Lexer::TokenType::MINUS)
+        {
+            this->tokens.Next();
+            return std::make_shared<Core::Instructions::UnaryOperatorInstruction>(ParseUnaryMinus(), Core::Instructions::OpType::MINUS);
+        }
+        
+        return ParseHighPriorityExpr();
+    }
+
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
+    {
+        std::shared_ptr<Core::Instructions::Instruction> result;
+        auto leaf = ParseLeaf();
+
+        bool resultIsEmpty = true;
+
+        if (leaf.has_value())
+        {
+            result = leaf.value();
+            resultIsEmpty = false;
+        }
+
+        while (this->tokens.HasNext() && GetPriority(this->tokens.Current().GetTokenType()) == 4)
+        {
+            switch (this->tokens.Current().GetTokenType())
+            {
+            case Lexer::TokenType::DOT:
+                if (resultIsEmpty)
                 {
                     throw Utils::RitaException(
                         "Parser", 
-                        (std::stringstream() << "Expected an identifier, got \"" << tokens.Current().GetTokenType() << "\"").str(),
+                        "Expected expression before '.'-token!",
+                        this->tokens.Current().GetLine(),
+                        this->tokens.Current().GetCharacter()
+                    );
+                }
+                else
+                {
+                    this->tokens.Next(); // skip dot
+                    if (this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
+                    {
+                        throw Utils::RitaException(
+                            "Parser", 
+                            (std::stringstream() << "Expected an identifier, got \"" << tokens.Current().GetTokenType() << "\"").str(),
+                            tokens.Current().GetLine(),
+                            tokens.Current().GetCharacter()
+                        );
+                    }
+
+                    result = std::make_shared<Core::Instructions::AttributeInstruction>(result, tokens.GetAndNext().GetLiteral());
+                }
+                break;
+            case Lexer::TokenType::LEFT_BRACKET: 
+            {
+                if(resultIsEmpty)
+                {
+                    throw Utils::RitaException(
+                        "Parser", 
+                        "Expected expression before '['",
                         tokens.Current().GetLine(),
                         tokens.Current().GetCharacter()
                     );
                 }
 
-                result = std::make_shared<Core::Instructions::AttributeInstruction>(result, tokens.GetAndNext().GetLiteral());
-            }
-            break;
-        case Lexer::TokenType::LEFT_BRACKET: 
-        {
-            if(resultIsEmpty)
-            {
-                throw Utils::RitaException(
-                    "Parser", 
-                    "Expected expression before '['",
-                    tokens.Current().GetLine(),
-                    tokens.Current().GetCharacter()
-                );
-            }
+                this->tokens.Next(); // skip LEFT_BRACKET
 
-            this->tokens.Next(); // skip LEFT_BRACKET
-
-            auto index = ParseNotExpr();
-            ExpectAndSkip(Lexer::TokenType::RIGHT_BRACKET);
-            result = std::make_shared<Core::Instructions::IndexInstruction>(result, index);
-            break;
-        }
-        case Lexer::TokenType::LEFT_PAREN:
-            if (resultIsEmpty) // not func-call
-            {
-                this->tokens.Next(); // skip left paren
-                result = ParseNotExpr();
-                ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
-                return result;
+                auto index = ParseNotExpr();
+                ExpectAndSkip(Lexer::TokenType::RIGHT_BRACKET);
+                result = std::make_shared<Core::Instructions::IndexInstruction>(result, index);
+                break;
             }
-            else
-            {
-                std::vector<std::shared_ptr<Core::Instructions::Instruction>> funcArgs;
-                tokens.Next(); // skip left paren
-
-                while (tokens.HasNext() && tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+            case Lexer::TokenType::LEFT_PAREN:
+                if (resultIsEmpty) // not func-call
                 {
-                    funcArgs.push_back(ParseNotExpr());
-                    
-                    if (tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
-                        tokens.Next(); // skip comma
+                    this->tokens.Next(); // skip left paren
+                    result = ParseNotExpr();
+                    ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
+                    return result;
                 }
-                ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
-                result = std::make_shared<Core::Instructions::FunctionCallInstruction>(result, funcArgs);
-            }
-        }
-    }
+                else
+                {
+                    std::vector<std::shared_ptr<Core::Instructions::Instruction>> funcArgs;
+                    tokens.Next(); // skip left paren
 
-    if (!resultIsEmpty)
-        return result;
-
-    throw Utils::RitaException(
-        "Parser", 
-        (std::stringstream() << "Expected a constant or identifier, got \"" <<  tokens.Current().GetTokenType() << "\"").str(),
-        tokens.Current().GetLine(),
-        tokens.Current().GetCharacter()
-    );
-}
-
-std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLeaf()
-{
-    switch(this->tokens.Current().GetTokenType())
-    {
-    case Lexer::TokenType::IDENTIFIER:
-    {
-        const std::string& name = tokens.GetAndNext().GetLiteral();
-        return std::make_shared<Core::Instructions::Leaf>(name);
-    }
-    case Lexer::TokenType::FLOAT:
-    {
-        // I think will be better if I create my own converter...
-        long double value = std::atof(tokens.GetAndNext().GetLiteral().c_str());
-        return std::make_shared<Core::Instructions::ConstantFloat>(value);
-    }
-    case Lexer::TokenType::INTEGER:
-    {
-        // I think will be better if I create my own converter...
-        int value = std::stoi(tokens.GetAndNext().GetLiteral());
-        return std::make_shared<Core::Instructions::ConstantInt>(value);
-    }
-    case Lexer::TokenType::STRING:
-    {
-        // I think will be better if I create my own converter...
-        auto val = tokens.GetAndNext().GetLiteral();
-        return std::make_shared<Core::Instructions::ConstantString>(val);
-    }
-    case Lexer::TokenType::LEFT_BRACKET:
-    {
-        // skip bracket
-        this->tokens.Next();
-        std::vector<std::shared_ptr<Core::Instructions::Instruction>> list;
-
-
-        while(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET && this->tokens.HasNext())
-        {
-            list.push_back(this->ParseNotExpr());
-
-            // also we expect ','
-
-            if(this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
-            {
-                this->tokens.Next(); // skip comma
+                    while (tokens.HasNext() && tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+                    {
+                        funcArgs.push_back(ParseNotExpr());
+                        
+                        if (tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
+                            tokens.Next(); // skip comma
+                    }
+                    ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
+                    result = std::make_shared<Core::Instructions::FunctionCallInstruction>(result, funcArgs);
+                }
             }
         }
 
-        ExpectAndSkip(Lexer::TokenType::RIGHT_BRACKET);
-        return std::make_shared<Core::Instructions::ConstantList>(list);
-    }
-    }
+        if (!resultIsEmpty)
+            return result;
 
-    return std::nullopt;
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseExpression()
-{
-    return this->ParseNotExpr();
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseVarDecl()
-{
-    this->tokens.Next(); // skip var token
-
-    if(this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
-    {
         throw Utils::RitaException(
-            "Parser",
-            (std::stringstream() << "Expected \"IDENTIFIER after 'var' token, got \"" << tokens.Current().GetTokenType() << "\"").str(),
+            "Parser", 
+            (std::stringstream() << "Expected a constant or identifier, got \"" <<  tokens.Current().GetTokenType() << "\"").str(),
             tokens.Current().GetLine(),
             tokens.Current().GetCharacter()
         );
     }
 
-    std::string varName = this->tokens.GetAndNext().GetLiteral();
-
-    ExpectAndSkip(Lexer::TokenType::EQUAL);
-    return std::make_shared<Core::Instructions::VariableDeclarationInstruction>(varName, ParseExpression());
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseIf()
-{
-    tokens.Next(); // skip if token
-
-    auto expr = ParseExpression();
-
-    auto ifBody = ParseCodeBlock();
-
-    std::vector<std::shared_ptr<Core::Instructions::Instruction>> elseBody;
-
-    if(this->tokens.Current().GetTokenType() == Lexer::TokenType::ELSE)
+    std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLeaf()
     {
-        this->tokens.Next();
-        elseBody = ParseCodeBlock();
-    }
-
-    return std::make_shared<Core::Instructions::IfInstruction>(ifBody, elseBody, expr);
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseWhile()
-{
-    // skip while token
-    tokens.Next();
-
-    auto expr = ParseExpression();
-    auto body = ParseCodeBlock();
-
-    return std::make_shared<Core::Instructions::WhileInstruction>(body, expr);
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseInstruction()
-{
-    switch (tokens.Current().GetTokenType())
-    {
-    case Lexer::TokenType::VAR:
-        return ParseVarDecl();
-    case Lexer::TokenType::IF:
-        return ParseIf();
-    case Lexer::TokenType::WHILE:
-        return ParseWhile();
-    case Lexer::TokenType::FUN:
-        return ParseFunction();
-    default:
-        auto expr = ParseExpression();
-        if(
-            (expr->GetType() == Core::Instructions::InstructionType::LEAF 
-            || 
-            expr->GetType() == Core::Instructions::InstructionType::ATTRIBUTE
-            ) && this->tokens.Current().GetTokenType() == Lexer::TokenType::EQUAL
-        )
+        switch(this->tokens.Current().GetTokenType())
         {
-            // assign
-            tokens.Next(); // skip EQUAL-token
-            return std::make_shared<Core::Instructions::AssignmentInstruction>(expr, ParseExpression());
+        case Lexer::TokenType::IDENTIFIER:
+        {
+            const std::string& name = tokens.GetAndNext().GetLiteral();
+            return std::make_shared<Core::Instructions::Leaf>(name);
         }
-        return expr;
+        case Lexer::TokenType::FLOAT:
+        {
+            // I think will be better if I create my own converter...
+            long double value = std::atof(tokens.GetAndNext().GetLiteral().c_str());
+            return std::make_shared<Core::Instructions::ConstantFloat>(value);
+        }
+        case Lexer::TokenType::INTEGER:
+        {
+            // I think will be better if I create my own converter...
+            int value = std::stoi(tokens.GetAndNext().GetLiteral());
+            return std::make_shared<Core::Instructions::ConstantInt>(value);
+        }
+        case Lexer::TokenType::STRING:
+        {
+            // I think will be better if I create my own converter...
+            auto val = tokens.GetAndNext().GetLiteral();
+            return std::make_shared<Core::Instructions::ConstantString>(val);
+        }
+        case Lexer::TokenType::LEFT_BRACKET:
+        {
+            // skip bracket
+            this->tokens.Next();
+            std::vector<std::shared_ptr<Core::Instructions::Instruction>> list;
+
+
+            while(this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACKET && this->tokens.HasNext())
+            {
+                list.push_back(this->ParseNotExpr());
+
+                // also we expect ','
+
+                if(this->tokens.Current().GetTokenType() == Lexer::TokenType::COMMA)
+                {
+                    this->tokens.Next(); // skip comma
+                }
+            }
+
+            ExpectAndSkip(Lexer::TokenType::RIGHT_BRACKET);
+            return std::make_shared<Core::Instructions::ConstantList>(list);
+        }
+        }
+
+        return std::nullopt;
     }
-}
 
-std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseCodeBlock()
-{
-    std::vector<std::shared_ptr<Core::Instructions::Instruction>> result;
-
-    ExpectAndSkip(Lexer::TokenType::LEFT_BRACE);
-
-    while(this->tokens.HasNext() && this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACE)
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseExpression()
     {
-        result.push_back(ParseInstruction());
+        return this->ParseNotExpr();
     }
 
-    ExpectAndSkip(Lexer::TokenType::RIGHT_BRACE);
-    return result;
-}
-
-Lexer::Token Parser::ExpectAndSkip(Lexer::TokenType type)
-{
-    auto tok = tokens.GetAndNext();
-
-    if(tok.GetTokenType() != type)
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseVarDecl()
     {
-        throw Utils::RitaException(
-            "Parser", 
-            (std::stringstream() << "Expected \"" << type << "\" got \"" << tok.GetTokenType() << "\"").str(),
-            tok.GetLine(),
-            tok.GetCharacter()
-        );
+        this->tokens.Next(); // skip var token
+
+        if(this->tokens.Current().GetTokenType() != Lexer::TokenType::IDENTIFIER)
+        {
+            throw Utils::RitaException(
+                "Parser",
+                (std::stringstream() << "Expected \"IDENTIFIER after 'var' token, got \"" << tokens.Current().GetTokenType() << "\"").str(),
+                tokens.Current().GetLine(),
+                tokens.Current().GetCharacter()
+            );
+        }
+
+        std::string varName = this->tokens.GetAndNext().GetLiteral();
+
+        ExpectAndSkip(Lexer::TokenType::EQUAL);
+        return std::make_shared<Core::Instructions::VariableDeclarationInstruction>(varName, ParseExpression());
     }
 
-    return tok;
-}
-
-std::shared_ptr<Core::Instructions::Instruction> Parser::ParseFunction()
-{
-    tokens.Next(); // skip function token
-    
-    // expect identifier for token
-
-    std::string functionName = ExpectAndSkip(Lexer::TokenType::IDENTIFIER).GetLiteral();
-
-    // parse arguments
-
-    std::vector<std::string> args;
-
-    ExpectAndSkip(Lexer::TokenType::LEFT_PAREN);
-
-    while(tokens.HasNext() && tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseIf()
     {
-        args.push_back(ExpectAndSkip(Lexer::TokenType::IDENTIFIER).GetLiteral());
+        tokens.Next(); // skip if token
 
-        if(tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
-            ExpectAndSkip(Lexer::TokenType::COMMA);
+        auto expr = ParseExpression();
+
+        auto ifBody = ParseCodeBlock();
+
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> elseBody;
+
+        if(this->tokens.Current().GetTokenType() == Lexer::TokenType::ELSE)
+        {
+            this->tokens.Next();
+            elseBody = ParseCodeBlock();
+        }
+
+        return std::make_shared<Core::Instructions::IfInstruction>(ifBody, elseBody, expr);
     }
 
-    ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
-
-    auto body = ParseCodeBlock();
-
-    return std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(functionName, args, body);
-}
-
-std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexer::Tokenator& tokens)
-{
-    this->tokens = tokens;
-    this->tokens.Reset();
-
-    std::vector<std::shared_ptr<Core::Instructions::Instruction>> program;
-
-    while(this->tokens.HasNext())
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseWhile()
     {
-        program.push_back(ParseInstruction());
+        // skip while token
+        tokens.Next();
+
+        auto expr = ParseExpression();
+        auto body = ParseCodeBlock();
+
+        return std::make_shared<Core::Instructions::WhileInstruction>(body, expr);
     }
 
-    return program;
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseInstruction()
+    {
+        switch (tokens.Current().GetTokenType())
+        {
+        case Lexer::TokenType::VAR:
+            return ParseVarDecl();
+        case Lexer::TokenType::IF:
+            return ParseIf();
+        case Lexer::TokenType::WHILE:
+            return ParseWhile();
+        case Lexer::TokenType::FUN:
+            return ParseFunction();
+        default:
+            auto expr = ParseExpression();
+            if(
+                (expr->GetType() == Core::Instructions::InstructionType::LEAF 
+                || 
+                expr->GetType() == Core::Instructions::InstructionType::ATTRIBUTE
+                ) && this->tokens.Current().GetTokenType() == Lexer::TokenType::EQUAL
+            )
+            {
+                // assign
+                tokens.Next(); // skip EQUAL-token
+                return std::make_shared<Core::Instructions::AssignmentInstruction>(expr, ParseExpression());
+            }
+            return expr;
+        }
+    }
+
+    std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseCodeBlock()
+    {
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> result;
+
+        ExpectAndSkip(Lexer::TokenType::LEFT_BRACE);
+
+        while(this->tokens.HasNext() && this->tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_BRACE)
+        {
+            result.push_back(ParseInstruction());
+        }
+
+        ExpectAndSkip(Lexer::TokenType::RIGHT_BRACE);
+        return result;
+    }
+
+    Lexer::Token Parser::ExpectAndSkip(Lexer::TokenType type)
+    {
+        auto tok = tokens.GetAndNext();
+
+        if(tok.GetTokenType() != type)
+        {
+            throw Utils::RitaException(
+                "Parser", 
+                (std::stringstream() << "Expected \"" << type << "\" got \"" << tok.GetTokenType() << "\"").str(),
+                tok.GetLine(),
+                tok.GetCharacter()
+            );
+        }
+
+        return tok;
+    }
+
+    std::shared_ptr<Core::Instructions::Instruction> Parser::ParseFunction()
+    {
+        tokens.Next(); // skip function token
+        
+        // expect identifier for token
+
+        std::string functionName = ExpectAndSkip(Lexer::TokenType::IDENTIFIER).GetLiteral();
+
+        // parse arguments
+
+        std::vector<std::string> args;
+
+        ExpectAndSkip(Lexer::TokenType::LEFT_PAREN);
+
+        while(tokens.HasNext() && tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+        {
+            args.push_back(ExpectAndSkip(Lexer::TokenType::IDENTIFIER).GetLiteral());
+
+            if(tokens.Current().GetTokenType() != Lexer::TokenType::RIGHT_PAREN)
+                ExpectAndSkip(Lexer::TokenType::COMMA);
+        }
+
+        ExpectAndSkip(Lexer::TokenType::RIGHT_PAREN);
+
+        auto body = ParseCodeBlock();
+
+        return std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(functionName, args, body);
+    }
+
+    std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexer::Tokenator& tokens)
+    {
+        this->tokens = tokens;
+        this->tokens.Reset();
+
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> program;
+
+        while(this->tokens.HasNext())
+        {
+            program.push_back(ParseInstruction());
+        }
+
+        return program;
+    }
 }
