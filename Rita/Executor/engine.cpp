@@ -65,6 +65,7 @@ Engine::Engine()
 Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::Leaf* instr)
 {
     auto curNamespace = nameSpace.size() - 1;
+    
     while(curNamespace != -1)
     {
         if(nameSpace[curNamespace].find(instr->GetID()) != nameSpace[curNamespace].end())
@@ -192,6 +193,7 @@ Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::FunctionCallIns
         {
             callArgs.push_back(ExecuteInstruction(arg));
         }
+
         if(callArgs.size() != ritaFunction->GetFuncDef()->GetArgs().size())
         {
             throw Utils::RitaException(
@@ -256,6 +258,11 @@ Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions:
         return ExecuteInstruction(static_cast<Core::Instructions::FunctionDefinitionInstruction*>(instr.get()));
     case Core::Instructions::InstructionType::CONSTANT_STRING:
         return ExecuteInstruction(static_cast<Core::Instructions::ConstantString*>(instr.get()));
+    case Core::Instructions::InstructionType::RETURN:
+        throw Utils::RitaException(
+            "Executor",
+            "Return 'not in function' not allowed."
+        );
     default:
         throw Utils::RitaException("Executor", (std::stringstream() << "Unsupported instruction for execute \"" << instr->GetType() << "\"").str());
     }
