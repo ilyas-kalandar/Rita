@@ -36,6 +36,7 @@ namespace Core
             VAR_DECL,
             PRINT,
             FUNCTION_DEFINITION,
+            RETURN,
         };
 
         /**

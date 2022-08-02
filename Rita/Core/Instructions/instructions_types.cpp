@@ -65,6 +65,9 @@ namespace Core
             case InstructionType::FUNCTION_DEFINITION:
                 os << "FunctionDefinition";
                 break;
+            case InstructionType::RETURN:
+                os << "Return";
+                break;
             default:
                 throw Utils::RitaException("ostream operator<<", "Unsupported instruction type: " + std::to_string((int)instr_type));
             }
