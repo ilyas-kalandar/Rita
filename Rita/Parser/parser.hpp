@@ -16,6 +16,7 @@
 #include "tokenator.hpp"
 
 #include "Instructions/binop_instruction.hpp"
+#include "Instructions/return_instruction.hpp"
 #include "Instructions/function_call_instruction.hpp"
 #include "Instructions/op_type.hpp"
 #include "Instructions/leaf.hpp"
@@ -45,6 +46,15 @@ namespace Parser
          * @param tok_type Type of token for expecting.
          */
         Lexer::Token ExpectAndSkip(Lexer::TokenType tok_type);
+
+        /**
+         * @brief If tokens.Current().GetTokenType() == tok_type, will call tokens.Next()
+         * 
+         * @param tok_type Type of token 
+         * @return true If token skipped
+         * @return false If token not skipped
+         */
+        bool SkipIfExist(Lexer::TokenType tok_type);
 
         std::optional<std::shared_ptr<Core::Instructions::Instruction>> ParseLeaf();
         /**
@@ -77,14 +87,21 @@ namespace Parser
          * 
          * @return std::shared_ptr<Core::Instructions::Instruction> 
          */
-
+        
         std::shared_ptr<Core::Instructions::Instruction> ParseExpression();
+        
+        /**
+         * @brief Parses a variable declaration
+         * 
+         * @return std::shared_ptr<Core::Instructions::Instruction> 
+         */
         std::shared_ptr<Core::Instructions::Instruction> ParseVarDecl();
-        std::shared_ptr<Core::Instructions::Instruction> ParseInstruction();
         std::shared_ptr<Core::Instructions::Instruction> ParseIf();
         std::vector<std::shared_ptr<Core::Instructions::Instruction>> ParseCodeBlock();
         std::shared_ptr<Core::Instructions::Instruction> ParseWhile();
         std::shared_ptr<Core::Instructions::Instruction> ParseFunction();
+        std::shared_ptr<Core::Instructions::Instruction> ParseInstruction();
+        std::shared_ptr<Core::Instructions::ReturnInstruction> ParseReturn();
     public:
         /**
          * @brief Parses tokens into instructions
