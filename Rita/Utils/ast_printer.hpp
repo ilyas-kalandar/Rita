@@ -9,6 +9,7 @@
  * 
  */
 
+#include "Instructions/return_instruction.hpp"
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/instruction.hpp"
 #include "Instructions/binop_instruction.hpp"
@@ -71,6 +72,7 @@ namespace Utils
         void Print(Core::Instructions::UnaryOperatorInstruction*);
         void Print(Core::Instructions::WhileInstruction*);
         void Print(Core::Instructions::FunctionDefinitionInstruction*);
+        void Print(Core::Instructions::ReturnInstruction*);
 
         //TODO(Ilyas): Add another definitions
 
