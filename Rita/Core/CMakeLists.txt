@@ -51,6 +51,7 @@ set(
         Instructions/constant_list.hpp
         Instructions/index_instruction.hpp
         Instructions/var_decl_instruction.hpp
+        Instructions/return_instruction.hpp
         Instructions/function_definition.hpp
 )
 
@@ -63,6 +64,7 @@ set(
         Instructions/assignment_instruction.cpp
         Instructions/leaf.cpp
         Instructions/binop_instruction.cpp
+        Instructions/return_instruction.cpp
         Instructions/function_call_instruction.cpp
         Instructions/unop_instruction.cpp
         Instructions/attribute_instruction.cpp
