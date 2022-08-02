@@ -205,6 +205,11 @@ namespace Utils
         PrintValue("Body", instr->GetBody());
     }
 
+    void AstPrinter::Print(Core::Instructions::ReturnInstruction* instr)
+    {
+        PrintValue("Val", instr->GetExpr().get());
+    }
+
     void AstPrinter::Print(Core::Instructions::Instruction* instr, size_t depth_incr)
     {
         for(auto it = 0; it < depth_incr; ++it)
@@ -212,12 +217,23 @@ namespace Utils
 
         SetCursor();
 
+        if(instr == nullptr)
+        {
+            std::cout << "NULL" << std::endl;
+            for(auto it = 0; it < depth_incr; ++it)
+                DecrDepth();
+            return;
+        }
+
         std::cout << instr->GetType() << "(" << std::endl;
 
         switch(instr->GetType())
         {
         case Core::Instructions::InstructionType::WHILE:
             Print(static_cast<Core::Instructions::WhileInstruction*>(instr));
+            break;
+        case Core::Instructions::InstructionType::RETURN:
+            Print(static_cast<Core::Instructions::ReturnInstruction*>(instr));
             break;
         case Core::Instructions::InstructionType::CONSTANT_FLOAT:
             Print(static_cast<Core::Instructions::ConstantFloat*>(instr));
