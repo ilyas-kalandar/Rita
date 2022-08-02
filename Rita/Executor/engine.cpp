@@ -64,7 +64,7 @@ Engine::Engine()
 
 Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::Leaf* instr)
 {
-    auto curNamespace = this->currentNamespaceIndex;
+    auto curNamespace = nameSpace.size() - 1;
     while(curNamespace != -1)
     {
         if(nameSpace[curNamespace].find(instr->GetID()) != nameSpace[curNamespace].end())
@@ -185,15 +185,37 @@ Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::FunctionCallIns
     else if(type == Executor::Builtins::Types::FunctionType)
     {
         Core::Function* ritaFunction = static_cast<Core::Function*>(func);
-        currentNamespaceIndex++;
+        std::vector<Core::RitaObject*> callArgs;
+
+
+        for(auto arg : instr->GetFunctionArguments())
+        {
+            callArgs.push_back(ExecuteInstruction(arg));
+        }
+        if(callArgs.size() != ritaFunction->GetFuncDef()->GetArgs().size())
+        {
+            throw Utils::RitaException(
+                "Executor::ExecuteRitaFn",
+                (
+                    std::stringstream() << "Expected " << ritaFunction->GetFuncDef()->GetArgs().size() << " given " << callArgs.size() << " in function " << ritaFunction->GetFuncDef()->GetName()
+                ).str()
+            );
+        }
+
+        this->nameSpace.emplace_back();
+
+        for(int i = 0; i < callArgs.size(); ++i)
+        {
+            nameSpace[nameSpace.size() - 1][ritaFunction->GetFuncDef()->GetArgs()[i]] = callArgs[i];
+        }
+
 
         for(auto body_instr : ritaFunction->GetFuncDef()->GetBody())
         {
             ExecuteInstruction(body_instr);
         }
 
-        currentNamespaceIndex--;
-        
+        nameSpace.pop_back();        
         return nullptr;
     }
 
