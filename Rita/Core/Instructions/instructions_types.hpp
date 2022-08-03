@@ -37,6 +37,7 @@ namespace Core
             PRINT,
             FUNCTION_DEFINITION,
             RETURN,
+            MODULE,
         };
 
         /**
