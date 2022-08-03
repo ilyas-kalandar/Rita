@@ -68,6 +68,9 @@ namespace Core
             case InstructionType::RETURN:
                 os << "Return";
                 break;
+            case InstructionType::MODULE:
+                os << "Module";
+                break;
             default:
                 throw Utils::RitaException("ostream operator<<", "Unsupported instruction type: " + std::to_string((int)instr_type));
             }
