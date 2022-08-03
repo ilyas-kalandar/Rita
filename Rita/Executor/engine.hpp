@@ -33,14 +33,17 @@
 
 namespace Executor
 {
-    namespace Builtins{
-        namespace Types{
-extern Core::Type* BoolType;
-extern Core::Type* IntType;
-extern Core::Type* BuiltinFunctionType;
-extern Core::Type* UserObject;
-extern Core::Type* StringType;
-extern Core::Type* ObjectType;}
+    namespace Builtins
+    {
+        namespace Types
+        {
+            extern Core::Type* BoolType;
+            extern Core::Type* IntType;
+            extern Core::Type* BuiltinFunctionType;
+            extern Core::Type* UserObject;
+            extern Core::Type* StringType;
+            extern Core::Type* ObjectType;
+        }
     }
 }
 
