@@ -53,6 +53,7 @@ set(
         Instructions/var_decl_instruction.hpp
         Instructions/return_instruction.hpp
         Instructions/function_definition.hpp
+        Instructions/module_instruction.hpp
 )
 
 set(
@@ -76,6 +77,7 @@ set(
         Instructions/var_decl_instruction.cpp
         Instructions/op_type.cpp
         Instructions/function_definition.cpp
+        Instructions/module_instruction.cpp
 )
 
 
