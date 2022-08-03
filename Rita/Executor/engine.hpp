@@ -1,11 +1,11 @@
 /**
  * @file engine.hpp
- * @author your name (you@domain.com)
- * @brief 
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief Engine's definition.
  * @version 0.1
  * @date 2022-07-14
  * 
- * @copyright Copyright (c) 2022
+ * @copyright Copyright Awaitable (c) 2022
  * 
  */
 

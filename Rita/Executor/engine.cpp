@@ -1,3 +1,14 @@
+/**
+ * @file engine.cpp
+ * @author Ilyas Awaitable (t.me/awaitable)
+ * @brief Engine's implementation.
+ * @version 0.1
+ * @date 2022-07-14
+ * 
+ * @copyright Copyright Awaitable (c) 2022
+ * 
+ */
+
 #include <sstream>
 
 #include "user_object.hpp"
