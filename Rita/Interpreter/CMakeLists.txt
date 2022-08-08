@@ -4,7 +4,16 @@ project (Interpreter)
 
 set(SOURCE_EXE main.cpp)
 
-add_executable(rita ${SOURCE_EXE})
+set(
+    EXECUTABLE_OUTPUT_PATH 
+        ${CMAKE_SOURCE_DIR}/build
+)
+
+
+add_executable(
+    rita 
+        ${SOURCE_EXE}
+)
 
 include_directories("../Lexer/")
 include_directories("../Core/")
