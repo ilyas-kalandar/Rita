@@ -210,6 +210,11 @@ namespace Utils
         PrintValue("Val", instr->GetExpr().get());
     }
 
+    void AstPrinter::Print(Core::Instructions::ModuleInstruction* instr)
+    {
+        PrintValue("Instructions", instr->GetInstructions());
+    }
+
     void AstPrinter::Print(Core::Instructions::Instruction* instr, size_t depth_incr)
     {
         for(auto it = 0; it < depth_incr; ++it)
@@ -273,6 +278,9 @@ namespace Utils
             break;
         case Core::Instructions::InstructionType::FUNCTION_DEFINITION:
             Print(static_cast<Core::Instructions::FunctionDefinitionInstruction*>(instr));
+            break;
+        case Core::Instructions::InstructionType::MODULE:
+            Print(static_cast<Core::Instructions::ModuleInstruction*>(instr));
             break;
         default:
             throw RitaException(
