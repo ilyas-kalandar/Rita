@@ -537,7 +537,7 @@ namespace Parser
         return false;
     }
 
-    std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parser::Parse(Lexer::Tokenator& tokens)
+    std::shared_ptr<Core::Instructions::ModuleInstruction> Parser::Parse(Lexer::Tokenator& tokens)
     {
         this->tokens = tokens;
         this->tokens.Reset();
@@ -549,6 +549,6 @@ namespace Parser
             program.push_back(ParseInstruction());
         }
 
-        return program;
+        return std::make_shared<Core::Instructions::ModuleInstruction>(program);
     }
 }

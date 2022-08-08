@@ -15,6 +15,7 @@
 
 #include "tokenator.hpp"
 
+#include "Instructions/module_instruction.hpp"
 #include "Instructions/binop_instruction.hpp"
 #include "Instructions/return_instruction.hpp"
 #include "Instructions/function_call_instruction.hpp"
@@ -96,6 +97,12 @@ namespace Parser
          * @return std::shared_ptr<Core::Instructions::Instruction> 
          */
         std::shared_ptr<Core::Instructions::Instruction> ParseVarDecl();
+        
+        /**
+         * @brief Parses an if-instruction
+         * 
+         * @return std::shared_ptr<Core::Instructions::Instruction> 
+         */
         std::shared_ptr<Core::Instructions::Instruction> ParseIf();
         std::vector<std::shared_ptr<Core::Instructions::Instruction>> ParseCodeBlock();
         std::shared_ptr<Core::Instructions::Instruction> ParseWhile();
@@ -109,6 +116,6 @@ namespace Parser
          * @param tokens Tokenator object.
          * @return std::vector<std::shared_ptr<Core::Instructions::Instruction>> 
          */
-        std::vector<std::shared_ptr<Core::Instructions::Instruction>> Parse(Lexer::Tokenator& tokens);
+        std::shared_ptr<Core::Instructions::ModuleInstruction> Parse(Lexer::Tokenator& tokens);
     };
 }
