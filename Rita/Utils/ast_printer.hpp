@@ -9,6 +9,7 @@
  * 
  */
 
+#include "Instructions/module_instruction.hpp"
 #include "Instructions/return_instruction.hpp"
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/instruction.hpp"
@@ -73,6 +74,7 @@ namespace Utils
         void Print(Core::Instructions::WhileInstruction*);
         void Print(Core::Instructions::FunctionDefinitionInstruction*);
         void Print(Core::Instructions::ReturnInstruction*);
+        void Print(Core::Instructions::ModuleInstruction*);
 
         //TODO(Ilyas): Add another definitions
 
