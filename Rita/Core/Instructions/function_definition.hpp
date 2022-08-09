@@ -45,7 +45,7 @@ namespace Core
              * @brief Get function's body
              * 
              */
-            const std::vector<std::shared_ptr<Instruction>>& GetBody();
+            std::vector<std::shared_ptr<Instruction>>& GetBody();
 
             /**
              * @brief Get function's name 
