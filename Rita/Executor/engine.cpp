@@ -77,7 +77,7 @@ namespace Executor
     {
         size_t currentStack = stack.size() - 1;
 
-        while(currentStack != -1)
+        while(currentStack >= 0)
         {
             if(stack[currentStack].CheckVar(instr->GetID()))
                 return stack[currentStack].GetVar(instr->GetID());
@@ -125,13 +125,14 @@ namespace Executor
 
     Core::RitaObject* Engine::LinkSelf(std::shared_ptr<Core::Instructions::AttributeInstruction> instr, Core::RitaObject* obj)
     {
-        
-        if(obj->GetType() != Executor::Builtins::Types::FunctionType)
-            return obj;
 
+        if(obj->GetType() != Executor::Builtins::Types::FunctionType && obj->GetType() != Executor::Builtins::Types::BuiltinFunctionType)
+        {
+            return obj;
+        }
         std::vector<std::shared_ptr<Core::Instructions::Instruction>> callArgs{instr};
 
-        std::vector<std::string> fnArgs{"this"};
+        std::vector<std::string> fnArgs{};
 
         std::shared_ptr<Core::Instructions::FunctionCallInstruction> call = std::make_shared<Core::Instructions::FunctionCallInstruction>(
             instr->GetValue(),
@@ -142,7 +143,7 @@ namespace Executor
 
         std::vector<std::shared_ptr<Core::Instructions::Instruction>> fnBody{
             call            
-        };
+        }; 
 
         return ExecuteInstruction(std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(get, fnArgs, fnBody));
     }
@@ -167,7 +168,7 @@ namespace Executor
         }
 
         Core::Type* type = static_cast<Core::Type*>(val->GetType());
-
+        
         return LinkSelf(instr, type->GetField(attr));
     }
 
@@ -180,7 +181,6 @@ namespace Executor
         //TODO(Ilyas): Add check for existing function
 
         stack[stack.size() - 1].SetVar(instr->GetName(), functionObject);
-
         return functionObject;
     }
 
@@ -307,7 +307,6 @@ namespace Executor
 
     Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions::Instruction> instr)
     {
-        std::cout << "Executing " << instr->GetType() << std::endl;
         switch(instr->GetType())
         {
         case Core::Instructions::InstructionType::LEAF:
