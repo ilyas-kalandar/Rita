@@ -123,18 +123,28 @@ namespace Executor
         return ExecuteInstruction(result);    
     }
 
-    Core::RitaObject* LinkSelf(Core::RitaObject* value, Core::RitaObject* functionObj)
+    Core::RitaObject* Engine::LinkSelf(std::shared_ptr<Core::Instructions::AttributeInstruction> instr, Core::RitaObject* obj)
     {
+        
+        if(obj->GetType() != Executor::Builtins::Types::FunctionType)
+            return obj;
 
-        throw Utils::RitaException("Executor", "Unimplemented!!!");
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> callArgs{instr};
 
-        // std::shared_ptr<Core::Instructions::FunctionCallInstruction> call = std::make_shared<Core::Instructions::FunctionCallInstruction>(
+        std::vector<std::string> fnArgs{"this"};
 
-        // );
+        std::shared_ptr<Core::Instructions::FunctionCallInstruction> call = std::make_shared<Core::Instructions::FunctionCallInstruction>(
+            instr->GetValue(),
+            callArgs
+        );
 
-        // std::vector<std::shared_ptr<Core::Instructions::Instruction>> fnBody{
-            
-        // };
+        std::string get = "get";
+
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> fnBody{
+            call            
+        };
+
+        return ExecuteInstruction(std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(get, fnArgs, fnBody));
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantString* instr)
@@ -143,13 +153,8 @@ namespace Executor
         return new Core::String(data, Executor::Builtins::Types::StringType);
     }
 
-    Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::AttributeInstruction* instr)
+    Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions::AttributeInstruction> instr)
     {
-        //TODO(Ilyas):
-        // Here we must check
-        // if attr from instr->GetValue() is method, make function like f(args) => method(instr.GetValue(), args) from it
-
-
         Core::RitaObject* val = ExecuteInstruction(instr->GetValue());
         std::string attr = instr->GetAttr();
 
@@ -158,12 +163,12 @@ namespace Executor
             Core::UserObject* userObj = static_cast<Core::UserObject*>(val);
 
             if(userObj->Contains(attr))
-                return userObj->Get(attr);
+                return LinkSelf(instr, userObj->Get(attr));
         }
 
         Core::Type* type = static_cast<Core::Type*>(val->GetType());
 
-        return type->GetField(attr);
+        return LinkSelf(instr, type->GetField(attr));
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr)
@@ -246,7 +251,7 @@ namespace Executor
         auto value = ExecuteInstruction(instr->GetExpression());
 
         //TODO(Ilyas): Add checks
-        this->nameSpace[this->currentNamespaceIndex][instr->GetVarName()] = value;
+        stack[stack.size() - 1].SetVar(instr->GetVarName(), value);
 
         return nullptr;
     }
@@ -314,7 +319,7 @@ namespace Executor
         case Core::Instructions::InstructionType::FUNCTION_CALL:
             return ExecuteInstruction(static_cast<Core::Instructions::FunctionCallInstruction*>(instr.get()));
         case Core::Instructions::InstructionType::ATTRIBUTE:
-            return ExecuteInstruction(static_cast<Core::Instructions::AttributeInstruction*>(instr.get()));
+            return ExecuteInstruction(std::static_pointer_cast<Core::Instructions::AttributeInstruction>(instr));
         case Core::Instructions::InstructionType::VAR_DECL:
             return ExecuteInstruction(static_cast<Core::Instructions::VariableDeclarationInstruction*>(instr.get()));
         case Core::Instructions::InstructionType::FUNCTION_DEFINITION:
