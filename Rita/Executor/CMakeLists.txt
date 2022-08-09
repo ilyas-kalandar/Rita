@@ -5,6 +5,8 @@ set(
         Builtins/functions.hpp
         Builtins/constants.hpp
         engine.hpp
+        enviropment_type.hpp
+        enviropment.hpp
 )
 
 set(
@@ -12,6 +14,7 @@ set(
         Builtins/functions.cpp
         Builtins/types.hpp
         engine.cpp
+        enviropment.cpp
 )
 
 include_directories("../Core")
