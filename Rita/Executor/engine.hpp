@@ -54,8 +54,6 @@ namespace Executor
     {
     protected:
         std::vector<Enviropment> stack;
-        std::list<Core::RitaObject*> objects;
-        std::vector<std::map<std::string, Core::RitaObject*>> nameSpace;
         size_t currentNamespaceIndex = 0;
 
         Core::RitaObject* LinkSelf(std::shared_ptr<Core::Instructions::AttributeInstruction> instr, Core::RitaObject* obj);

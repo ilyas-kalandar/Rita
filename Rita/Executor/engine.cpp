@@ -130,22 +130,29 @@ namespace Executor
         {
             return obj;
         }
-        std::vector<std::shared_ptr<Core::Instructions::Instruction>> callArgs{instr};
 
-        std::vector<std::string> fnArgs{};
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> callArgs{instr->GetValue()};
+
+        std::vector<std::string> fnArgs;
 
         std::shared_ptr<Core::Instructions::FunctionCallInstruction> call = std::make_shared<Core::Instructions::FunctionCallInstruction>(
-            instr->GetValue(),
+            instr,
             callArgs
         );
 
-        std::string get = "get";
+        std::string get = "!get";
+
+
+        // return func => return a.toString(a)
 
         std::vector<std::shared_ptr<Core::Instructions::Instruction>> fnBody{
-            call            
+            std::make_shared<Core::Instructions::ReturnInstruction>(call)
         }; 
 
-        return ExecuteInstruction(std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(get, fnArgs, fnBody));
+        auto funcDef = std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(get, fnArgs, fnBody);
+        auto funcObj = ExecuteInstruction(funcDef);
+        auto dbgFun = static_cast<Core::Function*>(funcObj);
+        return funcObj;
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantString* instr)
