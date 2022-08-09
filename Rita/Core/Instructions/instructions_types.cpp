@@ -9,6 +9,8 @@
  * 
  */
 
+#include <string>
+
 #include "rita_exception.hpp"
 #include "instructions_types.hpp"
 
