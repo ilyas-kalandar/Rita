@@ -76,7 +76,7 @@ namespace Executor
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::Leaf* instr)
     {
         size_t currentStack = stack.size() - 1;
-        
+
         while(currentStack != -1)
         {
             if(stack[currentStack].CheckVar(instr->GetID()))
@@ -221,6 +221,15 @@ namespace Executor
             // Create new stack & Load instructions
             stack.emplace_back(ritaFunction->GetFuncDef()->GetBody(), EnviropmentType::FUNCTION);
 
+            // Load args to stack
+            
+            size_t index = 0;
+            for (const std::string& argName : ritaFunction->GetFuncDef()->GetArgs())
+            {
+                stack[stack.size() - 1].SetVar(argName, callArgs[index]);
+                index++;
+            }
+
             return RunUntilComplete();
         }
 
@@ -238,6 +247,8 @@ namespace Executor
 
         //TODO(Ilyas): Add checks
         this->nameSpace[this->currentNamespaceIndex][instr->GetVarName()] = value;
+
+        return nullptr;
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ModuleInstruction* instr)
@@ -268,7 +279,7 @@ namespace Executor
         if(instr->GetExpr().get() != nullptr)
             stack[it].SetReturnedValue(ExecuteInstruction(instr->GetExpr()));
 
-        while(stack.size() != it)
+        while(stack.size() != it + 1)
         {
             stack.pop_back();
         }
