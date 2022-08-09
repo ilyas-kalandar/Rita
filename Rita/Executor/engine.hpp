@@ -57,13 +57,15 @@ namespace Executor
         std::list<Core::RitaObject*> objects;
         std::vector<std::map<std::string, Core::RitaObject*>> nameSpace;
         size_t currentNamespaceIndex = 0;
+
+        Core::RitaObject* LinkSelf(std::shared_ptr<Core::Instructions::AttributeInstruction> instr, Core::RitaObject* obj);
         
         Core::RitaObject* ExecuteInstruction(Core::Instructions::BinOpInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantInt* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantFloat* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::VariableDeclarationInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionCallInstruction* instr);
-        Core::RitaObject* ExecuteInstruction(Core::Instructions::AttributeInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(std::shared_ptr<Core::Instructions::AttributeInstruction> instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::Leaf* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantString* instr);
