@@ -37,7 +37,7 @@ namespace Core
              * 
              * @return const std::vector<std::shared_ptr<Instruction>>& 
              */
-            const std::vector<std::shared_ptr<Instruction>>& GetInstructions();
+            std::vector<std::shared_ptr<Instruction>>& GetInstructions();
         };
     }
 }

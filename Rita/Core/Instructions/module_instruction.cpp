@@ -22,7 +22,7 @@ namespace Core
             type = InstructionType::MODULE;
         }
 
-        const std::vector<std::shared_ptr<Instruction>>& ModuleInstruction::GetInstructions()
+        std::vector<std::shared_ptr<Instruction>>& ModuleInstruction::GetInstructions()
         {
             return instructions;
         }
