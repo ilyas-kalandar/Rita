@@ -16,6 +16,7 @@
 
 #include "object.hpp"
 
+#include "Instructions/return_instruction.hpp"
 #include "Instructions/constant_string.hpp"
 #include "Instructions/instruction.hpp"
 #include "Instructions/binop_instruction.hpp"
@@ -29,7 +30,10 @@
 #include "Instructions/attribute_instruction.hpp"
 #include "Instructions/assignment_instruction.hpp"
 #include "Instructions/var_decl_instruction.hpp"
+#include "Instructions/module_instruction.hpp"
 #include "Builtins/functions.hpp"
+#include "enviropment.hpp"
+
 
 namespace Executor
 {
@@ -45,39 +49,44 @@ namespace Executor
             extern Core::Type* ObjectType;
         }
     }
+
+    class Engine
+    {
+    protected:
+        std::vector<Enviropment> stack;
+        std::list<Core::RitaObject*> objects;
+        std::vector<std::map<std::string, Core::RitaObject*>> nameSpace;
+        size_t currentNamespaceIndex = 0;
+        
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::BinOpInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantInt* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantFloat* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::VariableDeclarationInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionCallInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::AttributeInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::Leaf* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantString* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::ModuleInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::ReturnInstruction* instr);
+        //Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantList* instr);
+
+        Core::RitaObject* RunUntilComplete();
+
+    public:
+        /**
+         * @brief Construct a new Engine object
+         * 
+         */
+        Engine();
+        
+        void Initialize();  
+
+        /**
+         * @brief 
+         * 
+         * @return Core::RitaObject* 
+         */
+        Core::RitaObject* ExecuteInstruction(std::shared_ptr<Core::Instructions::Instruction>);
+    };
 }
-
-class Engine
-{
-protected:
-    std::list<Core::RitaObject*> objects;
-    std::vector<std::map<std::string, Core::RitaObject*>> nameSpace;
-    size_t currentNamespaceIndex = 0;
-    
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::BinOpInstruction* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantInt* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantFloat* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::VariableDeclarationInstruction* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionCallInstruction* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::AttributeInstruction* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::Leaf* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr);
-    Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantString* instr);
-    //Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantList* instr);
-
-public:
-    /**
-     * @brief Construct a new Engine object
-     * 
-     */
-    Engine();
-    
-    void Initialize();  
-
-    /**
-     * @brief 
-     * 
-     * @return Core::RitaObject* 
-     */
-    Core::RitaObject* ExecuteInstruction(std::shared_ptr<Core::Instructions::Instruction>);
-};
