@@ -10,70 +10,54 @@
 #include "parser.hpp"
 #include "engine.hpp"
 #include "ast_printer.hpp"
-
 #include "string_obj.hpp"
 
 int main()
 {
-	size_t line = 1;
+    size_t line = 1;
 
-	Lexer::Lexer lex;
-	std::string source;
-	std::string buff;
+    Lexer::Lexer lex;
+    std::string source;
+    std::string buff;
 
 
-	Engine engine;
-	
+    Executor::Engine engine;
+    
 
-	do
-	{
-		std::cout << "[Line " << line << "]: ";
-		std::getline(std::cin, buff);
-		source += buff;
-		line++;
-	}while(buff.size() > 0);
+    do
+    {
+        std::cout << "[Line " << line << "]: ";
+        std::getline(std::cin, buff);
+        source += buff;
+        line++;
+    } while (buff.size() > 0);
 
-	auto toks = lex.Tokenize(source);
-	while (toks.Current().GetTokenType() != Lexer::TokenType::END_OF_FILE)
-	{
-		//std::cout << toks.Current() << std::endl;
-		toks.Next();
-	}
+    auto toks = lex.Tokenize(source);
+    while (toks.Current().GetTokenType() != Lexer::TokenType::END_OF_FILE)
+    {
+        //std::cout << toks.Current() << std::endl;
+        toks.Next();
+    }
 
-	toks.Reset();
+    toks.Reset();
 
-	Parser parser;
+    Parser::Parser parser;
 
-	std::vector<std::shared_ptr<Core::Instructions::Instruction>> program;
+    std::shared_ptr<Core::Instructions::Instruction> program;
 
-	try
-	{
-		program = parser.Parse(toks);
-	}
-	catch(const std::runtime_error& e)
-	{
-		std::cout << e.what() << std::endl;
-		return -1; // compilation error
-	}
+    try
+    {
+        program = parser.Parse(toks);
+    }
+    catch(const std::runtime_error& e)
+    {
+        std::cout << e.what() << std::endl;
+        return -1; // compilation error
+    }
 
-	Utils::AstPrinter printer(2);
+    Utils::AstPrinter printer(2);
 
-	for (auto instr : program)
-	{
-		printer.Print(instr.get());
-	}
+    printer.Print(program.get());
 
-	for(auto instr : program)
-	{
-		try
-		{
-			engine.ExecuteInstruction(instr);
-		}
-		catch(const std::exception& e)
-		{
-			std::cerr << e.what() << '\n';
-			return 20; // runtime error.
-		}
-		
-	}
+    engine.ExecuteInstruction(program);
 }
