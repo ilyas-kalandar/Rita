@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 
 #include "rita_exception.hpp"
 #include "op_type.hpp"
