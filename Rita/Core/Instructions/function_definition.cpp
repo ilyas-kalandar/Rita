@@ -22,7 +22,7 @@ namespace Core
             type = InstructionType::FUNCTION_DEFINITION;
         }
 
-        const std::vector<std::shared_ptr<Core::Instructions::Instruction>>& FunctionDefinitionInstruction::GetBody()
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>>& FunctionDefinitionInstruction::GetBody()
         {
             return body;
         }
