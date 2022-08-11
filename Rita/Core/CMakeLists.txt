@@ -16,6 +16,7 @@ set(
         list_obj.cpp
         user_object.cpp
         func_obj.cpp
+        bool_obj.cpp
 )
 
 set(
@@ -28,6 +29,7 @@ set(
         list_obj.hpp
         user_object.hpp
         func_obj.hpp
+        bool_obj.hpp
 )
 
 
