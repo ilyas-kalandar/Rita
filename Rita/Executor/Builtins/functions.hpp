@@ -71,6 +71,13 @@ namespace Executor
              * @return Core::RitaObject* 
              */
             Core::RitaObject* Print(const std::vector<Core::RitaObject*>&);
+
+            /**
+             * @brief 
+             * 
+             * @return Core::RitaObject* 
+             */
+            Core::RitaObject* BoolCtor(const std::vector<Core::RitaObject*>&);
         }
     } 
 }

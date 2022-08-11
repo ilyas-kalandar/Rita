@@ -2,6 +2,7 @@
 
 #include "rita_exception.hpp"
 #include "functions.hpp"
+#include "bool_obj.hpp"
 #include "string_obj.hpp"
 #include "types.hpp"
 
@@ -89,6 +90,42 @@ namespace Executor
                 }
 
                 std::cout << std::endl;
+            }
+
+            Core::RitaObject* BoolCtor(const std::vector<Core::RitaObject*>& vec)
+            {
+                auto arg = vec[0];
+
+                auto type = arg->GetType();
+
+                if(type == Builtins::Types::BoolType)
+                {
+                    Core::BoolObject* tmpBool = static_cast<Core::BoolObject*>(arg);
+                    return new Core::BoolObject(tmpBool->GetValue(), Builtins::Types::BoolType);
+                }
+                else 
+                {
+                    throw Utils::RitaException(
+                        "Bool::Constructor",
+                        "Expected int, float or bool, given \"" + static_cast<Core::Type*>(arg->GetType())->GetTypeName() + "\""
+                    );
+                }
+            }
+
+            Core::RitaObject* BoolToStringNative(const std::vector<Core::RitaObject*>& vec)
+            {
+                auto arg = vec[0];
+                std::string _tr = "true";
+                std::string _fl = "false";
+
+                Core::BoolObject* tmpBool = static_cast<Core::BoolObject*>(arg);
+
+                if(tmpBool->GetValue())
+                {
+                    return new Core::String(_tr, Types::StringType);
+                }
+
+                return new Core::String(_fl, Types::StringType);
             }
         }
     }
