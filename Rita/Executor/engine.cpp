@@ -4,9 +4,9 @@
  * @brief Engine's implementation.
  * @version 0.1
  * @date 2022-07-14
- * 
+ *
  * @copyright Copyright Awaitable (c) 2022
- * 
+ *
  */
 
 #include <sstream>
@@ -45,19 +45,19 @@ namespace Executor
         std::string toString = "toString";
 
         Executor::Builtins::Types::ObjectType->AddField(
-            toString, 
+            toString,
             new Core::NativeFunction(Executor::Builtins::Functions::ObjectToStringNative, Executor::Builtins::Types::BuiltinFunctionType)
         );
 
         // link operatorPlus to Int
-        
+
         std::string operatorPlus = "operatorPlus";
 
         Executor::Builtins::Types::IntType->AddField(
             operatorPlus,
             new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorPlus, Executor::Builtins::Types::BuiltinFunctionType)
         );
-        
+
 
         // Link Integer's toString to Int
 
@@ -77,9 +77,9 @@ namespace Executor
     {
         size_t currentStack = stack.size() - 1;
 
-        while(currentStack >= 0)
+        while (currentStack >= 0)
         {
-            if(stack[currentStack].CheckVar(instr->GetID()))
+            if (stack[currentStack].CheckVar(instr->GetID()))
                 return stack[currentStack].GetVar(instr->GetID());
             currentStack--;
         }
@@ -93,9 +93,9 @@ namespace Executor
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::BinOpInstruction* instr)
     {
         std::shared_ptr<Core::Instructions::Instruction> resultFunction;
-        std::vector<std::shared_ptr<Core::Instructions::Instruction>> list{instr->GetFirst(), instr->GetSecond()};
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> list{ instr->GetFirst(), instr->GetSecond() };
 
-        switch(instr->GetOperationType())
+        switch (instr->GetOperationType())
         {
         case Core::Instructions::OpType::PLUS:
             resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
@@ -110,8 +110,15 @@ namespace Executor
             );
             break;
         case Core::Instructions::OpType::DIV:
-            resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(instr->GetFirst(),
-            "operatorDiv"
+            resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
+                instr->GetFirst(),
+                "operatorDiv"
+            );
+            break;
+        case Core::Instructions::OpType::EQUAL_EQUAL:
+            resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
+                instr->GetFirst(),
+                "operatorEqualEqual"
             );
             break;
         default:
@@ -120,39 +127,7 @@ namespace Executor
 
         std::shared_ptr<Core::Instructions::Instruction> result = std::make_shared<Core::Instructions::FunctionCallInstruction>(resultFunction, list);
 
-        return ExecuteInstruction(result);    
-    }
-
-    Core::RitaObject* Engine::LinkSelf(std::shared_ptr<Core::Instructions::AttributeInstruction> instr, Core::RitaObject* obj)
-    {
-
-        if(obj->GetType() != Executor::Builtins::Types::FunctionType && obj->GetType() != Executor::Builtins::Types::BuiltinFunctionType)
-        {
-            return obj;
-        }
-
-        std::vector<std::shared_ptr<Core::Instructions::Instruction>> callArgs{instr->GetValue()};
-
-        std::vector<std::string> fnArgs;
-
-        std::shared_ptr<Core::Instructions::FunctionCallInstruction> call = std::make_shared<Core::Instructions::FunctionCallInstruction>(
-            instr,
-            callArgs
-        );
-
-        std::string get = "!get";
-
-
-        // return func => return a.toString(a)
-
-        std::vector<std::shared_ptr<Core::Instructions::Instruction>> fnBody{
-            std::make_shared<Core::Instructions::ReturnInstruction>(call)
-        }; 
-
-        auto funcDef = std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(get, fnArgs, fnBody);
-        auto funcObj = ExecuteInstruction(funcDef);
-        auto dbgFun = static_cast<Core::Function*>(funcObj);
-        return funcObj;
+        return ExecuteInstruction(result);
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantString* instr)
@@ -166,17 +141,18 @@ namespace Executor
         Core::RitaObject* val = ExecuteInstruction(instr->GetValue());
         std::string attr = instr->GetAttr();
 
-        if(val->GetType() == Executor::Builtins::Types::UserObject)
+        if (val->GetType() == Executor::Builtins::Types::UserObject)
         {
             Core::UserObject* userObj = static_cast<Core::UserObject*>(val);
 
-            if(userObj->Contains(attr))
-                return LinkSelf(instr, userObj->Get(attr));
+            if (userObj->Contains(attr))
+                return instr, userObj->Get(attr);
         }
 
         Core::Type* type = static_cast<Core::Type*>(val->GetType());
         
-        return LinkSelf(instr, type->GetField(attr));
+        return instr, type->GetField(attr);
+
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr)
@@ -197,36 +173,36 @@ namespace Executor
 
         auto type = static_cast<Core::Type*>(func->GetType());
 
-        if(type == Executor::Builtins::Types::BuiltinFunctionType)
+        if (type == Executor::Builtins::Types::BuiltinFunctionType)
         {
             auto nativeFunction = static_cast<Core::NativeFunction*>(func);
             std::vector<Core::RitaObject*> functionArguments;
 
-            for(auto arg : instr->GetFunctionArguments())
+            for (auto arg : instr->GetFunctionArguments())
             {
                 functionArguments.push_back(ExecuteInstruction(arg));
             }
 
             return nativeFunction->Execute(functionArguments);
         }
-        else if(type == Executor::Builtins::Types::FunctionType)
+        else if (type == Executor::Builtins::Types::FunctionType)
         {
             Core::Function* ritaFunction = static_cast<Core::Function*>(func);
             std::vector<Core::RitaObject*> callArgs;
 
 
-            for(auto arg : instr->GetFunctionArguments())
+            for (auto arg : instr->GetFunctionArguments())
             {
                 callArgs.push_back(ExecuteInstruction(arg));
             }
 
-            if(callArgs.size() != ritaFunction->GetFuncDef()->GetArgs().size())
+            if (callArgs.size() != ritaFunction->GetFuncDef()->GetArgs().size())
             {
                 throw Utils::RitaException(
                     "Executor::ExecuteRitaFn",
                     (
                         std::stringstream() << "Expected " << ritaFunction->GetFuncDef()->GetArgs().size() << " given " << callArgs.size() << " in function " << ritaFunction->GetFuncDef()->GetName()
-                    ).str()
+                        ).str()
                 );
             }
 
@@ -234,7 +210,7 @@ namespace Executor
             stack.emplace_back(ritaFunction->GetFuncDef()->GetBody(), EnviropmentType::FUNCTION);
 
             // Load args to stack
-            
+
             size_t index = 0;
             for (const std::string& argName : ritaFunction->GetFuncDef()->GetArgs())
             {
@@ -272,13 +248,13 @@ namespace Executor
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ReturnInstruction* instr)
     {
         size_t it = stack.size() - 1;
-        
-        while(it > 0 && stack[it].GetEnvType() != EnviropmentType::FUNCTION)
+
+        while (it > 0 && stack[it].GetEnvType() != EnviropmentType::FUNCTION)
         {
-            it--;            
+            it--;
         }
 
-        if(it <= 0)
+        if (it <= 0)
         {
             throw Utils::RitaException(
                 "Executor",
@@ -288,10 +264,10 @@ namespace Executor
 
         stack[it].SetRunning(false);
 
-        if(instr->GetExpr().get() != nullptr)
+        if (instr->GetExpr().get() != nullptr)
             stack[it].SetReturnedValue(ExecuteInstruction(instr->GetExpr()));
 
-        while(stack.size() != it + 1)
+        while (stack.size() != it + 1)
         {
             stack.pop_back();
         }
@@ -301,20 +277,25 @@ namespace Executor
 
     Core::RitaObject* Engine::RunUntilComplete()
     {
-        while(stack[stack.size() - 1].IsRunning())
+        while (stack[stack.size() - 1].IsRunning())
         {
             ExecuteInstruction(stack[stack.size() - 1].GetCurrentInstruction());
         }
 
         auto value = stack[stack.size() - 1].GetReturnedValue();
         stack.pop_back();
-        
         return value;
+    }
+
+    Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::IfInstruction* instr)
+    {
+        Core::RitaObject* computedVal = ExecuteInstruction(instr->GetExpr());
+        return nullptr;
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions::Instruction> instr)
     {
-        switch(instr->GetType())
+        switch (instr->GetType())
         {
         case Core::Instructions::InstructionType::LEAF:
             return ExecuteInstruction(static_cast<Core::Instructions::Leaf*>(instr.get()));
@@ -344,6 +325,6 @@ namespace Executor
 
     void Engine::Initialize()
     {
-        
+
     }
 }

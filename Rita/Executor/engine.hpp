@@ -16,6 +16,7 @@
 
 #include "object.hpp"
 
+#include "Instructions/if_instruction.hpp"
 #include "Instructions/return_instruction.hpp"
 #include "Instructions/constant_string.hpp"
 #include "Instructions/instruction.hpp"
@@ -69,6 +70,7 @@ namespace Executor
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantString* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ModuleInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ReturnInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::IfInstruction* instr);
         //Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantList* instr);
 
         Core::RitaObject* RunUntilComplete();
