@@ -14,7 +14,7 @@
 #include "Instructions/unop_instruction.hpp"
 #include "Instructions/instruction.hpp"
 #include "Instructions/binop_instruction.hpp"
-#include <Instructions/assignment_instruction.hpp>
+#include "Instructions/assignment_instruction.hpp"
 #include "Instructions/if_instruction.hpp"
 #include "Instructions/assignment_instruction.hpp"
 #include "Instructions/leaf.hpp"
