@@ -11,6 +11,8 @@ namespace Lexer
         FLOAT,
         STRING,
         IDENTIFIER,
+        TRUE,
+        FALSE,
 
         // Binary operators
         EQUAL,
