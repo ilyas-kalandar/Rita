@@ -13,6 +13,7 @@
 
 #include "parser.hpp"
 #include "rita_exception.hpp"
+#include "Instructions/constant_bool.hpp"
 #include "Instructions/if_instruction.hpp"
 #include "Instructions/assignment_instruction.hpp"
 #include "Instructions/unop_instruction.hpp"
@@ -303,11 +304,11 @@ namespace Parser
 
     std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLeaf()
     {
-        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
+        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE || tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_FILE)
         {
             throw Utils::RitaException(
                 "Parser",
-                "Unexpected \"END_OF_LINE\"",
+                (std::stringstream() << "Unexpected \"" << tokens.Current().GetTokenType() << "\"").str(),
                 tokens.Current().GetLine(),
                 tokens.Current().GetCharacter()
             );
@@ -337,6 +338,18 @@ namespace Parser
             // I think will be better if I create my own converter...
             auto val = tokens.GetAndNext().GetLiteral();
             return std::make_shared<Core::Instructions::ConstantString>(val);
+        }
+        case Lexer::TokenType::FALSE:
+        {
+            // skip false
+            tokens.Next();
+            return std::make_shared<Core::Instructions::ConstantBool>(false);
+        }
+        case Lexer::TokenType::TRUE:
+        {
+            // skip true
+            tokens.Next();
+            return std::make_shared<Core::Instructions::ConstantBool>(true);
         }
         case Lexer::TokenType::LEFT_BRACKET:
         {
