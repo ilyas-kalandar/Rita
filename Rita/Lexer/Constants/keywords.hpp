@@ -11,5 +11,7 @@ namespace Lexer
         {"and", TokenType::AND},
         {"break", TokenType::BREAK},
         {"return", TokenType::RETURN},
+        {"false", TokenType::FALSE},
+        {"true", TokenType::TRUE},
     };
 }
