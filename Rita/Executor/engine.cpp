@@ -13,6 +13,7 @@
 
 #include "user_object.hpp"
 #include "rita_exception.hpp"
+#include "bool_obj.hpp"
 #include "Instructions/constant_list.hpp"
 #include "Instructions/constant_string.hpp"
 #include "type.hpp"
@@ -293,6 +294,11 @@ namespace Executor
         return nullptr;
     }
 
+    Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantBool* instr)
+    {
+        return new Core::BoolObject(instr->GetData(), Builtins::Types::BoolType);
+    }
+
     Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions::Instruction> instr)
     {
         switch (instr->GetType())
@@ -317,11 +323,12 @@ namespace Executor
             return ExecuteInstruction(static_cast<Core::Instructions::ModuleInstruction*>(instr.get()));
         case Core::Instructions::InstructionType::RETURN:
             return ExecuteInstruction(static_cast<Core::Instructions::ReturnInstruction*>(instr.get()));
+        case Core::Instructions::InstructionType::CONSTANT_BOOL:
+            return ExecuteInstruction(static_cast<Core::Instructions::ConstantBool*>(instr.get()));
         default:
             throw Utils::RitaException("Executor", (std::stringstream() << "Unsupported instruction for execute \"" << instr->GetType() << "\"").str());
         }
     }
-
 
     void Engine::Initialize()
     {
