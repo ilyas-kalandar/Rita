@@ -32,6 +32,7 @@ namespace Core
             CONSTANT_FLOAT,
             CONSTANT_STRING,
             CONSTANT_LIST,
+            CONSTANT_BOOL,
             INDEX,
             VAR_DECL,
             PRINT,

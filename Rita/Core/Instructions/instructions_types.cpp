@@ -73,6 +73,9 @@ namespace Core
             case InstructionType::MODULE:
                 os << "Module";
                 break;
+            case InstructionType::CONSTANT_BOOL:
+                os << "ConstantBool";
+                break;
             default:
                 throw Utils::RitaException("ostream operator<<", "Unsupported instruction type: " + std::to_string((int)instr_type));
             }
