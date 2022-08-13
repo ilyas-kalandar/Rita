@@ -215,6 +215,14 @@ namespace Utils
         PrintValue("Instructions", instr->GetInstructions());
     }
 
+    void AstPrinter::Print(Core::Instructions::ConstantBool* instr)
+    {
+        if(instr->GetData())
+            Print("Value", "true");
+        else
+            Print("Value", "false");
+    }
+
     void AstPrinter::Print(Core::Instructions::Instruction* instr, size_t depth_incr)
     {
         for(auto it = 0; it < depth_incr; ++it)
@@ -234,6 +242,9 @@ namespace Utils
 
         switch(instr->GetType())
         {
+        case Core::Instructions::InstructionType::CONSTANT_BOOL:
+            Print(static_cast<Core::Instructions::ConstantBool*>(instr));
+            break;
         case Core::Instructions::InstructionType::WHILE:
             Print(static_cast<Core::Instructions::WhileInstruction*>(instr));
             break;
