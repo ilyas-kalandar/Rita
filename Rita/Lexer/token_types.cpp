@@ -105,6 +105,12 @@ namespace Lexer
         case TokenType::BREAK:
             os << "BREAK";
             break;
+        case TokenType::TRUE:
+            os << "TRUE";
+            break;
+        case TokenType::FALSE:
+            os << "false";
+            break;
         default:
             throw Utils::RitaException(
                 "Lexer::TokenType::operator<<", 
