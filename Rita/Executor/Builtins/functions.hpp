@@ -78,6 +78,22 @@ namespace Executor
              * @return Core::RitaObject* 
              */
             Core::RitaObject* BoolCtor(const std::vector<Core::RitaObject*>&);
+
+            Core::RitaObject* IntOperatorEqual(const std::vector<Core::RitaObject*>&);
+
+            Core::RitaObject* IntOperatorLessThan(const std::vector<Core::RitaObject*>&);
+
+            Core::RitaObject* SqrtNative(const std::vector<Core::RitaObject*>&);
+
+            Core::RitaObject* InputNative(const std::vector<Core::RitaObject*>&);
+
+            Core::RitaObject* IntCtor(const std::vector<Core::RitaObject*>&);
+
+            Core::RitaObject* IntOperatorMinus(const std::vector<Core::RitaObject*>& list);
+
+            Core::RitaObject* IntOperatorDiv(const std::vector<Core::RitaObject*>& list);
+
+            Core::RitaObject* IntOperatorMul(const std::vector<Core::RitaObject*>& list);
         }
     } 
 }
