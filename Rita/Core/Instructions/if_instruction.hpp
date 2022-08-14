@@ -68,7 +68,9 @@ namespace Core
              * 
              * @return std::vector<std::shared_ptr<Instruction>> 
              */
-            std::vector<std::shared_ptr<Instruction>> GetBody();
+            std::vector<std::shared_ptr<Instruction>>& GetBody();
+
+            std::vector<std::shared_ptr<Core::Instructions::Instruction>>& GetElseBody();
         };
     }
 }

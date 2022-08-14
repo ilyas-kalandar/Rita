@@ -28,9 +28,14 @@ namespace Core
         {
             return this->expr;
         }
-        std::vector<std::shared_ptr<Instruction>> IfInstruction::GetBody()
+        std::vector<std::shared_ptr<Instruction>>& IfInstruction::GetBody()
         {
             return this->body;
+        }
+
+        std::vector<std::shared_ptr<Instruction>>& IfInstruction::GetElseBody()
+        {
+            return elseBody;
         }
     }
 }
