@@ -56,9 +56,53 @@ namespace Executor
 
         Executor::Builtins::Types::IntType->AddField(
             operatorPlus,
-            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorPlus, Executor::Builtins::Types::BuiltinFunctionType)
+            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorPlus, Builtins::Types::BuiltinFunctionType)
         );
 
+        // link operatorEqual to Int
+
+        std::string operatorEqual = "operatorEqualEqual";
+
+        Executor::Builtins::Types::IntType->AddField(
+            operatorEqual,
+            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorEqual, Builtins::Types::BuiltinFunctionType)
+        );
+
+        // link operatorMinus
+
+        std::string operatorMin = "operatorMinus";
+
+        Executor::Builtins::Types::IntType->AddField(
+            operatorMin,
+            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorMinus, Builtins::Types::BuiltinFunctionType)
+        );
+
+        // link operatorMul
+
+        std::string operatorMul = "operatorMultiply";
+
+        Executor::Builtins::Types::IntType->AddField(
+            operatorMul,
+            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorMul, Builtins::Types::BuiltinFunctionType)
+        );
+
+        std::string operatorDiv = "operatorDivide";
+
+        Executor::Builtins::Types::IntType->AddField(
+            operatorDiv,
+            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorDiv, Builtins::Types::BuiltinFunctionType)
+        );
+
+        
+
+        // link operatorLessThan to Int
+
+        std::string lessThan = "operatorLessThan";
+
+        Executor::Builtins::Types::IntType->AddField(
+            lessThan,
+            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorLessThan, Builtins::Types::BuiltinFunctionType)
+        );
 
         // Link Integer's toString to Int
 
@@ -72,6 +116,19 @@ namespace Executor
 
         // add functions to global namespace
         stack[stack.size() - 1].SetVar(print, new Core::NativeFunction(Executor::Builtins::Functions::Print, Executor::Builtins::Types::BuiltinFunctionType));
+    
+        std::string sqr = "sqr";
+
+        stack[stack.size() - 1].SetVar(sqr, new Core::NativeFunction(Executor::Builtins::Functions::SqrtNative, Executor::Builtins::Types::BuiltinFunctionType));
+    
+        std::string inp = "input";
+
+        stack[stack.size() - 1].SetVar(inp, new Core::NativeFunction(Executor::Builtins::Functions::InputNative, Executor::Builtins::Types::BuiltinFunctionType));
+    
+        std::string intCtor = "Int";
+
+        stack[stack.size() - 1].SetVar(intCtor, new Core::NativeFunction(Executor::Builtins::Functions::IntCtor, Executor::Builtins::Types::BuiltinFunctionType));
+
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::Leaf* instr)
@@ -104,6 +161,12 @@ namespace Executor
                 "operatorPlus"
             );
             break;
+        case Core::Instructions::OpType::MUL:
+            resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
+                instr->GetFirst(),
+                "operatorMultiply"
+            );
+            break;
         case Core::Instructions::OpType::MINUS:
             resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
                 instr->GetFirst(),
@@ -113,7 +176,13 @@ namespace Executor
         case Core::Instructions::OpType::DIV:
             resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
                 instr->GetFirst(),
-                "operatorDiv"
+                "operatorDivide"
+            );
+            break;
+        case Core::Instructions::OpType::LESS_THAN:
+            resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
+                instr->GetFirst(),
+                "operatorLessThan"
             );
             break;
         case Core::Instructions::OpType::EQUAL_EQUAL:
@@ -122,6 +191,7 @@ namespace Executor
                 "operatorEqualEqual"
             );
             break;
+        
         default:
             throw Utils::RitaException("Executor", (std::stringstream() << "Runtime error, unexpected operator " << instr->GetOperationType()).str());
         }
