@@ -42,6 +42,9 @@ namespace Lexer
         case TokenType::FOR:
             os << "FOR";
             break;
+        case TokenType::COMMA:
+            os << "COMMA";
+            break;
         case TokenType::GREATER_OR_EQUAL_THAN:
             os << "GREATER_OR_EQUAL_THAN";
             break;
