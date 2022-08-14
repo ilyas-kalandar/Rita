@@ -423,6 +423,8 @@ namespace Executor
             // if not ok
             stack.emplace_back(instr->GetElseBody(), EnviropmentType::OTHER);
         }
+
+        return nullptr;
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantBool* instr)
