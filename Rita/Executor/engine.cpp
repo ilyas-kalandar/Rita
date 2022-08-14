@@ -137,23 +137,71 @@ namespace Executor
         return new Core::String(data, Executor::Builtins::Types::StringType);
     }
 
+    Core::RitaObject* Engine::BindThis(std::shared_ptr<Core::Instructions::AttributeInstruction> instr, Core::RitaObject* func)
+    {
+        // Check for func is callable
+
+        return func;
+
+        // Let's start bind.
+
+        // Here, we must create a function from given instruction
+        
+        std::vector<std::string> buildedFunctionArguments;
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> buildedFunctionBody;
+        std::string buildedFunctionName = "!get";
+
+        // Make a CallInstruction
+
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> callArgs;
+
+        // Push ``this`` to arguments.
+        callArgs.push_back(instr->GetValue());
+
+        // For CallInstruction, I must provide an instruction for getting-function, let's create it
+
+        auto attrInstruction = std::make_shared<Core::Instructions::AttributeInstruction>(instr->GetValue(), instr->GetAttr(), false);
+
+        std::shared_ptr<Core::Instructions::FunctionCallInstruction> callInstruction = std::make_shared<Core::Instructions::FunctionCallInstruction>(
+            attrInstruction,
+            callArgs
+        );
+
+        buildedFunctionBody.push_back(std::make_shared<Core::Instructions::ReturnInstruction>(callInstruction));
+
+        return ExecuteInstruction(std::make_shared<Core::Instructions::FunctionDefinitionInstruction>(buildedFunctionName, buildedFunctionArguments, buildedFunctionBody));
+    }
+
     Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions::AttributeInstruction> instr)
     {
+
+        // Here, we get value and execute it for getting RitaObject*
+
         Core::RitaObject* val = ExecuteInstruction(instr->GetValue());
+        
+        // After this, get attriute
         std::string attr = instr->GetAttr();
 
+
+        // Lookup
         if (val->GetType() == Executor::Builtins::Types::UserObject)
         {
             Core::UserObject* userObj = static_cast<Core::UserObject*>(val);
 
             if (userObj->Contains(attr))
-                return instr, userObj->Get(attr);
+            {
+                if(instr->IsBindAllowed())
+                    return BindThis(instr, userObj->Get(attr));
+                return userObj->Get(attr);
+            }
         }
 
         Core::Type* type = static_cast<Core::Type*>(val->GetType());
         
-        return instr, type->GetField(attr);
+        if(instr->IsBindAllowed())
+            return BindThis(instr, type->GetField(attr));
 
+        return type->GetField(attr);
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::FunctionDefinitionInstruction* instr)
@@ -290,8 +338,21 @@ namespace Executor
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::IfInstruction* instr)
     {
-        Core::RitaObject* computedVal = ExecuteInstruction(instr->GetExpr());
-        return nullptr;
+
+        std::vector<Core::RitaObject*> args{ExecuteInstruction(instr->GetExpr())};
+        Core::BoolObject* computedVal = static_cast<Core::BoolObject*>(Builtins::Functions::BoolCtor(args));
+        
+        if(computedVal->GetValue())
+        {
+            // if ok
+
+            stack.emplace_back(instr->GetBody(), EnviropmentType::OTHER);
+        }
+        else
+        {
+            // if not ok
+            stack.emplace_back(instr->GetElseBody(), EnviropmentType::OTHER);
+        }
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantBool* instr)
@@ -303,6 +364,8 @@ namespace Executor
     {
         switch (instr->GetType())
         {
+        case Core::Instructions::InstructionType::IF:
+            return ExecuteInstruction(static_cast<Core::Instructions::IfInstruction*>(instr.get()));
         case Core::Instructions::InstructionType::LEAF:
             return ExecuteInstruction(static_cast<Core::Instructions::Leaf*>(instr.get()));
         case Core::Instructions::InstructionType::BINOP:
