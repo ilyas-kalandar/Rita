@@ -15,12 +15,13 @@ namespace Core
 {
 	namespace Instructions
 	{
-		AttributeInstruction::AttributeInstruction(std::shared_ptr<Instruction> value, const std::string& attr)
+		AttributeInstruction::AttributeInstruction(std::shared_ptr<Instruction> value, const std::string& attr, bool bind)
 			:
 			attr(attr),
 			value(value)
 		{
 			this->type = InstructionType::ATTRIBUTE;
+			this->bind = bind;
 		}
 		const std::string& AttributeInstruction::GetAttr()
 		{
@@ -30,6 +31,11 @@ namespace Core
 		std::shared_ptr<Core::Instructions::Instruction> AttributeInstruction::GetValue()
 		{
 			return this->value;
+		}
+
+		bool AttributeInstruction::IsBindAllowed()
+		{
+			return bind;
 		}
 	}
 }

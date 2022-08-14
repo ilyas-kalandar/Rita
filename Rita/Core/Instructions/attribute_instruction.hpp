@@ -29,6 +29,7 @@ namespace Core
 		{
 		protected:
 			std::shared_ptr<Core::Instructions::Instruction> value;
+			bool bind;
 			std::string attr;
 		public:
 			/**
@@ -37,7 +38,7 @@ namespace Core
 			 * @param value Another instruction 
 			 * @param attr Attribute
 			 */
-			AttributeInstruction(std::shared_ptr<Instruction> value, const std::string& attr);
+			AttributeInstruction(std::shared_ptr<Instruction> value, const std::string& attr, bool bind = true);
 			/**
 			 * @brief Get the Value object
 			 * 
@@ -50,6 +51,8 @@ namespace Core
 			 * @return const std::string& 
 			 */
 			const std::string& GetAttr();
+
+			bool IsBindAllowed();
 		};
 	}
 }
