@@ -42,6 +42,9 @@ namespace Core
             case OpType::GREATER_THAN:
                 os << "Greater than >";
                 break;
+            case OpType::LESS_THAN:
+                os << "Less than <";
+                break;
             default:
                 throw Utils::RitaException(
                     "ostream& operator<<(ostream, OpType)",
