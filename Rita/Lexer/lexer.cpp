@@ -244,9 +244,9 @@ namespace Lexer
                 case ',':
                     PushToken(TokenType::COMMA);
                     break;
-                default:
-                    throw std::runtime_error(
-                        "Unknown character passed: \'" + std::to_string(Current()) + "\' (" + std::to_string(currentLine) + "," + std::to_string(currChar) + ")");
+                case '<':
+                    PushToken(TokenType::LESS_THAN);
+                    break;
                 }
                 Next();
             }
