@@ -58,8 +58,9 @@ namespace Executor
         std::vector<Enviropment> stack;
         size_t currentNamespaceIndex = 0;
 
-        Core::RitaObject* LinkSelf(std::shared_ptr<Core::Instructions::AttributeInstruction> instr, Core::RitaObject* obj);
-        
+        // Utility functions
+        Core::RitaObject* BindThis(std::shared_ptr<Core::Instructions::AttributeInstruction>, Core::RitaObject* obj);
+
         Core::RitaObject* ExecuteInstruction(Core::Instructions::BinOpInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantInt* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantFloat* instr);
