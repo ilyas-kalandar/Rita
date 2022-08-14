@@ -2,7 +2,16 @@ project (Interpreter)
 
 # Prepare executable
 
-set(SOURCE_EXE main.cpp)
+set(
+    SOURCE_EXE 
+        main.cpp
+        interpreter.cpp
+)
+
+set(
+    HEADERS_EXE
+        interpreter.hpp
+)
 
 set(
     EXECUTABLE_OUTPUT_PATH 
@@ -13,6 +22,7 @@ set(
 add_executable(
     rita 
         ${SOURCE_EXE}
+        ${HEADERS_EXE}
 )
 
 include_directories("../Lexer/")
