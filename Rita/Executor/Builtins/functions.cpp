@@ -265,6 +265,15 @@ namespace Executor
                     "Runtime error, expected 'int' or 'float' type, got '" + secType->GetTypeName() + "'"
                 );
             }
+
+            Core::RitaObject* IntOperatorUnaryMinus(const std::vector<Core::RitaObject*>& list)
+            {
+                auto self = static_cast<Core::Int*>(list[0]);
+
+                
+                return new Core::Int(-self->GetValue(), Types::IntType);
+                
+            }
         }
     }
 }
