@@ -50,6 +50,11 @@ namespace Executor
             new Core::NativeFunction(Executor::Builtins::Functions::ObjectToStringNative, Executor::Builtins::Types::BuiltinFunctionType)
         );
 
+        Executor::Builtins::Types::BoolType->AddField(
+            toString,
+            new Core::NativeFunction(Executor::Builtins::Functions::BoolToStringNative, Executor::Builtins::Types::BuiltinFunctionType)
+        );
+
         // link operatorPlus to Int
 
         std::string operatorPlus = "operatorPlus";
@@ -475,6 +480,25 @@ namespace Executor
         return new Core::BoolObject(instr->GetData(), Builtins::Types::BoolType);
     }
 
+    Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::WhileInstruction* instr)
+    {
+        bool computed;
+        do
+        {
+            std::vector<Core::RitaObject*> args{ExecuteInstruction(instr->GetExpression())};
+
+            computed = static_cast<Core::BoolObject*>(Builtins::Functions::BoolCtor(args))->GetValue();
+
+            if(computed)
+            {
+                stack.emplace_back(instr->GetBody(), EnviropmentType::OTHER);
+                RunUntilComplete();
+            }
+
+        }while(computed);
+        return nullptr;
+    }
+
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::UnaryOperatorInstruction* instr)
     {
         std::shared_ptr<Core::Instructions::Instruction> resultFunction;
@@ -537,6 +561,8 @@ namespace Executor
             return ExecuteInstruction(static_cast<Core::Instructions::UnaryOperatorInstruction*>(instr.get()));
         case Core::Instructions::InstructionType::ASSIGNMENT:
             return ExecuteInstruction(static_cast<Core::Instructions::AssignmentInstruction*>(instr.get()));
+        case Core::Instructions::InstructionType::WHILE:
+            return ExecuteInstruction(static_cast<Core::Instructions::WhileInstruction*>(instr.get()));
         default:
             throw Utils::RitaException("Executor", (std::stringstream() << "Unsupported instruction for execute \"" << instr->GetType() << "\"").str());
         }
