@@ -181,7 +181,11 @@ namespace Lexer
                 {
                 case ' ':
                     break;
+                case ';':
+                    PushToken(TokenType::SEMICOLON);
+                    break;
                 case '\n':
+                case '\r':
                     PushToken(TokenType::END_OF_LINE);
                     currentLine++;
                     break;
@@ -247,6 +251,8 @@ namespace Lexer
                 case '<':
                     PushToken(TokenType::LESS_THAN);
                     break;
+                default:
+                    std::cout << "Unkown character: " << (int)Current() << std::endl; 
                 }
                 Next();
             }
