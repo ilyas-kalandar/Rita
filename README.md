@@ -82,6 +82,21 @@ if a > 0{
 }
 ```
 
+## While statements
+
+Rita support while statements, use while-keyword, provide expression and code-block.
+
+```kotlin
+
+var a = 100;
+
+while a > 0 {
+    print("working");
+    a -= 1;
+}
+
+```
+
 ## Operators
 Yes, you can use operators, priorities in Rita are fully correct.
 
@@ -111,7 +126,7 @@ cmake .. && cmake --build .
 
 ## TODO
 - [ ] - While-loops
-- [ ] - Classes
+- [X] - Classes
 - [ ] - Floats
 
 ## Author
