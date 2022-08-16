@@ -104,6 +104,15 @@ namespace Executor
             new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorLessThan, Builtins::Types::BuiltinFunctionType)
         );
 
+        // link unaryMinus to Int
+
+        std::string unaryMinus = "unaryMinus";
+
+        Executor::Builtins::Types::IntType->AddField(
+            unaryMinus,
+            new Core::NativeFunction(Executor::Builtins::Functions::IntOperatorUnaryMinus, Builtins::Types::BuiltinFunctionType)
+        );
+
         // Link Integer's toString to Int
 
         Executor::Builtins::Types::IntType->AddField(
@@ -424,12 +433,44 @@ namespace Executor
             stack.emplace_back(instr->GetElseBody(), EnviropmentType::OTHER);
         }
 
+        RunUntilComplete();
+
         return nullptr;
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantBool* instr)
     {
         return new Core::BoolObject(instr->GetData(), Builtins::Types::BoolType);
+    }
+
+    Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::UnaryOperatorInstruction* instr)
+    {
+        std::shared_ptr<Core::Instructions::Instruction> resultFunction;
+        std::vector<std::shared_ptr<Core::Instructions::Instruction>> list{ instr->GetValue() };
+
+        switch (instr->GetOperationType())
+        {
+        case Core::Instructions::OpType::PLUS:
+            resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
+                instr->GetValue(),
+                "unaryPlus"
+            );
+            break;
+
+        case Core::Instructions::OpType::MINUS:
+            resultFunction = std::make_shared<Core::Instructions::AttributeInstruction>(
+                instr->GetValue(),
+                "unaryMinus"
+            );
+            break;
+
+        default:
+            throw Utils::RitaException("Executor", (std::stringstream() << "Runtime error, unexpected operator " << instr->GetOperationType()).str());
+        }
+
+        std::shared_ptr<Core::Instructions::Instruction> result = std::make_shared<Core::Instructions::FunctionCallInstruction>(resultFunction, list);
+
+        return ExecuteInstruction(result);
     }
 
     Core::RitaObject* Engine::ExecuteInstruction(std::shared_ptr<Core::Instructions::Instruction> instr)
@@ -460,6 +501,8 @@ namespace Executor
             return ExecuteInstruction(static_cast<Core::Instructions::ReturnInstruction*>(instr.get()));
         case Core::Instructions::InstructionType::CONSTANT_BOOL:
             return ExecuteInstruction(static_cast<Core::Instructions::ConstantBool*>(instr.get()));
+        case Core::Instructions::InstructionType::UNOP:
+            return ExecuteInstruction(static_cast<Core::Instructions::UnaryOperatorInstruction*>(instr.get()));
         default:
             throw Utils::RitaException("Executor", (std::stringstream() << "Unsupported instruction for execute \"" << instr->GetType() << "\"").str());
         }
