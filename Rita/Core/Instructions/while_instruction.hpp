@@ -56,7 +56,7 @@ namespace Core
              * 
              * @return const std::vector<std::shared_ptr<Instruction>>& 
              */
-            const std::vector<std::shared_ptr<Instruction>>& GetBody();
+            std::vector<std::shared_ptr<Instruction>>& GetBody();
 
             /**
              * @brief Get the Expression object
