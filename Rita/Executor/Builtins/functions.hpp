@@ -46,7 +46,7 @@ namespace Executor
              * @param obj Boolean
              * @return Core::String* 
              */
-            Core::String* BoolToStringNative(Core::RitaObject* obj);
+            Core::RitaObject* BoolToStringNative(const std::vector<Core::RitaObject*>& obj);
 
             /**
              * @brief Returns a string representation of List-object.
