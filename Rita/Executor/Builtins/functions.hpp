@@ -94,6 +94,8 @@ namespace Executor
             Core::RitaObject* IntOperatorDiv(const std::vector<Core::RitaObject*>& list);
 
             Core::RitaObject* IntOperatorMul(const std::vector<Core::RitaObject*>& list);
+
+            Core::RitaObject* IntOperatorUnaryMinus(const std::vector<Core::RitaObject*>& list);
         }
     } 
 }
