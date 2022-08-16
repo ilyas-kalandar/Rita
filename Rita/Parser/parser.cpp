@@ -453,8 +453,10 @@ namespace Parser
             )
             {
                 // assign
-                tokens.Next(); // skip EQUAL-token
-                return std::make_shared<Core::Instructions::AssignmentInstruction>(expr, ParseExpression());
+                ExpectAndSkip(Lexer::TokenType::EQUAL);
+                auto ass =  std::make_shared<Core::Instructions::AssignmentInstruction>(expr, ParseExpression());
+                ExpectAndSkip(Lexer::TokenType::SEMICOLON);
+                return ass;
             }
 
             ExpectAndSkip(Lexer::TokenType::SEMICOLON);
