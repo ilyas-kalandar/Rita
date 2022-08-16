@@ -180,6 +180,7 @@ namespace Lexer
                 switch (Current())
                 {
                 case ' ':
+                case '\t':
                     break;
                 case ';':
                     PushToken(TokenType::SEMICOLON);
