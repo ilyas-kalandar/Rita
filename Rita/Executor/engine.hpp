@@ -16,6 +16,7 @@
 
 #include "object.hpp"
 
+#include "Instructions/unop_instruction.hpp"
 #include "Instructions/constant_bool.hpp"
 #include "Instructions/if_instruction.hpp"
 #include "Instructions/return_instruction.hpp"
@@ -74,6 +75,7 @@ namespace Executor
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ReturnInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::IfInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantBool* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::UnaryOperatorInstruction* instr);
         
         //Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantList* instr);
 
