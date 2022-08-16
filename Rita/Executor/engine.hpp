@@ -76,6 +76,7 @@ namespace Executor
         Core::RitaObject* ExecuteInstruction(Core::Instructions::IfInstruction* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantBool* instr);
         Core::RitaObject* ExecuteInstruction(Core::Instructions::UnaryOperatorInstruction* instr);
+        Core::RitaObject* ExecuteInstruction(Core::Instructions::AssignmentInstruction* instr);
         
         //Core::RitaObject* ExecuteInstruction(Core::Instructions::ConstantList* instr);
 

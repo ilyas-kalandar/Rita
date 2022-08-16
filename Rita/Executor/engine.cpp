@@ -438,6 +438,38 @@ namespace Executor
         return nullptr;
     }
 
+    Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::AssignmentInstruction* instr)
+    {
+        switch(instr->GetObject()->GetType())
+        {
+        case Core::Instructions::InstructionType::LEAF:
+        {
+            auto leaf = std::static_pointer_cast<Core::Instructions::Leaf>(instr->GetObject());
+            
+            size_t currentStack = stack.size() - 1;
+
+            while (currentStack >= 0)
+            {
+                if (stack[currentStack].CheckVar(leaf->GetID())){
+                    stack[currentStack].SetVar(leaf->GetID(), ExecuteInstruction(instr->GetRightInstr()));
+                    return nullptr;
+                }
+                currentStack--;
+            }
+
+            throw Utils::RitaException(
+                "Executor",
+                "Variable \"" + leaf->GetID() + "\" is not declared in this scope."
+            );
+        }
+        case Core::Instructions::InstructionType::ATTRIBUTE:
+            throw Utils::RitaException("Executor::Assignment", "Currently assignment to attribute is not supported.");
+            break;
+        }
+
+        return nullptr;
+    }
+
     Core::RitaObject* Engine::ExecuteInstruction(Core::Instructions::ConstantBool* instr)
     {
         return new Core::BoolObject(instr->GetData(), Builtins::Types::BoolType);
@@ -503,6 +535,8 @@ namespace Executor
             return ExecuteInstruction(static_cast<Core::Instructions::ConstantBool*>(instr.get()));
         case Core::Instructions::InstructionType::UNOP:
             return ExecuteInstruction(static_cast<Core::Instructions::UnaryOperatorInstruction*>(instr.get()));
+        case Core::Instructions::InstructionType::ASSIGNMENT:
+            return ExecuteInstruction(static_cast<Core::Instructions::AssignmentInstruction*>(instr.get()));
         default:
             throw Utils::RitaException("Executor", (std::stringstream() << "Unsupported instruction for execute \"" << instr->GetType() << "\"").str());
         }
