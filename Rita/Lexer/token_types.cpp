@@ -39,6 +39,9 @@ namespace Lexer
         case TokenType::FLOAT:
             os << "FLOAT";
             break;
+        case TokenType::SEMICOLON:
+            os << "SEMICOLON";
+            break;
         case TokenType::FOR:
             os << "FOR";
             break;

@@ -56,6 +56,7 @@ namespace Lexer
 
         // Other
         DOT,
+        SEMICOLON,
         NOT,
         COMMA,
         END_OF_LINE,
