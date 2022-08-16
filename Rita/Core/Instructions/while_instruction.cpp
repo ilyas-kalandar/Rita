@@ -25,7 +25,7 @@ namespace Core
             return this->expr;
         }
 
-        const std::vector<std::shared_ptr<Instruction>>& WhileInstruction::GetBody()
+        std::vector<std::shared_ptr<Instruction>>& WhileInstruction::GetBody()
         {
             return this->body;
         }
