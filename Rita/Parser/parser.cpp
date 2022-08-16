@@ -101,15 +101,15 @@ namespace Parser
 
     std::shared_ptr<Core::Instructions::Instruction> Parser::ParseNotExpr()
     {
-        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
-        {
-            throw Utils::RitaException(
-                "Parser",
-                "Unexpected \"END_OF_LINE\"",
-                tokens.Current().GetLine(),
-                tokens.Current().GetCharacter()
-            );
-        }
+        // if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
+        // {
+        //     throw Utils::RitaException(
+        //         "Parser",
+        //         "Unexpected \"END_OF_LINE\"",
+        //         tokens.Current().GetLine(),
+        //         tokens.Current().GetCharacter()
+        //     );
+        // }
 
         if (this->tokens.Current().GetTokenType() != Lexer::TokenType::NOT)
         {
@@ -123,15 +123,15 @@ namespace Parser
 
     std::shared_ptr<Core::Instructions::Instruction> Parser::ParseBinop(size_t priority)
     {
-        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
-        {
-            throw Utils::RitaException(
-                "Parser",
-                "Unexpected \"END_OF_LINE\"",
-                tokens.Current().GetLine(),
-                tokens.Current().GetCharacter()
-            );
-        }
+        // if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
+        // {
+        //     throw Utils::RitaException(
+        //         "Parser",
+        //         "Unexpected \"END_OF_LINE\"",
+        //         tokens.Current().GetLine(),
+        //         tokens.Current().GetCharacter()
+        //     );
+        // }
 
         std::shared_ptr<Core::Instructions::Instruction> result;
 
@@ -164,15 +164,15 @@ namespace Parser
 
     std::shared_ptr<Core::Instructions::Instruction> Parser::ParseUnaryMinus()
     {
-        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
-        {
-            throw Utils::RitaException(
-                "Parser",
-                "Unexpected \"END_OF_LINE\"",
-                tokens.Current().GetLine(),
-                tokens.Current().GetCharacter()
-            );
-        }
+        // if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
+        // {
+        //     throw Utils::RitaException(
+        //         "Parser",
+        //         "Unexpected \"END_OF_LINE\"",
+        //         tokens.Current().GetLine(),
+        //         tokens.Current().GetCharacter()
+        //     );
+        // }
 
         if (this->tokens.Current().GetTokenType() == Lexer::TokenType::MINUS)
         {
@@ -185,15 +185,15 @@ namespace Parser
 
     std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
     {
-        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
-        {
-            throw Utils::RitaException(
-                "Parser",
-                "Unexpected \"END_OF_LINE\"",
-                tokens.Current().GetLine(),
-                tokens.Current().GetCharacter()
-            );
-        }
+        // if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
+        // {
+        //     throw Utils::RitaException(
+        //         "Parser",
+        //         "Unexpected \"END_OF_LINE\"",
+        //         tokens.Current().GetLine(),
+        //         tokens.Current().GetCharacter()
+        //     );
+        // }
 
         std::shared_ptr<Core::Instructions::Instruction> result;
         auto leaf = ParseLeaf();
@@ -304,16 +304,6 @@ namespace Parser
 
     std::optional<std::shared_ptr<Core::Instructions::Instruction>> Parser::ParseLeaf()
     {
-        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE || tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_FILE)
-        {
-            throw Utils::RitaException(
-                "Parser",
-                (std::stringstream() << "Unexpected \"" << tokens.Current().GetTokenType() << "\"").str(),
-                tokens.Current().GetLine(),
-                tokens.Current().GetCharacter()
-            );
-        }
-
         switch(this->tokens.Current().GetTokenType())
         {
         case Lexer::TokenType::IDENTIFIER:
@@ -437,6 +427,9 @@ namespace Parser
     {
         switch (tokens.Current().GetTokenType())
         {
+        case Lexer::TokenType::SEMICOLON:
+            tokens.Next();
+            return ParseInstruction();
         case Lexer::TokenType::VAR:
             return ParseVarDecl();
         case Lexer::TokenType::IF:
@@ -447,6 +440,9 @@ namespace Parser
             return ParseReturn();
         case Lexer::TokenType::FUN:
             return ParseFunction();
+        case Lexer::TokenType::END_OF_LINE:
+            tokens.Next();
+            return ParseInstruction();
         default:
             auto expr = ParseExpression();
             if(
@@ -460,6 +456,9 @@ namespace Parser
                 tokens.Next(); // skip EQUAL-token
                 return std::make_shared<Core::Instructions::AssignmentInstruction>(expr, ParseExpression());
             }
+
+            ExpectAndSkip(Lexer::TokenType::SEMICOLON);
+
             return expr;
         }
     }
@@ -469,7 +468,7 @@ namespace Parser
         // skip return token
         ExpectAndSkip(Lexer::TokenType::RETURN);
 
-        if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE  || tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_FILE)
+        if(tokens.Current().GetTokenType() == Lexer::TokenType::SEMICOLON)
         {
             tokens.Next(); // skip EOL
             return std::make_shared<Core::Instructions::ReturnInstruction>(nullptr);
