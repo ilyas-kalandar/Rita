@@ -125,8 +125,8 @@ cmake .. && cmake --build .
 ```
 
 ## TODO
-- [ ] - While-loops
-- [X] - Classes
+- [X] - While-loops
+- [ ] - Classes
 - [ ] - Floats
 
 ## Author
