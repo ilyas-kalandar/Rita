@@ -113,15 +113,32 @@ input(); // EXPERIMENTAL! Returns a string given from user.
 
 # Building
 
-```bash
-# Clone repo
-git clone https://github.com/ilyas-qalandarzoda/Rita
-cd Rita && mkdir build && cd build
-# Build 
-cmake .. && cmake --build .
 
-# Run
-./rita --help
+### Clone repo
+```bash
+git clone https://github.com/ilyas-kalandar/Rita
+```
+### Create directory for build & move
+```bash
+cd Rita && mkdir build && cd build
+```
+### Build 
+```bash
+cmake .. && cmake --build .
+```
+
+### Running
+```
+./rita
+```
+
+### Output of <code>./rita --help</code>
+```
+Usage: rita --file filename.rt
+--ast - Show ast.
+--tokens - Show tokens from tokenizer.
+--help - Show this menu.
+--version - Output version of language.
 ```
 
 ## TODO
