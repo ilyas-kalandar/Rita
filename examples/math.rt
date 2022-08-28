@@ -1,0 +1,2 @@
+var sqrt = sqr(25);
+print("SQR of 25 is:", sqrt.toString(sqrt));

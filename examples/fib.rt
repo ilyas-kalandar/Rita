@@ -1,0 +1,14 @@
+var n = 10;
+var first = 1;
+var second  = 2;
+var current = 1;
+
+while current < n {
+    print(first.toString(first));
+    
+    var tmp = second;
+    second = first + second;
+    first = tmp;
+
+    current = current + 1;
+}

@@ -1,0 +1,41 @@
+fun main(){
+    print("LOG: Main function loaded");
+
+    var a = 1;
+    var b = -1;
+    var c = -20;
+
+    print("LOG: Variables created");
+
+    var d = (b * b) - (4 * a * c);
+
+    print("LOG: Discriminant computed, value is", d.toString(d));
+
+    print("LOG: Checking for D < 0");
+
+    if(d < 0){
+        print("No roots.");
+        return;
+    }
+
+    print("LOG: Checking for D equals to 0");
+
+    if(d == 0){
+        print("One root.");
+        print("Root", -b / (2 * a));
+
+        return;
+    }
+    
+
+    var x1 = (-b + sqr(d)) / (2 * a);
+    var x2 = (-b - sqr(d)) / (2 * a);
+
+    print("LOG: Roots computed.");
+
+    print("Two roots.");
+    print("First root:", x1.toString(x1));
+    print("Second root:", x2.toString(x2));
+}
+
+main();

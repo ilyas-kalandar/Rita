@@ -1,0 +1,15 @@
+fun println_with_args(name) {
+    print("Hello," name);
+}
+
+fun hello_rita() {
+    print("Hello Rita!");
+}
+
+fun main() {
+    print("[LOG]: Main function loaded");
+    hello_rita();
+    println_with_args("Ilyas =D");
+}
+
+main();

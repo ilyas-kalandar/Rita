@@ -1,0 +1,2 @@
+var variable_name = input("[prompt]:");
+print("Variable value is:");
