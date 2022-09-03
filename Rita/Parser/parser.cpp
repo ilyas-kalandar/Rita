@@ -185,16 +185,6 @@ namespace Parser
 
     std::shared_ptr<Core::Instructions::Instruction> Parser::ParseHighPriorityExpr()
     {
-        // if(tokens.Current().GetTokenType() == Lexer::TokenType::END_OF_LINE)
-        // {
-        //     throw Utils::RitaException(
-        //         "Parser",
-        //         "Unexpected \"END_OF_LINE\"",
-        //         tokens.Current().GetLine(),
-        //         tokens.Current().GetCharacter()
-        //     );
-        // }
-
         std::shared_ptr<Core::Instructions::Instruction> result;
         auto leaf = ParseLeaf();
 
